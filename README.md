@@ -1,2 +1,3 @@
-# research_project
-research project plan
+# University of Bath Research Project
+
+## Methods of Deep Model Compression for Video Classification
