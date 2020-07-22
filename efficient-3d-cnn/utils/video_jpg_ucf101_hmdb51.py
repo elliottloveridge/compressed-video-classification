@@ -41,5 +41,9 @@ if __name__=="__main__":
   dir_path = sys.argv[1]
   dst_dir_path = sys.argv[2]
 
+  print('dir_path', dir_path)
+  print('dst_dir_path', dst_dir_path)
+
   for class_name in os.listdir(dir_path):
-    class_process(dir_path, dst_dir_path, class_name)
+      print(class_name)
+  #   class_process(dir_path, dst_dir_path, class_name)
