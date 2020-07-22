@@ -1,7 +1,7 @@
+from __future__ import print_function, division
 import os
 import sys
 import subprocess
-from __future__ import print_function, division
 
 
 def class_process(dir_path, dst_dir_path, class_name):
