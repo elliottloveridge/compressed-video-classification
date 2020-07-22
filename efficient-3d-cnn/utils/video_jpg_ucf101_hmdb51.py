@@ -9,8 +9,14 @@ def class_process(dir_path, dst_dir_path, class_name):
     return
 
   dst_class_path = os.path.join(dst_dir_path, class_name)
+  print(dst_class_path)
+
+
+  return
+
+
   if not os.path.exists(dst_class_path):
-    os.mkdir(dst_class_path)
+      os.mkdir(dst_class_path)
 
   for file_name in os.listdir(class_path):
     if '.avi' not in file_name:
@@ -45,5 +51,5 @@ if __name__=="__main__":
   print('dst_dir_path', dst_dir_path)
 
   for class_name in os.listdir(dir_path):
-      print(class_name)
-  #   class_process(dir_path, dst_dir_path, class_name)
+      # print(class_name)
+    class_process(dir_path, dst_dir_path, class_name)
