@@ -3,6 +3,7 @@ jZPXuK5qV4Q
 screen
 # hit enter twice
 cd research-project/
+# make sure the bash script is runnable -- use chmod +x ogg-train.sh
 docker run --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=2 -v "$(pwd)":/app ufoym/deepo:all-jupyter /app/ogg-train.sh
 # Ctrl + a followed by a 'd'
 # Exit the ssh session
