@@ -1,9 +1,9 @@
 ssh el627@ogg.cs.bath.ac.uk
 jZPXuK5qV4Q
 screen
-# hit enter
-cd ~/research-project
-docker run --rm --runtime-nvidia -e NVIDIA_VISIBLE_DEVICES=2 -v "$(pwd)":/app ufoym/deepo:all-jupyter /app/ogg-train.sh
+# hit enter twice
+cd research-project/
+docker run --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=2 -v "$(pwd)":/app ufoym/deepo:all-jupyter /app/ogg-train.sh
 # Ctrl + a followed by a 'd'
 # Exit the ssh session
 # SSH back into the server
