@@ -1,0 +1,10 @@
+screen
+# hit enter
+cd ~/Documents/GitHub/research-project/efficient-3d-cnn
+docker run --rm -v "$(pwd)":/app ufoym/deepo:latest /app/local-train.sh
+# Ctrl + a followed by a 'd'
+# Exit the ssh session
+# SSH back into the server
+screen -r
+# If your code has finished then collect the results, otherwise exit out again
+exit
