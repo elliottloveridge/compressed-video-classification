@@ -1,6 +1,6 @@
 screen
 # hit enter
-cd ~/Documents/GitHub/research-project/efficient-3d-cnn
+cd ~/Documents/GitHub/research-project/
 docker run --rm -v "$(pwd)":/app ufoym/deepo:latest /app/local-train.sh
 # Ctrl + a followed by a 'd'
 # Exit the ssh session

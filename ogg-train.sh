@@ -1,2 +1,2 @@
 #! /bin/bash
-python3 /app/efficient-3d-cnn/main.py --root_path ~/ --video_path /mnt/slow0/ucf101/toy/train --annotation_path ~/research-project/efficient-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --model mobilenetv2 --width_mult 1.0 \
+python /app/efficient-3d-cnn/main.py --root_path ~/ --video_path /mnt/slow0/ucf101/toy/train --annotation_path efficient-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --bath_size 8  --model mobilenetv2 --width_mult 1.0 \
