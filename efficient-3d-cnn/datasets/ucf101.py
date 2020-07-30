@@ -95,7 +95,7 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
         idx_to_class[label] = name
 
     # DEBUG: print to test what video_names is
-    print(video_names)
+    # print(video_names)
 
     dataset = []
     for i in range(len(video_names)):
@@ -109,8 +109,8 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
             continue
 
         # DEBUG: added this to end after first 5 iters
-        if i >= 5:
-            break
+        # if i >= 5:
+        #     break
 
         n_frames_file_path = os.path.join(video_path, 'n_frames')
         n_frames = int(load_value_file(n_frames_file_path))

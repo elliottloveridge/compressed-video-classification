@@ -92,7 +92,7 @@ if __name__ == '__main__':
                                          temporal_transform, target_transform)
 
         # DEBUG: this prints an object, is that right?
-        print(training_data)
+        # print(training_data)
 
         train_loader = torch.utils.data.DataLoader(
             training_data,
