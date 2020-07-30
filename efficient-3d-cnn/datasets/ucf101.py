@@ -94,6 +94,9 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
     for name, label in class_to_idx.items():
         idx_to_class[label] = name
 
+    # DEBUG: print to test what video_names is
+    print(video_names)
+
     dataset = []
     for i in range(len(video_names)):
         if i % 1000 == 0:
@@ -101,6 +104,7 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
 
         video_path = os.path.join(root_path, video_names[i])
         if not os.path.exists(video_path):
+            print("shouldn't be here")
             continue
 
         n_frames_file_path = os.path.join(video_path, 'n_frames')
@@ -166,6 +170,7 @@ class UCF101(data.Dataset):
                  temporal_transform=None,
                  target_transform=None,
                  sample_duration=16):
+                 # DEBUG: see next debug for explanation
                  # get_loader=get_default_video_loader):
         self.data, self.class_names = make_dataset(
             root_path, annotation_path, subset, n_samples_for_each_video,
@@ -190,6 +195,7 @@ class UCF101(data.Dataset):
         if self.temporal_transform is not None:
             frame_indices = self.temporal_transform(frame_indices)
         clip = self.loader(path, frame_indices)
+        print(clip)
         if self.spatial_transform is not None:
             self.spatial_transform.randomize_parameters()
             clip = [self.spatial_transform(img) for img in clip]
