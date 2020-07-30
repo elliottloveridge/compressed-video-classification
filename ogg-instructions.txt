@@ -2,6 +2,8 @@ ssh el627@ogg.cs.bath.ac.uk
 jZPXuK5qV4Q
 screen
 # hit enter twice
+# if you need to then use git pull
+# 6be8c4c3df5c82c42663b04bd6fab6dd31ddb622
 cd research-project/
 # make sure the bash script is runnable -- use chmod +x ogg-train.sh
 docker run --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=5 -v "$(pwd)":/app ufoym/deepo:all-jupyter /app/ogg-train.sh
