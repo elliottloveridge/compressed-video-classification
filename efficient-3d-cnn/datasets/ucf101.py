@@ -54,6 +54,9 @@ def get_default_video_loader():
 
 
 def load_annotation_data(data_file_path):
+    print()
+    print(data_file_path)
+    print()
     with open(data_file_path, 'r') as data_file:
         return json.load(data_file)
 
