@@ -8,6 +8,7 @@ import json
 import copy
 import random
 from numpy.random import randint
+from torchvision import get_image_backend
 
 from utils import load_value_file
 
@@ -29,7 +30,8 @@ def accimage_loader(path):
 
 
 def get_default_image_loader():
-    from torchvision import get_image_backend
+    # DEBUG: removed the below, now at top
+    # from torchvision import get_image_backend
     if get_image_backend() == 'accimage':
         return accimage_loader
     else:
@@ -40,7 +42,9 @@ def video_loader(video_dir_path, frame_indices, image_loader):
     video = []
     for i in frame_indices:
         image_path = os.path.join(video_dir_path, 'image_{:05d}.jpg'.format(i))
+        print(image_path)
         if os.path.exists(image_path):
+            print(here)
             video.append(image_loader(image_path))
         else:
             return video
