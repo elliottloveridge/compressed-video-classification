@@ -54,9 +54,6 @@ def get_default_video_loader():
 
 
 def load_annotation_data(data_file_path):
-    print()
-    print(data_file_path)
-    print()
     with open(data_file_path, 'r') as data_file:
         return json.load(data_file)
 
@@ -165,7 +162,7 @@ class UCF101(data.Dataset):
                  temporal_transform=None,
                  target_transform=None,
                  sample_duration=16,
-                 get_loader=get_default_video_loader):
+                 get_loader= get_default_video_loader):
         self.data, self.class_names = make_dataset(
             root_path, annotation_path, subset, n_samples_for_each_video,
             sample_duration)
