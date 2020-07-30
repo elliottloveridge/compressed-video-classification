@@ -161,8 +161,8 @@ class UCF101(data.Dataset):
                  spatial_transform=None,
                  temporal_transform=None,
                  target_transform=None,
-                 sample_duration=16,
-                 get_loader= get_default_video_loader):
+                 sample_duration=16):
+                 # get_loader=get_default_video_loader):
         self.data, self.class_names = make_dataset(
             root_path, annotation_path, subset, n_samples_for_each_video,
             sample_duration)
@@ -170,7 +170,9 @@ class UCF101(data.Dataset):
         self.spatial_transform = spatial_transform
         self.temporal_transform = temporal_transform
         self.target_transform = target_transform
-        self.loader = get_loader()
+        # self.loader = get_loader()
+        # # DEBUG: changed the above to the below
+        self.loader = get_default_video_loader()
 
     def __getitem__(self, index):
         """

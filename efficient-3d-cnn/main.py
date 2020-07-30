@@ -42,14 +42,17 @@ if __name__ == '__main__':
     opt.std = get_std(opt.norm_value)
     opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.width_mult) + 'x',
                                opt.modality, str(opt.sample_duration)])
-    print(opt)
+
+    # DEBUG: removed the print below
+    # print(opt)
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
         json.dump(vars(opt), opt_file)
 
     torch.manual_seed(opt.manual_seed)
 
     model, parameters = generate_model(opt)
-    print(model)
+    # DEBUG: removed the print below
+    # print(model)
 
     criterion = nn.CrossEntropyLoss()
     if not opt.no_cuda:
@@ -87,7 +90,9 @@ if __name__ == '__main__':
         target_transform = ClassLabel()
         training_data = get_training_set(opt, spatial_transform,
                                          temporal_transform, target_transform)
-                                         
+
+        print(training_data)
+
         train_loader = torch.utils.data.DataLoader(
             training_data,
             batch_size=opt.batch_size,
