@@ -97,6 +97,7 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
 
         video_path = os.path.join(root_path, video_names[i])
         if not os.path.exists(video_path):
+            print('here')
             continue
 
         n_frames_file_path = os.path.join(video_path, 'n_frames')
