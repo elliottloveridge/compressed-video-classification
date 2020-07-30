@@ -103,9 +103,14 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
             print('dataset loading [{}/{}]'.format(i, len(video_names)))
 
         video_path = os.path.join(root_path, video_names[i])
+        print(video_path)
         if not os.path.exists(video_path):
             print("shouldn't be here")
             continue
+
+        # DEBUG: added this to end after first 5 iters
+        if i >= 5:
+            break
 
         n_frames_file_path = os.path.join(video_path, 'n_frames')
         n_frames = int(load_value_file(n_frames_file_path))
