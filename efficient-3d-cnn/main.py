@@ -87,6 +87,7 @@ if __name__ == '__main__':
         target_transform = ClassLabel()
         training_data = get_training_set(opt, spatial_transform,
                                          temporal_transform, target_transform)
+        print(training_data)
         train_loader = torch.utils.data.DataLoader(
             training_data,
             batch_size=opt.batch_size,
@@ -158,7 +159,7 @@ if __name__ == '__main__':
                 'best_prec1': best_prec1
                 }
             save_checkpoint(state, False, opt)
-            
+
         if not opt.no_val:
             validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
                                         val_logger)
@@ -193,7 +194,3 @@ if __name__ == '__main__':
             num_workers=opt.n_threads,
             pin_memory=True)
         test.test(test_loader, model, opt, test_data.class_names)
-
-
-
-
