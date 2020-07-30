@@ -96,7 +96,6 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
             print('dataset loading [{}/{}]'.format(i, len(video_names)))
 
         video_path = os.path.join(root_path, video_names[i])
-        print(video_path)
         if not os.path.exists(video_path):
             continue
 
@@ -133,8 +132,6 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
                 sample_j['frame_indices'] = list(
                     range(j, min(n_frames + 1, j + sample_duration)))
                 dataset.append(sample_j)
-
-        print(dataset)
 
     return dataset, idx_to_class
 
@@ -183,7 +180,6 @@ class UCF101(data.Dataset):
             tuple: (image, target) where target is class_index of the target class.
         """
         path = self.data[index]['video']
-
         frame_indices = self.data[index]['frame_indices']
         if self.temporal_transform is not None:
             frame_indices = self.temporal_transform(frame_indices)
@@ -196,6 +192,9 @@ class UCF101(data.Dataset):
         target = self.data[index]
         if self.target_transform is not None:
             target = self.target_transform(target)
+
+        # DEBUG: added this print statement to test clip path
+        print(clip, target)
 
         return clip, target
 
