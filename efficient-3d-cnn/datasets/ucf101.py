@@ -133,6 +133,8 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
                     range(j, min(n_frames + 1, j + sample_duration)))
                 dataset.append(sample_j)
 
+        print(dataset)
+
     return dataset, idx_to_class
 
 
