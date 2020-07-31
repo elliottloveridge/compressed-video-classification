@@ -1,10 +1,9 @@
 screen
 # hit enter
 cd ~/Documents/GitHub/research-project/
-docker run --rm -v "$(pwd)":/app ufoym/deepo:latest /app/local-train.sh
+docker run --rm -v "$(pwd)":/app -v "~/Datasets/UCF101/data":/data ufoym/deepo:latest /app/local-train.sh
 # Ctrl + a followed by a 'd'
-# Exit the ssh session
-# SSH back into the server
+# End terminal session
 screen -r
 # If your code has finished then collect the results, otherwise exit out again
 exit
