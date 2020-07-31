@@ -42,9 +42,7 @@ def video_loader(video_dir_path, frame_indices, image_loader):
     video = []
     for i in frame_indices:
         image_path = os.path.join(video_dir_path, 'image_{:05d}.jpg'.format(i))
-        print(image_path)
         if os.path.exists(image_path):
-            print(here)
             video.append(image_loader(image_path))
         else:
             return video
@@ -94,23 +92,14 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video,
     for name, label in class_to_idx.items():
         idx_to_class[label] = name
 
-    # DEBUG: print to test what video_names is
-    # print(video_names)
-
     dataset = []
     for i in range(len(video_names)):
         if i % 1000 == 0:
             print('dataset loading [{}/{}]'.format(i, len(video_names)))
 
         video_path = os.path.join(root_path, video_names[i])
-        print(video_path)
         if not os.path.exists(video_path):
-            print("shouldn't be here")
             continue
-
-        # DEBUG: added this to end after first 5 iters
-        # if i >= 5:
-        #     break
 
         n_frames_file_path = os.path.join(video_path, 'n_frames')
         n_frames = int(load_value_file(n_frames_file_path))
@@ -200,7 +189,7 @@ class UCF101(data.Dataset):
         if self.temporal_transform is not None:
             frame_indices = self.temporal_transform(frame_indices)
         clip = self.loader(path, frame_indices)
-        print(clip)
+
         if self.spatial_transform is not None:
             self.spatial_transform.randomize_parameters()
             clip = [self.spatial_transform(img) for img in clip]
@@ -209,9 +198,6 @@ class UCF101(data.Dataset):
         target = self.data[index]
         if self.target_transform is not None:
             target = self.target_transform(target)
-
-        # DEBUG: added this print statement to test clip path
-        print(clip, target)
 
         return clip, target
 
