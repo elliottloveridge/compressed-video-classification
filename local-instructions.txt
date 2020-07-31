@@ -1,7 +1,7 @@
 screen
 # hit enter
 cd ~/Documents/GitHub/research-project/
-docker run --rm -v "$(pwd)":/app -v "~/Datasets/UCF101/data":/data ufoym/deepo:latest /app/local-train.sh
+docker run --rm --ipc=host -v "$(pwd)":/app -v "/Users/elliottloveridge/Datasets/UCF101/data":/data ufoym/deepo:latest /app/local-train.sh
 # Ctrl + a followed by a 'd'
 # End terminal session
 screen -r
