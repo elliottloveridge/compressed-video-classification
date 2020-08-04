@@ -48,7 +48,8 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         optimizer.zero_grad()
         loss.backward()
 
-        compression_scheduler.before_parameter_optimization(epoch)
+        # DEBUG: can you call optimizer in this way?
+        compression_scheduler.before_parameter_optimization(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), optimizer=optimizer)
 
         optimizer.step()
 
