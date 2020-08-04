@@ -33,7 +33,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         print('inputs', len(inputs))
 
-        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=)
+        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i)
 
         if not opt.no_cuda:
             targets = targets.cuda()
