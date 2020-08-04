@@ -27,7 +27,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         # for each training step
         # DEBUG: need to check (len(data_loader)) value does not change over time
-        print('data_loader length', len(data_loader))
+        print('data_loader length:', len(data_loader))
         compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
 
         if not opt.no_cuda:
@@ -38,7 +38,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         loss = criterion(outputs, targets)
 
         # before backwards pass
-        compression_scheduler.before_backward_pass(epoch)
+        compression_scheduler.before_backward_pass(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), loss=loss)
 
         losses.update(loss.data, inputs.size(0))
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
