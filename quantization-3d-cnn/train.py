@@ -9,7 +9,7 @@ from utils import *
 
 
 def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
-                epoch_logger, batch_logger):
+                epoch_logger, batch_logger, compression_scheduler):
     print('train at epoch {}'.format(epoch))
 
     model.train()
