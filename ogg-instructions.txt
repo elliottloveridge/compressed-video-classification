@@ -21,4 +21,4 @@ Train: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -
 
 Test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-test.sh
 
-Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=4 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh
+Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=1 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh
