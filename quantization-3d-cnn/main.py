@@ -56,6 +56,13 @@ if __name__ == '__main__':
     model, parameters = generate_model(opt)
     print(model)
 
+    # create compression scheduler
+    compression_scheduler = distiller.CompressionScheduler(model)
+
+    # open yaml compression file
+    if os.path.isfile(opt.compression):
+        distiller.file_config(model, optimiser, opt.compression)
+
     criterion = nn.CrossEntropyLoss()
     if not opt.no_cuda:
         criterion = criterion.cuda()
