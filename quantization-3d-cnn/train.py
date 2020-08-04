@@ -21,11 +21,19 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     top5 = AverageMeter()
 
     end_time = time.time()
+
+    print('data-loader', len(data_loader))
+
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
         # for each training step
-        compression_scheduler.on_minibatch_begin(epoch)
+
+        # DEBUG: on_minibatch_begin requires minibatch_id and minibatches_per_epoch vals
+
+        print('inputs', len(inputs))
+
+        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=)
 
         if not opt.no_cuda:
             targets = targets.cuda()
