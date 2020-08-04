@@ -148,14 +148,10 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    print(opt.compression)
-
     # open yaml compression file
     if os.path.isfile(opt.compression):
-        print('here')
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression, compression_scheduler)
-        print(compression_scheduler)
 
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
@@ -166,7 +162,7 @@ if __name__ == '__main__':
 
             adjust_learning_rate(optimizer, i, opt)
             train_epoch(i, train_loader, model, criterion, optimizer, opt,
-                        train_logger, train_batch_logger)
+                        train_logger, train_batch_logger, compression_scheduler)
             state = {
                 'epoch': i,
                 'arch': opt.arch,
