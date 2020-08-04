@@ -25,7 +25,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         data_time.update(time.time() - end_time)
 
         # for each training step
-        compression_scheduler.on_minibath_begin(epoch)
+        compression_scheduler.on_minibatch_begin(epoch)
 
         if not opt.no_cuda:
             targets = targets.cuda()
@@ -49,7 +49,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         optimizer.step()
 
-        compression_scheduler.on_minibath_end(epoch)
+        compression_scheduler.on_minibatch_end(epoch)
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
