@@ -3,6 +3,7 @@ from torch.autograd import Variable
 import time
 import os
 import sys
+import distiller
 
 from utils import *
 
@@ -23,12 +24,18 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
+        # for each training step
+        compression_scheduler.on_minibath_begin(epoch)
+
         if not opt.no_cuda:
             targets = targets.cuda()
         inputs = Variable(inputs)
         targets = Variable(targets)
         outputs = model(inputs)
         loss = criterion(outputs, targets)
+
+        # before backwards pass
+        compression_scheduler.before_backward_pass(epoch)
 
         losses.update(loss.data, inputs.size(0))
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
@@ -37,7 +44,12 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         optimizer.zero_grad()
         loss.backward()
+
+        compression_scheduler.before_parameter_optimization(epoch)
+
         optimizer.step()
+
+        compression_scheduler.on_minibath_end(epoch)
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()

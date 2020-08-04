@@ -12,3 +12,13 @@ docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pw
 # SSH back into the server
 screen -r
 # If your code has finished then collect the results, otherwise exit out again
+
+
+
+Docker Commands:
+
+Train: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-train.sh
+
+Test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-test.sh
+
+Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh

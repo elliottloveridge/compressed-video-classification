@@ -3,6 +3,10 @@ import sys
 import json
 import numpy as np
 import torch
+
+# distiller import
+import distiller
+
 from torch import nn
 from torch import optim
 from torch.optim import lr_scheduler
@@ -148,7 +152,10 @@ if __name__ == '__main__':
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
+        compression_scheduler.on_epoch_begin(i)
+
         if not opt.no_train:
+
             adjust_learning_rate(optimizer, i, opt)
             train_epoch(i, train_loader, model, criterion, optimizer, opt,
                         train_logger, train_batch_logger)
@@ -162,6 +169,7 @@ if __name__ == '__main__':
             save_checkpoint(state, False, opt)
 
         if not opt.no_val:
+
             validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
                                         val_logger)
             is_best = prec1 > best_prec1
@@ -174,6 +182,8 @@ if __name__ == '__main__':
                 'best_prec1': best_prec1
                 }
             save_checkpoint(state, is_best, opt)
+
+        compression_scheduler.on_epoch_end(i)
 
 
     if opt.test:
