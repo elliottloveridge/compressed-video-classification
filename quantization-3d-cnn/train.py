@@ -53,7 +53,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         optimizer.step()
 
-        compression_scheduler.on_minibatch_end(epoch)
+        compression_scheduler.on_minibatch_end(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
