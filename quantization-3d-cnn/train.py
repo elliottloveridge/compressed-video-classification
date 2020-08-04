@@ -22,18 +22,13 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
     end_time = time.time()
 
-    print('data-loader', len(data_loader))
-
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
         # for each training step
-
-        # DEBUG: on_minibatch_begin requires minibatch_id and minibatches_per_epoch vals
-
-        print('inputs', len(inputs))
-
-        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i)
+        # DEBUG: need to check (len(data_loader)) value does not change over time
+        print('data_loader length', len(data_loader))
+        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
 
         if not opt.no_cuda:
             targets = targets.cuda()
