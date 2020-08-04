@@ -56,6 +56,8 @@ if __name__ == '__main__':
     model, parameters = generate_model(opt)
     print(model)
 
+    print(dir(distiller))
+
     # create compression scheduler
     # FIXME: is this needed?
     # compression_scheduler = distiller.CompressionScheduler(model)
