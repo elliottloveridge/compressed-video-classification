@@ -4,7 +4,7 @@ import numbers
 import collections
 import numpy as np
 import torch
-import cv2
+# import cv2
 import scipy.ndimage
 from PIL import Image, ImageOps
 try:
