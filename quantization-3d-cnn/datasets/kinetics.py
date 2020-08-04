@@ -9,7 +9,7 @@ import copy
 from numpy.random import randint
 import numpy as np
 import random
-import cv2
+# import cv2
 
 from utils import load_value_file
 
@@ -52,14 +52,14 @@ def video_loader(video_dir_path, frame_indices, sample_duration, image_loader):
             break
 
     cap.release()
-    
+
 
     # Loop as many times for short videos
     for frame in video:
         if len(video) >= sample_duration:
             break
         video.append(frame)
-    
+
     if len(video) == 0: # give an empty clip
         for _ in range(sample_duration):
             video.append(Image.new('RGB', (320, 180)))
