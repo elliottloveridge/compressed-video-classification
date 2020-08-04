@@ -56,16 +56,6 @@ if __name__ == '__main__':
     model, parameters = generate_model(opt)
     print(model)
 
-    print(dir(distiller))
-
-    # create compression scheduler
-    # FIXME: is this needed?
-    # compression_scheduler = distiller.CompressionScheduler(model)
-
-    # open yaml compression file
-    if os.path.isfile(opt.compression):
-        compression_scheduler = distiller.file_config(model, optimiser, opt.compression)
-
     criterion = nn.CrossEntropyLoss()
     if not opt.no_cuda:
         criterion = criterion.cuda()
@@ -157,6 +147,14 @@ if __name__ == '__main__':
         best_prec1 = checkpoint['best_prec1']
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
+
+    # create compression scheduler
+    # FIXME: is this needed?
+    # compression_scheduler = distiller.CompressionScheduler(model)
+
+    # open yaml compression file
+    if os.path.isfile(opt.compression):
+        compression_scheduler = distiller.file_config(model, optimizer, opt.compression)
 
 
     print('run')
