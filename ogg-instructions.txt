@@ -15,10 +15,14 @@ screen -r
 
 
 
-Docker Commands:
+UCF101 Docker Commands:
 
-Train: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-train.sh
+Deepo Train: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-train.sh
 
-Test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-test.sh
+Deepo Test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-test.sh
 
 Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=1 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh
+
+Sandbox Distiller: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=1 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-sandbox.sh
+
+Sandbox Deepo: 
