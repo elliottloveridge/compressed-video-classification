@@ -55,7 +55,7 @@ df = distiller.model_summary(model, what='model', dataset='ucf101')
 print(df)
 
 # from distiller example jupyter notebooks...
-dummy_input = torch.randn(1, 3, 224, 224)
+dummy_input = torch.randn(32, 3, 3, 3)
 ms = distiller.model_performance_summary(model, dummy_input, 1)
 # ms.to_csv(opt.result_path + 'performance-summary.csv')
 print(ms)
