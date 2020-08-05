@@ -50,7 +50,7 @@ model, parameters = generate_model(opt)
 # print()
 
 # what = 'model' should print a simple form of the model
-df = distiller.model_summary(model, what='model', dataset='ucf101')
+df = distiller.model_summary(model, what='modules')
 # df.to_csv(opt.result_path + 'model-summary.csv')
 # print(df)
 
