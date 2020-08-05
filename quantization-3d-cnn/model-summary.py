@@ -31,8 +31,8 @@ opt.scales = [opt.initial_scale]
 for i in range(1, opt.n_scales):
     opt.scales.append(opt.scales[-1] * opt.scale_step)
 opt.arch = '{}'.format(opt.model)
-opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
-opt.std = get_std(opt.norm_value)
+# opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
+# opt.std = get_std(opt.norm_value)
 opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.width_mult) + 'x',
                            opt.modality, str(opt.sample_duration)])
 
