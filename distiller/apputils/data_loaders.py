@@ -29,23 +29,25 @@ import numpy as np
 import distiller
 
 
-DATASETS_NAMES = ['imagenet', 'cifar10', 'mnist']
+DATASETS_NAMES = ['imagenet', 'cifar10', 'mnist', 'ucf101']
 
 
 def classification_dataset_str_from_arch(arch):
     if 'cifar' in arch:
-        dataset = 'cifar10' 
+        dataset = 'cifar10'
     elif 'mnist' in arch:
-        dataset = 'mnist' 
-    else:
-        dataset = 'imagenet'
+        dataset = 'mnist'
+    elif 'ucf101' in arch:
+        dataset = 'ucf101'
+    else dataset = 'imagenet'
     return dataset
 
 
 def classification_num_classes(dataset):
     return {'cifar10': 10,
             'mnist': 10,
-            'imagenet': 1000}.get(dataset, None)
+            'imagenet': 1000
+            'ucf101': 101}.get(dataset, None)
 
 
 def classification_get_input_shape(dataset):
@@ -55,6 +57,9 @@ def classification_get_input_shape(dataset):
         return 1, 3, 32, 32
     elif dataset == 'mnist':
         return 1, 1, 28, 28
+    elif dataset == 'ucf101':
+        # NOTE: need to check if these dimensions are correct for input shape
+        return 1, 3, 224, 224
     else:
         raise ValueError("dataset %s is not supported" % dataset)
 
@@ -166,7 +171,7 @@ def cifar10_get_datasets(data_dir, load_train=True, load_test=True):
 
     return train_dataset, test_dataset
 
-  
+
 def imagenet_get_datasets(data_dir, arch, load_train=True, load_test=True):
     """
     Load the ImageNet dataset.
