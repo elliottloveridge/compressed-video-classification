@@ -45,11 +45,15 @@ torch.manual_seed(opt.manual_seed)
 model, parameters = generate_model(opt)
 print(model)
 
+print()
+print(opt.result_path + 'model-summary.csv')
+print()
+
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='model', dataset='ucf101')
-df.to_csv(opt.result_path)
+df.to_csv(opt.result_path + 'model-summary.csv')
 
 # from distiller example jupyter notebooks...
 dummy_input = torch.randn(1, 3, 224, 224)
 ms = distiller.model_performance_summary(model, dummy_input, 1)
-ms.to_csv(opt.result_path)
+ms.to_csv(opt.result_path + 'performance-summary.csv')
