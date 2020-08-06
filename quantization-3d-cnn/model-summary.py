@@ -43,7 +43,8 @@ with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
 torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
-# print(model)
+
+# FIXME: need to add model import of a pre-trained model, just give opt.resume_path
 
 # print()
 # print(opt.result_path + 'model-summary.csv')
