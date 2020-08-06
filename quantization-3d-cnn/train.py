@@ -25,9 +25,6 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
-        # for each training step
-        # DEBUG: need to check (len(data_loader)) value does not change over time
-        print('data_loader length:', len(data_loader))
         compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
 
         if not opt.no_cuda:
