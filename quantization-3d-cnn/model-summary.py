@@ -52,10 +52,10 @@ model, parameters = generate_model(opt)
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='modules')
 # df.to_csv(opt.result_path + 'model-summary.csv')
-# print(df)
+print(df)
 
 # from distiller example jupyter notebooks...
 dummy_input = torch.randn(32, 3, 3, 3, 3)
 ms = distiller.model_performance_summary(model, dummy_input, 32)
 # ms.to_csv(opt.result_path + 'performance-summary.csv')
-print(ms)
+# print(ms)
