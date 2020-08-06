@@ -155,6 +155,7 @@ if __name__ == '__main__':
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
+        # DEBUG: this could be a problem if running in 'test' mode
         compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
