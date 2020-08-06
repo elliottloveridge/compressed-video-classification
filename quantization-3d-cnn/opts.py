@@ -68,7 +68,7 @@ def parse_opts():
     parser.add_argument('--width_mult', default=1.0, type=float, help='The applied width multiplier to scale number of filters')
     parser.add_argument('--manual_seed', default=1, type=int, help='Manually set random seed')
     parser.add_argument('--compression', default='/app/quantization-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
-
+    parser.add_argument('--name', default='', type=str, help='Name for model used to identify the file')
 
     args = parser.parse_args()
 

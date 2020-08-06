@@ -44,8 +44,8 @@ if __name__ == '__main__':
     opt.arch = '{}'.format(opt.model)
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
-    opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.width_mult) + 'x',
-                               opt.modality, str(opt.sample_duration)])
+    opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.n_epochs) + 'epochs',
+                                str(opt.sample_duration), opt.name])
 
     print(opt)
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
