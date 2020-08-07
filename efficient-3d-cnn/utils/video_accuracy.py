@@ -18,7 +18,7 @@ annotation_path = '/app/efficient-3d-cnn/annotation_UCF101/ucf101_01.json'
 if dataset == 'ucf101':
 
     # check if you need str() for paths
-    ucf_classification = UCFclassification(annotation__path, result_path, subset='validation', top_k=1)
+    ucf_classification = UCFclassification(annotation_path, result_path, subset='validation', top_k=1)
     ucf_classification.evaluate()
     print(ucf_classification.hit_at_k)
 
