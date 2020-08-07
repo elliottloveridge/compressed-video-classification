@@ -26,7 +26,7 @@ elif dataset == 'kinetics':
     kinetics_classification = KINETICSclassification('../annotation_Kinetics/kinetics.json',
                                            '../results/val.json',
                                            subset='validation',
-                                           top_k=5,
+                                           top_k=1,
                                            check_status=False)
     kinetics_classification.evaluate()
     print(kinetics_classification.hit_at_k)
