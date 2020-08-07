@@ -1,6 +1,8 @@
 from eval_ucf101 import UCFclassification
 from eval_kinetics import KINETICSclassification
 
+from opts import parse_opts
+
 opt = parse_opts()
 if opt.root_path != '':
     opt.annotation_path = os.path.join(opt.root_path, opt.annotation_path)
