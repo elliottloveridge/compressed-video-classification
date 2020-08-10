@@ -12,7 +12,7 @@ from eval_kinetics import KINETICSclassification
 # # FIXME: add an opt for top_k = 1 or 5 so you can set it!
 
 dataset = 'ucf101'
-result_path = '/data/results/qat/0608/val.json'
+result_path = '/data/results/val.json'
 annotation_path = '/app/efficient-3d-cnn/annotation_UCF101/ucf101_01.json'
 
 if dataset == 'ucf101':
