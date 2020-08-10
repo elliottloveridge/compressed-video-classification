@@ -27,6 +27,8 @@ def calculate_video_results(output_buffer, video_id, test_results, class_names):
 def test(data_loader, model, opt, class_names):
     print('test')
 
+    print('model')
+
     model.eval()
 
     batch_time = AverageMeter()
