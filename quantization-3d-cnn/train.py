@@ -34,8 +34,8 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         outputs = model(inputs)
         loss = criterion(outputs, targets)
 
-        # before backwards pass
-        compression_scheduler.before_backward_pass(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), loss=loss)
+        # before backwards pass - update loss to include regularization
+        loss = compression_scheduler.before_backward_pass(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), loss=loss)
 
         losses.update(loss.data, inputs.size(0))
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
