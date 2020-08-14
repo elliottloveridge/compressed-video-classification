@@ -1,0 +1,2 @@
+#! /bin/bash
+python /app/quantization-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model mobilenetv2 --width_mult 1.0 --n_val_samples 1 --n_epochs 1  --compression /app/quantization-3d-cnn/distiller/mobilenetv2-filter-pruning.yaml --name fp-1408 --test

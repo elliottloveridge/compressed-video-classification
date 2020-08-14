@@ -82,6 +82,8 @@ def test(data_loader, model, opt, class_names):
             'w') as f:
         json.dump(test_results, f)
 
+    # NOTE: need to remove first value from batch_time.sum as it is a lot larger than all others
+
     print()
     print('average time', batch_time.avg)
     print('total time', batch_time.sum)
