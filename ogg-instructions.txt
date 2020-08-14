@@ -25,6 +25,6 @@ Deepo Eval: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICE
 
 Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh
 
-Sandbox Distiller: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-sandbox.sh
+Sandbox Distiller (Pruning Model Summary): docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-sandbox.sh
 
 Sandbox Deepo:

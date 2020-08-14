@@ -29,9 +29,6 @@ def test(data_loader, model, opt, class_names):
 
     print('test')
 
-    # total_time = 0
-    # all_times = []
-
     model.eval()
 
     batch_time = AverageMeter()
@@ -50,6 +47,9 @@ def test(data_loader, model, opt, class_names):
         if not opt.no_softmax_in_test:
             outputs = F.softmax(outputs, dim=1)
 
+        # DEBUG: find out what batch_time is doing
+        print(len(outputs.size(0)))
+
         for j in range(outputs.size(0)):
             if not (i == 0 and j == 0) and targets[j] != previous_video_id:
                 calculate_video_results(output_buffer, previous_video_id,
@@ -67,26 +67,21 @@ def test(data_loader, model, opt, class_names):
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
-        # total_time += batch_time
-        # all_times.append(batch_time)
+        # only print every 400th
+        if (i % 400) == 0:
+            print('[{}/{}]\t'
+                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'.format(
+                      i + 1,
+                      len(data_loader),
+                      batch_time=batch_time,
+                      data_time=data_time))
 
-        print('[{}/{}]\t'
-              'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-              'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'.format(
-                  i + 1,
-                  len(data_loader),
-                  batch_time=batch_time,
-                  data_time=data_time))
     with open(
             os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),
             'w') as f:
         json.dump(test_results, f)
 
-    print(data_time.avg)
-    print(data_time.sum)
-
-    # print()
-    # print('='*10)
-    # print('number of recorded times', len(all_times))
-    # print('total time', total_time)
-    # print('len of data_loader[0]', len(data_loader[0]))
+    print()
+    print('average time', batch_time.avg)
+    print('total time', batch_time.sum)
