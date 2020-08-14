@@ -19,19 +19,22 @@ from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2,
 # model = shufflenet.get_model(groups=3, width_mult=2.0, num_classes=600)#13
 # model = shufflenetv2.get_model( width_mult=2.0, num_classes=600, sample_size = 112)#14
 # model = mobilenet.get_model( width_mult=2.0, num_classes=600, sample_size = 112)#15
-# model = mobilenetv2.get_model( width_mult=1.0, num_classes=600, sample_size = 112)#16
+model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 112)#16
 # model = squeezenet.get_model( version=1.1, num_classes=600, sample_size = 112, sample_duration = 16)
 # model = resnext.resnet101( num_classes=600, shortcut_type='B', cardinality=32, sample_size=112, sample_duration=16)
 # model = resnet.resnet18( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet50( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
-model = c3d.get_model( num_classes=600, sample_size=112, sample_duration=16)
+# model = c3d.get_model( num_classes=600, sample_size=112, sample_duration=16)
 model = model.cuda()
-model = nn.DataParallel(model, device_ids=None)	
+model = nn.DataParallel(model, device_ids=None)
 print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 print("Total number of trainable parameters: ", pytorch_total_params)
 
+# NOTE: batch size of 16, 3 channels (RGB), 112x112 test size of image
 flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
 print("Total number of FLOPs: ", flops)
+
+print("Total number of prms: ", prms)
