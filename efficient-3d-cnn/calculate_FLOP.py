@@ -32,13 +32,13 @@ model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 11
 
 # FIXME: add an args for no_cuda!
 # device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-if torch.device == 'cuda':
-    model = model.cuda()
+# if torch.device == 'cuda':
+#     model = model.cuda()
 
 # model = model.cuda()
-model = nn.DataParallel(model, device_ids=None)
+# model = nn.DataParallel(model, device_ids=None)
 print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
