@@ -26,12 +26,11 @@ def calculate_video_results(output_buffer, video_id, test_results, class_names):
 
 
 def test(data_loader, model, opt, class_names):
+
     print('test')
 
-    print('model')
-
-    total_time = 0
-    all_times = []
+    # total_time = 0
+    # all_times = []
 
     model.eval()
 
@@ -68,8 +67,8 @@ def test(data_loader, model, opt, class_names):
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
-        total_time += batch_time
-        all_times.append(batch_time)
+        # total_time += batch_time
+        # all_times.append(batch_time)
 
         print('[{}/{}]\t'
               'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -83,8 +82,11 @@ def test(data_loader, model, opt, class_names):
             'w') as f:
         json.dump(test_results, f)
 
-    print()
-    print('='*10)
-    print('number of recorded times', len(all_times))
-    print('total time', total_time)
-    print('len of data_loader[0]', len(data_loader[0]))
+    print(data_time.avg)
+    print(data_time.sum)
+
+    # print()
+    # print('='*10)
+    # print('number of recorded times', len(all_times))
+    # print('total time', total_time)
+    # print('len of data_loader[0]', len(data_loader[0]))
