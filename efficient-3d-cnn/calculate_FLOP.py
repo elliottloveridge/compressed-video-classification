@@ -26,7 +26,9 @@ model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 11
 # model = resnet.resnet50( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = c3d.get_model( num_classes=600, sample_size=112, sample_duration=16)
-model = model.cuda()
+
+# FIXME: removed model.cuda due to bug - params on device cpu, not gpu
+# model = model.cuda()
 model = nn.DataParallel(model, device_ids=None)
 print(model)
 
