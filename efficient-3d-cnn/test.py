@@ -5,6 +5,7 @@ import time
 import os
 import sys
 import json
+import numpy as np
 
 from utils import AverageMeter
 
@@ -28,6 +29,9 @@ def test(data_loader, model, opt, class_names):
     print('test')
 
     print('model')
+
+    total_time = 0
+    all_times = []
 
     model.eval()
 
@@ -64,6 +68,9 @@ def test(data_loader, model, opt, class_names):
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
+        total_time += batch_time
+        all_times.append(batch_time)
+
         print('[{}/{}]\t'
               'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
               'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'.format(
@@ -75,3 +82,9 @@ def test(data_loader, model, opt, class_names):
             os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),
             'w') as f:
         json.dump(test_results, f)
+
+    print()
+    print('='*10)
+    print('number of recorded times', len(all_times))
+    print('total time', total_time)
+    print('len of data_loader[0]', len(data_loader[0]))
