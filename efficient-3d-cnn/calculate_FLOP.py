@@ -28,6 +28,14 @@ model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 11
 # model = c3d.get_model( num_classes=600, sample_size=112, sample_duration=16)
 
 # FIXME: removed model.cuda due to bug - params on device cpu, not gpu
+
+# FIXME: add an args for no_cuda!
+# device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+if torch.device == 'cuda':
+    model = model.cuda()
+
 # model = model.cuda()
 model = nn.DataParallel(model, device_ids=None)
 print(model)
