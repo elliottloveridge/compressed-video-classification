@@ -29,4 +29,4 @@ Prune: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -
 
 Sandbox Distiller (Pruning Model Summary): docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-sandbox.sh
 
-Sandbox Deepo:
+Sandbox Deepo: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app mb2775/distiller python /app/ogg-sensitivity.sh

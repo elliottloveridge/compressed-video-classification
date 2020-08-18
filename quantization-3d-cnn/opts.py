@@ -67,8 +67,10 @@ def parse_opts():
     parser.add_argument('--groups', default=3, type=int, help='The number of groups at group convolutions at conv layers')
     parser.add_argument('--width_mult', default=1.0, type=float, help='The applied width multiplier to scale number of filters')
     parser.add_argument('--manual_seed', default=1, type=int, help='Manually set random seed')
-    parser.add_argument('--compression', default='/app/quantization-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
-    parser.add_argument('--name', default='', type=str, help='Name for model used to identify the file')
+    parser.add_argument('--compression_file', default='/app/quantization-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
+    parser.add_argument('--compress', action='store_true', help='If true, compression is performed, defined by compression_type arg')
+    parser.set_defaults(compress=False)
+    parser.add_argument('--compression_type', default='qat', type=str, help='Compression type to perform (includes fp - filter pruning, cp - channel pruning, ptq - post training quantisation, qat - quantisation aware training)')
 
     args = parser.parse_args()
 

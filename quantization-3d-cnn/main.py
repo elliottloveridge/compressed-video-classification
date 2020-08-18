@@ -1,16 +1,18 @@
+# imports
 import os
 import sys
 import json
 import numpy as np
 import torch
-
-# distiller import
 import distiller
+from datetime import datetime
 
+# torch imports
 from torch import nn
 from torch import optim
 from torch.optim import lr_scheduler
 
+# function imports
 from opts import parse_opts
 from model import generate_model
 from mean import get_mean, get_std
@@ -25,8 +27,11 @@ from validation import val_epoch
 import test
 
 
-
 if __name__ == '__main__':
+
+    date_str = datetime.today().strftime('%d%m')
+
+    # define input args
     opt = parse_opts()
     if opt.root_path != '':
         opt.video_path = os.path.join(opt.root_path, opt.video_path)
@@ -44,9 +49,12 @@ if __name__ == '__main__':
     opt.arch = '{}'.format(opt.model)
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
-    opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.n_epochs) + 'epochs', str(opt.batch_size) + 'batch-size', opt.name])
+    if not opt.compress:
+        opt.compress_type = 'benchmark'
+    # naming convention set as dataset_model_compressiontype_#epochs_#batchsize_ddmm
+    opt.store_name = '_'.join([opt.dataset, opt.model, opt.compress_type,
+    str(opt.n_epochs) + 'epochs', str(opt.batch_size) + 'batchsize', date_str])
 
-    print(opt)
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
         json.dump(vars(opt), opt_file)
 
@@ -147,20 +155,28 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    # open yaml compression file
-    if os.path.isfile(opt.compression):
+    # set compression dictionary to validate compression_type input
+    comp = dict()
+    comp['active'] = ['qat, fp']
+    comp['passive'] = ['ptq']
+
+    if opt.compress:
+    # if os.path.isfile(opt.compression_file):
         compression_scheduler = distiller.CompressionScheduler(model)
-        compression_scheduler = distiller.file_config(model, optimizer, opt.compression, compression_scheduler)
+        compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+    else:
+        compression_scheduler = None
 
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
-        # DEBUG: this could be a problem if running in 'test' mode
-        compression_scheduler.on_epoch_begin(i)
+        if opt.compression_type in comp['active']:
+            compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
 
             adjust_learning_rate(optimizer, i, opt)
+            # DEBUG: don't always need to pass compresison_scheduler
             train_epoch(i, train_loader, model, criterion, optimizer, opt,
                         train_logger, train_batch_logger, compression_scheduler)
             state = {
@@ -187,15 +203,15 @@ if __name__ == '__main__':
                 }
             save_checkpoint(state, is_best, opt)
 
-        compression_scheduler.on_epoch_end(i)
+        if opt.compression_type in comp['active']:
+            compression_scheduler.on_epoch_end(i)
 
 
     if opt.test:
         spatial_transform = Compose([
             Scale(int(opt.sample_size / opt.scale_in_test)),
             CornerCrop(opt.sample_size, opt.crop_position_in_test),
-            ToTensor(opt.norm_value), norm_method
-        ])
+            ToTensor(opt.norm_value), norm_method])
         # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
         temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
         target_transform = VideoID()

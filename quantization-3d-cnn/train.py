@@ -25,7 +25,10 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
-        compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
+        # DEBUG: len(data_loader) may not be right size
+        if compression_scheduler is not None:
+            compression_scheduler.on_minibatch_begin(epoch, minibatch_id=i,
+            minibatches_per_epoch=len(data_loader))
 
         if not opt.no_cuda:
             targets = targets.cuda()
@@ -35,7 +38,9 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         loss = criterion(outputs, targets)
 
         # before backwards pass - update loss to include regularization
-        loss = compression_scheduler.before_backward_pass(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), loss=loss)
+        if compression_scheduler is not None:
+            loss = compression_scheduler.before_backward_pass(epoch, minibatch_id=i,
+            minibatches_per_epoch=len(data_loader), loss=loss)
 
         losses.update(loss.data, inputs.size(0))
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
@@ -45,12 +50,15 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         optimizer.zero_grad()
         loss.backward()
 
-        # DEBUG: can you call optimizer in this way?
-        compression_scheduler.before_parameter_optimization(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader), optimizer=optimizer)
+        if compression_scheduler is not None:
+            compression_scheduler.before_parameter_optimization(epoch, minibatch_id=i,
+            minibatches_per_epoch=len(data_loader), optimizer=optimizer)
 
         optimizer.step()
 
-        compression_scheduler.on_minibatch_end(epoch, minibatch_id=i, minibatches_per_epoch=len(data_loader))
+        if compression_scheduler is not None:
+            compression_scheduler.on_minibatch_end(epoch, minibatch_id=i,
+            minibatches_per_epoch=len(data_loader))
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
