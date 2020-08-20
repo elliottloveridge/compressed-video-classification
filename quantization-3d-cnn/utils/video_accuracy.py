@@ -62,7 +62,7 @@ model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(f)]
 
 # test if date directory exists - assumes compression directory already exists
 if not os.path.exists(os.path.join(opt.result_path, *new_path)):
-    os.mkdirs(os.path.join(opt.result_path, *new_path))
+    os.mkdir(os.path.join(opt.result_path, *new_path))
 
 # move all files
 for f in model_files:
