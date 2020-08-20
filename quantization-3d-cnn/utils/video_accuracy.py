@@ -59,7 +59,6 @@ with open(path, "w") as text_file:
 
 # use os.rename(oldfullpath, newfullpath) to move a file
 model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(f)]
-path = os.path.join(opt.result_path, *)
 
 # test if date directory exists - assumes compression directory already exists
 if not os.path.exists(os.path.join(opt.result_path, *new_path)):

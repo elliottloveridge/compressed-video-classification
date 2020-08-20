@@ -193,6 +193,7 @@ torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
 
+# NOTE: you can add the classifiers to pruning params, these are fully connected layers?
 params = ['module.features.0.0',
 'module.features.0.1',
 'module.features.0.2',
@@ -343,8 +344,8 @@ if opt.resume_path:
     model.load_state_dict(checkpoint['state_dict'])
 
 # sparsities = should be a range of values to perform sparsity calculations on
-# test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset, not rand?
-# group = 'filter' - if using filter wise pruning
+# test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset (rand?)
+# group = 'filter' - if using filter wise pruning etc
 
 sparse_rng = range(0, 1, 5)
 
