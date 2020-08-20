@@ -51,7 +51,6 @@ if __name__ == '__main__':
     opt.std = get_std(opt.norm_value)
     if not opt.compress:
         opt.compress_type = 'benchmark'
-    # naming convention set as dataset_model_compressiontype_#epochs_#batchsize_ddmm
     opt.store_name = '_'.join([opt.dataset, opt.model, opt.compress_type,
     str(opt.n_epochs) + 'epochs', str(opt.batch_size) + 'batchsize', date_str])
 
@@ -156,12 +155,12 @@ if __name__ == '__main__':
         model.load_state_dict(checkpoint['state_dict'])
 
     # set compression dictionary to validate compression_type input
+    # FIXME: move this to somewhere else, not a great implementation
     comp = dict()
     comp['active'] = ['qat, fp']
     comp['passive'] = ['ptq']
 
     if opt.compress:
-    # if os.path.isfile(opt.compression_file):
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
     else:
@@ -170,13 +169,12 @@ if __name__ == '__main__':
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
-        if opt.compression_type in comp['active']:
+        if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
 
             adjust_learning_rate(optimizer, i, opt)
-            # DEBUG: don't always need to pass compresison_scheduler
             train_epoch(i, train_loader, model, criterion, optimizer, opt,
                         train_logger, train_batch_logger, compression_scheduler)
             state = {
@@ -203,7 +201,7 @@ if __name__ == '__main__':
                 }
             save_checkpoint(state, is_best, opt)
 
-        if opt.compression_type in comp['active']:
+        if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_end(i)
 
 

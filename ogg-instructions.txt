@@ -1,32 +1,20 @@
 ssh el627@ogg.cs.bath.ac.uk
 jZPXuK5qV4Q
+cd research-project
 screen
 # hit enter twice
 # if you need to then use git pull
 # 6be8c4c3df5c82c42663b04bd6fab6dd31ddb622
 cd research-project/
-# make sure the bash script is runnable -- use chmod +x ogg-train.sh
-docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-train.sh
-# Ctrl + a followed by a 'd'
+# make sure the bash script is runnable -- use 'chmod +x ogg-run.sh' etc
+docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-run.sh
+# Ctrl + a followed by a 'd' to detach
 # Exit the ssh session
-# SSH back into the server
+# ssh back into the server like before
 screen -r
 # If your code has finished then collect the results, otherwise exit out again
 
 
-
-UCF101 Docker Commands:
-
-Deepo Train: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=1 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-train.sh
-
-Deepo Test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-test.sh
-
-Deepo Eval: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-eval.sh
-
-Quantize: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-quantize.sh
-
-Prune: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-prune.sh
-
-Sandbox Distiller (Pruning Model Summary): docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v"/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-sandbox.sh
-
-Sandbox Deepo: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app mb2775/distiller python /app/ogg-sensitivity.sh
+ucf101 docker commands:
+train and test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-run.sh
+evaluate: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-eval.sh
