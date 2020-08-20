@@ -52,7 +52,7 @@ if __name__ == '__main__':
     if not opt.compress:
         opt.compress_type = 'benchmark'
     opt.store_name = '_'.join([opt.dataset, opt.model, opt.compress_type,
-    str(opt.n_epochs) + 'epochs', str(opt.batch_size) + 'batchsize', date_str])
+    str(opt.n_epochs) + 'epochs', date_str])
 
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
         json.dump(vars(opt), opt_file)
