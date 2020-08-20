@@ -23,7 +23,7 @@ if opt.root_path != '':
 
 # NOTE: want to get files using os here and figure out dataset etc
 ls = os.listdir(opt.result_path)
-model_files = [f for f in os.listdir(opt.result_path) if os.path.splittext(f)[-1].lower() == '.pth']
+model_files = [f for f in os.listdir(opt.result_path) if os.path.splitext(f)[-1].lower() == '.pth']
 
 for f in model_files:
     print(f)
