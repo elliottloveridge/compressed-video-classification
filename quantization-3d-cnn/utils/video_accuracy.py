@@ -66,4 +66,5 @@ if not os.path.exists(os.path.join(opt.result_path, *new_path)):
 
 # move all files
 for f in model_files:
+    print(f)
     os.rename(os.path.join(opt.result_path, f), os.path.join(opt.result_path, *new_path, f))
