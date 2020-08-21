@@ -194,8 +194,7 @@ if opt.root_path != '':
     if opt.resume_path:
         opt.resume_path = os.path.join(opt.root_path, opt.resume_path)
 opt.arch = '{}'.format(opt.model)
-opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.n_epochs) + 'epochs',
- str(opt.batch_size) + 'batch-size', opt.name])
+# NOTE: removed opt.store_name arg from here
 
 torch.manual_seed(opt.manual_seed)
 
