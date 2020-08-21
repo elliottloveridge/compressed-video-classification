@@ -8,6 +8,7 @@ import json
 
 from utils import AverageMeter
 
+# DEBUG: need to get this working
 import utils.UCFclassification as UCFclassification
 
 
