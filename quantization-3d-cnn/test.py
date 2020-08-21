@@ -8,8 +8,8 @@ import json
 
 from utils import AverageMeter
 
-# # system path inserted at 1 to get utils python functions
-# sys.path.insert(1, '/utils')
+# system path inserted at 1 to get utils python functions
+sys.path.insert(1, '/utils')
 # import lib.BoxTime as BT
 # ...
 # BT.bt_function()
