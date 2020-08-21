@@ -106,11 +106,9 @@ def test_eval():
 
         # print every 100th sample - not using as low sample size
         # if i % 100 == 0:
-        print('[{}/{}]\t'.format(i + 1, len(data_loader))
+        print('[{}/{}]\t'.format(i + 1, len(data_loader)))
 
-    with open(
-            os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),
-            'w') as f:
+    with open(os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),'w') as f:
         json.dump(test_results, f)
 
     print('eval')
