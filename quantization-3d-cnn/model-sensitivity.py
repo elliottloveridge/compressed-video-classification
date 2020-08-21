@@ -46,6 +46,7 @@ from opts import parse_opts
 from model import generate_model
 from utils import *
 import test
+from mean import get_mean, get_std
 from spatial_transforms import *
 from temporal_transforms import *
 from target_transforms import ClassLabel, VideoID
