@@ -78,7 +78,7 @@ def test(data_loader, model, opt, class_names):
         json.dump(test_results, f)
 
 # pruning sensitivity analysis required a single function to test/evaluate and return losses, so will not dump values to json
-def test_eval():
+def test_eval(data_loader, model, opt, class_names):
     print('test')
 
     model.eval()
