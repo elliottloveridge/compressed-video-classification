@@ -407,7 +407,7 @@ test_data = get_test_set(opt, spatial_transform, temporal_transform,
 
 # NOTE: using test_subset will negate the need for sampler in DataLoader
 
-subset_ind = np.random.rand(0, len(test_data), size=(200, 1))
+subset_ind = np.random.randint(0, len(test_data), size=(200, 1))
 
 print(subset_ind)
 print()
