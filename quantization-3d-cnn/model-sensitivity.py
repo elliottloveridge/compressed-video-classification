@@ -32,9 +32,10 @@ from copy import deepcopy
 from collections import OrderedDict
 import logging
 import csv
+import numpy as np
 import os
 import distiller
-# not working, need to check this
+# NOTE: edited, check it is working correctly
 from distiller.scheduler import CompressionScheduler
 
 from torch import nn
@@ -391,7 +392,7 @@ temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
 target_transform = VideoID()
 
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
-                         target_transform
+                         target_transform)
 
 # NOTE: using test_subset will negate the need for sampler in DataLoader
 
