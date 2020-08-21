@@ -195,6 +195,8 @@ if opt.root_path != '':
     if opt.resume_path:
         opt.resume_path = os.path.join(opt.root_path, opt.resume_path)
 opt.arch = '{}'.format(opt.model)
+opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
+opt.std = get_std(opt.norm_value)
 # NOTE: removed opt.store_name arg from here
 
 # NOTE: added for norm_method used in test - need to check what it does
