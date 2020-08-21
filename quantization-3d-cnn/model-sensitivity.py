@@ -88,6 +88,8 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
         raise ValueError("group parameter contains an illegal value: {}".format(group))
     sensitivities = OrderedDict()
 
+    print(model.state_dict())
+
     for param_name in net_params:
         if model.state_dict()[param_name].dim() not in [2,4]:
             continue
