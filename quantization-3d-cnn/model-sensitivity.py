@@ -32,6 +32,7 @@ from copy import deepcopy
 from collections import OrderedDict
 import logging
 import csv
+import os
 import distiller
 # not working, need to check this
 from distiller.scheduler import CompressionScheduler
