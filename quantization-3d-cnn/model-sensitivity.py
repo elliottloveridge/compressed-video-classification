@@ -42,6 +42,12 @@ from torch.optim import lr_scheduler
 from opts import parse_opts
 from model import generate_model
 from utils import *
+import test
+from spatial_transforms import *
+from temporal_transforms import *
+from target_transforms import ClassLabel, VideoID
+from target_transforms import Compose as TargetCompose
+from dataset import get_training_set, get_validation_set, get_test_set
 
 msglogger = logging.getLogger()
 
@@ -349,10 +355,52 @@ if opt.resume_path:
 
 sparse_rng = range(0, 1, 5)
 
-test_fnc = partial(classifier.test, test_loader=data_loader, criterion=criterion,
-                       loggers=loggers, args=args,
-                       activations_collectors=classifier.create_activation_stats_collectors(model))
+#------------------- data sampler start ------------------#
+# FIXME: need to move this class to the top of the page...
 
-sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng, test_func=test_fnc, group='filter')
-sensitivities_to_png(sense, opt.result_path + 'sense.png')
-sensitivities_to_csv(sense, opt.result_path + 'sense.csv')
+class DataSampler(Sampler):
+    def __init__(self, mask):
+        self.mask = mask
+
+    def __iter__(self):
+        return (self.indices[i] for i in torch.nonzero(self.mask))
+
+    def __len__(self):
+        return len(self.mask)
+
+#------------------- data sampler end ------------------#
+
+
+# # distiller code example - do I need loggers etc?
+# test_fnc = partial(classifier.test, test_loader=data_loader, criterion=criterion,
+#                        loggers=loggers, args=args,
+#                        activations_collectors=classifier.create_activation_stats_collectors(model))
+
+
+# sample only a select number of values from test dataset
+sampler = DataSampler(100)
+
+# same as test call in main.py but includes sampling
+spatial_transform = Compose([
+    Scale(int(opt.sample_size / opt.scale_in_test)),
+    CornerCrop(opt.sample_size, opt.crop_position_in_test),
+    ToTensor(opt.norm_value), norm_method])
+# temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+target_transform = VideoID()
+
+test_data = get_test_set(opt, spatial_transform, temporal_transform,
+                         target_transform)
+test_loader = torch.utils.data.DataLoader(
+    test_data,
+    batch_size=16,
+    shuffle=False,
+    sampler=sampler,
+    num_workers=opt.n_threads,
+    pin_memory=True)
+
+test_func = test.test_eval(test_loader, model, opt, test_data.class_names)
+
+sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng, test_func=test_func, group='filter')
+sensitivities_to_png(sense, opt.result_path + 'sensitivity.png')
+sensitivities_to_csv(sense, opt.result_path + 'sensitivity.csv')

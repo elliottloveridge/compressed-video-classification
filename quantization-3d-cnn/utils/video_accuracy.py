@@ -33,6 +33,7 @@ new_path.append(f[2])
 new_path.append(f[4])
 path = os.path.join(opt.result_path, 'val.json')
 
+# DEBUG: should subset='testing' instead? - not calculating for validation set
 if opt.dataset == 'ucf101':
     ucf_classification = UCFclassification(opt.annotation_path, path, subset='validation', top_k=1)
     ucf_classification.evaluate()

@@ -6,7 +6,7 @@ import pandas as pd
 class UCFclassification(object):
 
     def __init__(self, ground_truth_filename=None, prediction_filename=None,
-                 subset='validation', verbose=False, top_k=1):
+                 subset='validation', verbose=False, top_k=1, full_eval=False):
         if not ground_truth_filename:
             raise IOError('Please input a valid ground truth file.')
         if not prediction_filename:
@@ -16,6 +16,8 @@ class UCFclassification(object):
         self.top_k = top_k
         self.ap = None
         self.hit_at_k = None
+        # NOTE: added this so that it is possible to return average accuracy per video
+        self.full_eval = full_eval
         # Import ground truth and predictions.
         self.ground_truth, self.activity_index = self._import_ground_truth(
             ground_truth_filename)
@@ -105,8 +107,17 @@ class UCFclassification(object):
         interpolated mean average precision to measure the performance of a
         method.
         """
-        hit_at_k = compute_video_hit_at_k(self.ground_truth,
-                                          self.prediction, top_k=self.top_k)
+        # added a return_all part for compute_video_hit_at_k
+        if self.full_eval:
+            hit_at_k = compute_video_hit_at_k(self.ground_truth,
+                                              self.prediction, top_k=self.top_k,
+                                              return_all=True)
+
+        else:
+            hit_at_k = compute_video_hit_at_k(self.ground_truth,
+                                              self.prediction, top_k=self.top_k)
+
+        # DEBUG: need to find out what this self.verbose is doing
         if self.verbose:
             print('[RESULTS] Performance on ActivityNet untrimmed video '
                    'classification task.')
@@ -117,7 +128,7 @@ class UCFclassification(object):
 ################################################################################
 # Metrics
 ################################################################################
-def compute_video_hit_at_k(ground_truth, prediction, top_k=3):
+def compute_video_hit_at_k(ground_truth, prediction, top_k=3, return_all=False):
     """Compute accuracy at k prediction between ground truth and
     predictions data frames. This code is greatly inspired by evaluation
     performed in Karpathy et al. CVPR14.
@@ -136,6 +147,9 @@ def compute_video_hit_at_k(ground_truth, prediction, top_k=3):
     acc : float
         Top k accuracy score.
     """
+
+    # for this you could return an array of avg_hits_per_vid rather than the mean
+
     video_ids = np.unique(ground_truth['video-id'].values)
     avg_hits_per_vid = np.zeros(video_ids.size)
     for i, vid in enumerate(video_ids):
@@ -152,4 +166,8 @@ def compute_video_hit_at_k(ground_truth, prediction, top_k=3):
         gt_label = ground_truth.loc[gt_idx]['label'].tolist()
         avg_hits_per_vid[i] = np.mean([1 if this_label in pred_label else 0
                                        for this_label in gt_label])
-    return float(avg_hits_per_vid.mean())
+
+    if return_all:
+        return avg_hits_per_vid
+    else:
+        return float(avg_hits_per_vid.mean())
