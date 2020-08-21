@@ -9,10 +9,13 @@ import copy
 from numpy.random import randint
 import numpy as np
 import random
+# NOTE: need to uncomment this if running kinetics
 # import cv2
 
-from utils import load_value_file
+# NOTE: testing the below instead
+# from utils import load_value_file
 
+import utils.load_value_file as load_value_file
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)

@@ -7,7 +7,8 @@ import sys
 import json
 
 from utils import AverageMeter
-from utils import UCFclassification
+
+import utils.UCFclassification as UCFclassification
 
 
 def calculate_video_results(output_buffer, video_id, test_results, class_names):
