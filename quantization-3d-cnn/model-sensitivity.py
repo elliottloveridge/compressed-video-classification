@@ -407,13 +407,14 @@ test_data = get_test_set(opt, spatial_transform, temporal_transform,
 
 # NOTE: using test_subset will negate the need for sampler in DataLoader
 
-subset_ind = np.random.randint(0, len(test_data), size=(200, 1))
+# NOTE: the size len(test_data) might be too big
+subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
 
-print(subset_ind)
+print(subset_ind[0].tolist())
 print()
 print(type(subset_ind))
 
-test_subset = torch.utils.data.Subset(test_data, subset_ind)
+test_subset = torch.utils.data.Subset(test_data, subset_ind[0].tolist())
 
 test_loader = torch.utils.data.DataLoader(
     # test_data,
