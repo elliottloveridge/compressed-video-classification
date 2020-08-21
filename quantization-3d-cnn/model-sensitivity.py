@@ -356,20 +356,20 @@ if opt.resume_path:
 
 sparse_rng = range(0, 1, 5)
 
-#------------------- data sampler start ------------------#
-# FIXME: need to move this class to the top of the page...
-
-class DataSampler(Sampler):
-    def __init__(self, mask):
-        self.mask = mask
-
-    def __iter__(self):
-        return (self.indices[i] for i in torch.nonzero(self.mask))
-
-    def __len__(self):
-        return len(self.mask)
-
-#------------------- data sampler end ------------------#
+# #------------------- data sampler start ------------------#
+# # FIXME: need to move this class to the top of the page...
+#
+# class DataSampler():
+#     def __init__(self, mask):
+#         self.mask = mask
+#
+#     def __iter__(self):
+#         return (self.indices[i] for i in torch.nonzero(self.mask))
+#
+#     def __len__(self):
+#         return len(self.mask)
+#
+# #------------------- data sampler end ------------------#
 
 
 # # distiller code example - do I need loggers etc?
@@ -378,8 +378,8 @@ class DataSampler(Sampler):
 #                        activations_collectors=classifier.create_activation_stats_collectors(model))
 
 
-# sample only a select number of values from test dataset
-sampler = DataSampler(100)
+# # sample only a select number of values from test dataset
+# sampler = DataSampler(100)
 
 # same as test call in main.py but includes sampling
 spatial_transform = Compose([
@@ -391,12 +391,24 @@ temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
 target_transform = VideoID()
 
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
-                         target_transform)
+                         target_transform
+
+# NOTE: using test_subset will negate the need for sampler in DataLoader
+
+subset_ind = np.random.rand(0, len(test_data), size=(200, 1))
+
+print(subset_ind)
+print()
+print(type(subset_ind))
+
+test_subset = torch.utils.data.Subset(test_data, subset_ind)
+
 test_loader = torch.utils.data.DataLoader(
-    test_data,
+    # test_data,
+    test_subset,
     batch_size=16,
     shuffle=False,
-    sampler=sampler,
+    # sampler=sampler,
     num_workers=opt.n_threads,
     pin_memory=True)
 
