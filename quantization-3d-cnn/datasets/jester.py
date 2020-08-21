@@ -10,7 +10,7 @@ from numpy.random import randint
 import numpy as np
 import random
 
-from utils import load_value_file
+from util import load_value_file
 
 
 def pil_loader(path):
