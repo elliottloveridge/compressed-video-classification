@@ -7,13 +7,7 @@ import sys
 import json
 
 from utils import AverageMeter
-
-# system path inserted at 1 to get utils python functions
-sys.path.insert(1, '/utils')
-# import lib.BoxTime as BT
-# ...
-# BT.bt_function()
-from utils.eval_ucf101 import UCFclassification
+from utils import UCFclassification
 
 
 def calculate_video_results(output_buffer, video_id, test_results, class_names):
