@@ -8,6 +8,10 @@ import json
 
 from utils import AverageMeter
 
+# system path inserted at 1 to get utils python functions
+sys.path.insert(1, '/utils')
+from eval_ucf101 import UCFclassification
+
 
 def calculate_video_results(output_buffer, video_id, test_results, class_names):
     video_outputs = torch.stack(output_buffer)
@@ -73,3 +77,64 @@ def test(data_loader, model, opt, class_names):
             os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),
             'w') as f:
         json.dump(test_results, f)
+
+# pruning sensitivity analysis required a single function to test/evaluate and return losses, so will not dump values to json
+def test_eval():
+    print('test')
+
+    model.eval()
+
+    # time not required for this method
+    output_buffer = []
+    previous_video_id = ''
+    test_results = {'results': {}}
+    for i, (inputs, targets) in enumerate(data_loader):
+
+        with torch.no_grad():
+            inputs = Variable(inputs)
+        outputs = model(inputs)
+        if not opt.no_softmax_in_test:
+            outputs = F.softmax(outputs, dim=1)
+
+        for j in range(outputs.size(0)):
+            if not (i == 0 and j == 0) and targets[j] != previous_video_id:
+                calculate_video_results(output_buffer, previous_video_id,
+                                        test_results, class_names)
+                output_buffer = []
+            output_buffer.append(outputs[j].data.cpu())
+            previous_video_id = targets[j]
+
+        # print every 100th sample - not using as low sample size
+        # if i % 100 == 0:
+        print('[{}/{}]\t'.format(i + 1, len(data_loader))
+
+    with open(
+            os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),
+            'w') as f:
+        json.dump(test_results, f)
+
+    print('eval')
+
+    # FIXME: don't want to hardcode val.json anywhere as could be test.json
+    opt.result_path = os.path.join(opt.result_path, 'val.json')
+
+    # FIXME: need to return all accuracy values rather than an average
+    if opt.dataset == 'ucf101':
+        # FIXME: need to change the subset to 'testing' rather than 'validation' - needs to match the above test_subset!
+        ucf_classification = UCFclassification(opt.annotation_path, opt.result_path, subset='validation', top_k=1, full_eval=True)
+        ucf_classification.evaluate()
+        top1 = ucf_classification.hit_at_k
+
+        ucf_classification = UCFclassification(opt.annotation_path, opt.result_path, subset='validation', top_k=5, full_eval=True)
+        ucf_classification.evaluate()
+        top5 = ucf_classification.hit_at_k
+
+    # now need to return losses and top-1/5 accuracy
+    # NOTE: are test_results the same as losses?
+
+    print(test_results)
+    print()
+    print()
+    print(top1)
+
+    return test_results, top1, top5
