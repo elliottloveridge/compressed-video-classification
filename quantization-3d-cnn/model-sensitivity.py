@@ -33,7 +33,8 @@ from collections import OrderedDict
 import logging
 import csv
 import distiller
-from .scheduler import CompressionScheduler
+# not working, need to check this
+from distiller.scheduler import CompressionScheduler
 
 from torch import nn
 from torch import optim
