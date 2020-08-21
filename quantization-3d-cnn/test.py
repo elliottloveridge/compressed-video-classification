@@ -6,7 +6,7 @@ import os
 import sys
 import json
 
-from utils import AverageMeter
+from util import AverageMeter
 
 # DEBUG: need to get this working
 from utils.eval_ucf101 import UCFclassification
