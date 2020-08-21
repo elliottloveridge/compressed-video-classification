@@ -9,7 +9,7 @@ import json
 from utils import AverageMeter
 
 # DEBUG: need to get this working
-import utils.UCFclassification as UCFclassification
+from utils.eval_ucf101 import UCFclassification
 
 
 def calculate_video_results(output_buffer, video_id, test_results, class_names):
