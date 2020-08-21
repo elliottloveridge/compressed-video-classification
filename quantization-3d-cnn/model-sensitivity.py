@@ -197,6 +197,14 @@ if opt.root_path != '':
 opt.arch = '{}'.format(opt.model)
 # NOTE: removed opt.store_name arg from here
 
+# NOTE: added for norm_method used in test - need to check what it does
+if opt.no_mean_norm and not opt.std_norm:
+    norm_method = Normalize([0, 0, 0], [1, 1, 1])
+elif not opt.std_norm:
+    norm_method = Normalize(opt.mean, [1, 1, 1])
+else:
+    norm_method = Normalize(opt.mean, opt.std)
+
 torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
