@@ -12,7 +12,7 @@ import random
 # NOTE: need to uncomment this if running kinetics
 # import cv2
 
-from utils import load_value_file
+from util import load_value_file
 
 
 def pil_loader(path):
