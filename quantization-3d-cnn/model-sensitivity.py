@@ -91,8 +91,8 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
     # print(model.state_dict())
 
     for param_name in net_params:
-        # # DEBUG: this is a temporary fix
-        param_name = 'module.' + param_name
+        # # # DEBUG: this is a temporary fix
+        # param_name = 'module.' + param_name
         if model.state_dict()[param_name].dim() not in [2,4]:
             continue
 
