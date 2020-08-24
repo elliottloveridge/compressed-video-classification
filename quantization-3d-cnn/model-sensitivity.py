@@ -214,19 +214,13 @@ torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
 
-# NOTE: used as model state_dict is not complete
-model = nn.DataParallel(model)
-
-# NOTE: is this needed?
-model.cuda()
-
 # NOTE: you can add the classifiers to pruning params, these are fully connected layers?
-params = ['features.0.0.weight',
-'features.0.1.weight',
-'features.0.2.weight',
-'features.1.conv.0.weight',
-'features.1.conv.1.weight',
-'features.1.conv.2.weight',
+params = ['module.features.0.0.weight',
+'module.features.0.1.weight',
+'module.features.0.2.weight',
+'module.features.1.conv.0.weight',
+'module.features.1.conv.1.weight',
+'module.features.1.conv.2.weight',
 'module.features.1.conv.3.weight',
 'module.features.1.conv.4.weight',
 'module.features.2.conv.0.weight',
@@ -365,6 +359,9 @@ best_prec1 = 0
 if opt.resume_path:
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
+    # NOTE: below two lines added as not entire_state_dict is being loaded
+    checkpoint = nn.DataParallel(checkpoint)
+    checkpoint.cuda()
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
