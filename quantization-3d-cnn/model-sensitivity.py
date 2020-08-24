@@ -557,5 +557,5 @@ test_loader = torch.utils.data.DataLoader(
 test_func = test.test_eval(test_loader, model, opt, test_data.class_names)
 
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng, test_func=test_func, group='filter')
-sensitivities_to_png(sense, opt.result_path + 'sensitivity.png')
-sensitivities_to_csv(sense, opt.result_path + 'sensitivity.csv')
+sensitivities_to_png(sense, 'sensitivity.png')
+sensitivities_to_csv(sense, 'sensitivity.csv')
