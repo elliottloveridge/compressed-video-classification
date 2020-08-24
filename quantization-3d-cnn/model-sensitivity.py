@@ -221,12 +221,12 @@ model = nn.DataParallel(model)
 model.cuda()
 
 # NOTE: you can add the classifiers to pruning params, these are fully connected layers?
-params = ['module.features.0.0.weight',
-'module.features.0.1.weight',
-'module.features.0.2.weight',
-'module.features.1.conv.0.weight',
-'module.features.1.conv.1.weight',
-'module.features.1.conv.2.weight',
+params = ['features.0.0.weight',
+'features.0.1.weight',
+'features.0.2.weight',
+'features.1.conv.0.weight',
+'features.1.conv.1.weight',
+'features.1.conv.2.weight',
 'module.features.1.conv.3.weight',
 'module.features.1.conv.4.weight',
 'module.features.2.conv.0.weight',
