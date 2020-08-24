@@ -360,23 +360,25 @@ from collections import OrderedDict
 
 best_prec1 = 0
 if opt.resume_path:
+
+    # NOTE: added dataparallel here
+    model = nn.DataParallel(model)
+    model.cuda()
+
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # create new OrderedDict that does not contain `module.`
     new_state_dict = OrderedDict()
     for k, v in checkpoint['state_dict'].items():
         name = k[7:] # remove `module.`
-        name = 'module.' + name
+        name = 'module.module.' + name
         new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
-    # NOTE: added dataparallel here
-    model = nn.DataParallel(model)
-    model.cuda()
 
     # model.load_state_dict(new_state_dict)
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(new_state_dict)
 
 # sparsities = should be a range of values to perform sparsity calculations on
 # test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset (rand?)
