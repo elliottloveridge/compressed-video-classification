@@ -307,6 +307,7 @@ if opt.resume_path:
     model.load_state_dict(new_state_dict)
 
 # introduce a range of sparsity values
+# sensitivities = np.arange(*args.sensitivity_range)
 sparse_rng = range(0, 1, 10)
 
 # same as test call in main.py but includes sampling

@@ -97,6 +97,10 @@ def test_eval(data_loader, model, opt, class_names, criterion):
             outputs = F.softmax(outputs, dim=1)
 
         # FIXME: do I need this loss? or could I use test_results score?
+        print('output:', outputs.size)
+        print('target:', targets.size)
+        print()
+        print(outputs)
         loss = criterion(outputs, targets)
         losses['objective_loss'].add(loss.item())
 
@@ -118,7 +122,6 @@ def test_eval(data_loader, model, opt, class_names, criterion):
     print('eval')
 
     #  FIXME: could just call the eval function here?
-
     # NOTE: full_eval=True returns all accuracy values rather than an average
     if opt.dataset == 'ucf101':
         # FIXME: should subset be changed to 'testing' from 'validation'?
