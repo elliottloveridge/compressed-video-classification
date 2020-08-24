@@ -168,6 +168,8 @@ def compute_video_hit_at_k(ground_truth, prediction, top_k=3, return_all=False):
                                        for this_label in gt_label])
 
     if return_all:
+        # NOTE: added a print for testing
+        print('avg_hits_per_vid', avg_hits_per_vid)
         return avg_hits_per_vid
     else:
         return float(avg_hits_per_vid.mean())

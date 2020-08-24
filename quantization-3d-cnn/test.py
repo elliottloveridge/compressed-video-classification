@@ -77,23 +77,28 @@ def test(data_loader, model, opt, class_names):
             'w') as f:
         json.dump(test_results, f)
 
-# pruning sensitivity analysis required a single function to test/evaluate and return losses, so will not dump values to json
-def test_eval(data_loader, model, opt, class_names):
+
+# pruning sensitivity analysis required a single function to test/evaluate
+def test_eval(data_loader, model, opt, class_names, criterion):
+
+    # NOTE: added from distiller.app_utils.image_classifier
+    losses = {'objective_loss': tnt.AverageValueMeter()}
+
     print('test')
-
     model.eval()
-
-    # time not required for this method
     output_buffer = []
     previous_video_id = ''
     test_results = {'results': {}}
     for i, (inputs, targets) in enumerate(data_loader):
-
         with torch.no_grad():
             inputs = Variable(inputs)
         outputs = model(inputs)
         if not opt.no_softmax_in_test:
             outputs = F.softmax(outputs, dim=1)
+
+        # FIXME: do I need this loss? or could I use test_results score?
+        loss = criterion(outputs, targets)
+        losses['objective_loss'].add(loss.item())
 
         for j in range(outputs.size(0)):
             if not (i == 0 and j == 0) and targets[j] != previous_video_id:
@@ -103,8 +108,8 @@ def test_eval(data_loader, model, opt, class_names):
             output_buffer.append(outputs[j].data.cpu())
             previous_video_id = targets[j]
 
-        # print every 100th sample - not using as low sample size
-        # if i % 100 == 0:
+        # FIXME: this currently outputs [1/7] etc - why so low?
+        # batches of 16 with dataset of 100 currently 100/16 = 6.25 ~ 7
         print('[{}/{}]\t'.format(i + 1, len(data_loader)))
 
     with open(os.path.join(opt.result_path, '{}.json'.format(opt.test_subset)),'w') as f:
@@ -112,26 +117,29 @@ def test_eval(data_loader, model, opt, class_names):
 
     print('eval')
 
-    # FIXME: don't want to hardcode val.json anywhere as could be test.json
-    opt.result_path = os.path.join(opt.result_path, 'val.json')
+    #  FIXME: could just call the eval function here?
 
-    # FIXME: need to return all accuracy values rather than an average
+    # NOTE: full_eval=True returns all accuracy values rather than an average
     if opt.dataset == 'ucf101':
-        # FIXME: need to change the subset to 'testing' rather than 'validation' - needs to match the above test_subset!
-        ucf_classification = UCFclassification(opt.annotation_path, opt.result_path, subset='validation', top_k=1, full_eval=True)
+        # FIXME: should subset be changed to 'testing' from 'validation'?
+        ucf_classification = UCFclassification(opt.annotation_path,
+        os.path.join(opt.result_path, 'val.json'), subset='validation',
+        top_k=1, full_eval=True)
         ucf_classification.evaluate()
         top1 = ucf_classification.hit_at_k
 
-        ucf_classification = UCFclassification(opt.annotation_path, opt.result_path, subset='validation', top_k=5, full_eval=True)
+        ucf_classification = UCFclassification(opt.annotation_path,
+        opt.result_path, subset='validation', top_k=5, full_eval=True)
         ucf_classification.evaluate()
         top5 = ucf_classification.hit_at_k
 
+    print('top1:', top1)
+    print('top5:', top5)
+
+    print('losses:')
+    print(losses['objective_loss'])
     # now need to return losses and top-1/5 accuracy
     # FIXME: are test_results the same as losses? - nope!
 
-    # print(test_results)
-    # print()
-    # print()
-    # print(top1)
 
-    return test_results, top1, top5
+    return losses['objective_loss'], top1, top5
