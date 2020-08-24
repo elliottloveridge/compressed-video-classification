@@ -298,8 +298,7 @@ if opt.resume_path:
     new_state_dict = OrderedDict()
     for k, v in checkpoint['state_dict'].items():
         # NOTE: this is hacky, remove it and get working without
-        v = 'module.' + v
-        new_state_dict[name] = v
+        name = 'module.' + k
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
