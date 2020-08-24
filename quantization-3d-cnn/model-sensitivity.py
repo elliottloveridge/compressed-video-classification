@@ -362,8 +362,6 @@ best_prec1 = 0
 if opt.resume_path:
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
-    # NOTE: nn.DataParallel does not work for a state_dict
-    # checkpoint = nn.DataParallel(checkpoint)
     # create new OrderedDict that does not contain `module.`
     new_state_dict = OrderedDict()
     for k, v in checkpoint['state_dict'].items():
@@ -372,6 +370,9 @@ if opt.resume_path:
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
+    # NOTE: added dataparallel here
+    model = nn.DataParallel(model)
+
     model.load_state_dict(new_state_dict)
 
 # sparsities = should be a range of values to perform sparsity calculations on
