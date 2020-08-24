@@ -363,11 +363,11 @@ if opt.resume_path:
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # create new OrderedDict that does not contain `module.`
-    new_state_dict = OrderedDict()
-    for k, v in checkpoint['state_dict'].items():
-        print(k)
-        name = k[7:] # remove `module.`
-        new_state_dict[name] = v
+    # new_state_dict = OrderedDict()
+    # for k, v in checkpoint['state_dict'].items():
+    #     print(k)
+    #     name = k[7:] # remove `module.`
+    #     new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
@@ -375,7 +375,8 @@ if opt.resume_path:
     model = nn.DataParallel(model)
     model.cuda()
 
-    model.load_state_dict(new_state_dict)
+    # model.load_state_dict(new_state_dict)
+    model.load_state_dict(checkpoint['state_dict'])
 
 # sparsities = should be a range of values to perform sparsity calculations on
 # test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset (rand?)
