@@ -127,11 +127,11 @@ def test_eval(data_loader, model, opt, class_names):
         top5 = ucf_classification.hit_at_k
 
     # now need to return losses and top-1/5 accuracy
-    # NOTE: are test_results the same as losses?
+    # FIXME: are test_results the same as losses? - nope!
 
-    print(test_results)
-    print()
-    print()
-    print(top1)
+    # print(test_results)
+    # print()
+    # print()
+    # print(top1)
 
     return test_results, top1, top5
