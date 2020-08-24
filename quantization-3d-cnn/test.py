@@ -92,7 +92,7 @@ def test_eval(data_loader, model, opt, class_names, criterion):
     for i, (inputs, targets) in enumerate(data_loader):
         with torch.no_grad():
             inputs = Variable(inputs)
-            targets = Variable(targets)
+            targets = Variable(torch.tensor(targets))
         outputs = model(inputs)
 
         if not opt.no_softmax_in_test:
