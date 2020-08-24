@@ -214,6 +214,12 @@ torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
 
+# NOTE: used as model state_dict is not complete
+model = nn.DataParallel(model)
+
+# NOTE: is this needed?
+model.cuda()
+
 # NOTE: you can add the classifiers to pruning params, these are fully connected layers?
 params = ['module.features.0.0.weight',
 'module.features.0.1.weight',
