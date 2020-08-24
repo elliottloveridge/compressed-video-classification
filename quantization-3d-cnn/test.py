@@ -82,7 +82,7 @@ def test(data_loader, model, opt, class_names):
 def test_eval(data_loader, model, opt, class_names, criterion):
 
     # NOTE: added from distiller.app_utils.image_classifier
-    losses = {'objective_loss': tnt.AverageValueMeter()}
+    losses = {'objective_loss': AverageMeter()}
 
     print('test')
     model.eval()
