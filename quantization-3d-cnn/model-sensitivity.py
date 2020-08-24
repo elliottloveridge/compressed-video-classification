@@ -361,7 +361,6 @@ if opt.resume_path:
     checkpoint = torch.load(opt.resume_path)
     # NOTE: below two lines added as not entire_state_dict is being loaded
     checkpoint = nn.DataParallel(checkpoint)
-    checkpoint.cuda()
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
