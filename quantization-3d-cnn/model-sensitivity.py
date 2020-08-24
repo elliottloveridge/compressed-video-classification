@@ -375,6 +375,7 @@ if opt.resume_path:
         name = k[7:] # remove `module.`
         name = 'module.module.' + name
         new_state_dict[name] = v
+        print(name)
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
@@ -382,7 +383,7 @@ if opt.resume_path:
     # model.load_state_dict(new_state_dict)
     model.load_state_dict(new_state_dict)
 
-print(new_state_dict)
+# print(new_state_dict)
 
 # sparsities = should be a range of values to perform sparsity calculations on
 # test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset (rand?)
