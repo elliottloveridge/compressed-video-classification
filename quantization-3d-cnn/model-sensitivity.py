@@ -372,6 +372,7 @@ if opt.resume_path:
     opt.begin_epoch = checkpoint['epoch']
     # NOTE: added dataparallel here
     model = nn.DataParallel(model)
+    model.cuda()
 
     model.load_state_dict(new_state_dict)
 
