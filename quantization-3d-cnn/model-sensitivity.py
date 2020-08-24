@@ -365,6 +365,7 @@ if opt.resume_path:
     # create new OrderedDict that does not contain `module.`
     new_state_dict = OrderedDict()
     for k, v in checkpoint['state_dict'].items():
+        print(k)
         name = k[7:] # remove `module.`
         new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
