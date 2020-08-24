@@ -299,6 +299,7 @@ if opt.resume_path:
     for k, v in checkpoint['state_dict'].items():
         # NOTE: this is hacky, remove it and get working without
         name = 'module.' + k
+        new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
