@@ -363,11 +363,11 @@ if opt.resume_path:
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # create new OrderedDict that does not contain `module.`
-    # new_state_dict = OrderedDict()
-    # for k, v in checkpoint['state_dict'].items():
-    #     print(k)
-    #     name = k[7:] # remove `module.`
-    #     new_state_dict[name] = v
+    new_state_dict = OrderedDict()
+    for k, v in checkpoint['state_dict'].items():
+        name = k[7:] # remove `module.`
+        name = 'module.module.' + name
+        new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
