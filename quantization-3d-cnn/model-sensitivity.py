@@ -366,13 +366,13 @@ if opt.resume_path:
     # checkpoint = nn.DataParallel(checkpoint)
     # create new OrderedDict that does not contain `module.`
     new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
+    for k, v in checkpoint['state_dict'].items():
         name = k[7:] # remove `module.`
         new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(new_state_dict)
 
 # sparsities = should be a range of values to perform sparsity calculations on
 # test_func = should be a function that returns the average loss + evaluation metric (top1/5 accuracy) from a portion of your test dataset (rand?)
