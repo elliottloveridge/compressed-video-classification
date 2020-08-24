@@ -355,12 +355,20 @@ params = ['module.features.0.0.weight',
 'module.features.18.1.weight',
 'module.features.18.2.weight']
 
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+
 best_prec1 = 0
 if opt.resume_path:
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
-    # NOTE: below two lines added as not entire_state_dict is being loaded
-    checkpoint = nn.DataParallel(checkpoint)
+    # NOTE: nn.DataParallel does not work for a state_dict
+    # checkpoint = nn.DataParallel(checkpoint)
+    # create new OrderedDict that does not contain `module.`
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        name = k[7:] # remove `module.`
+        new_state_dict[name] = v
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
