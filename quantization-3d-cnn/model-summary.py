@@ -14,6 +14,13 @@ from torch.optim import lr_scheduler
 from opts import parse_opts
 from model import generate_model
 from utils import *
+import test
+from mean import get_mean, get_std
+from spatial_transforms import *
+from temporal_transforms import *
+from target_transforms import ClassLabel, VideoID
+from target_transforms import Compose as TargetCompose
+from dataset import get_training_set, get_validation_set, get_test_set
 
 # opts kept the same even if not needed
 opt = parse_opts()
@@ -25,26 +32,33 @@ if opt.root_path != '':
         os.makedirs(opt.result_path)
     if opt.resume_path:
         opt.resume_path = os.path.join(opt.root_path, opt.resume_path)
-    if opt.pretrain_path:
-        opt.pretrain_path = os.path.join(opt.root_path, opt.pretrain_path)
-opt.scales = [opt.initial_scale]
-for i in range(1, opt.n_scales):
-    opt.scales.append(opt.scales[-1] * opt.scale_step)
 opt.arch = '{}'.format(opt.model)
-# opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
-# opt.std = get_std(opt.norm_value)
-opt.store_name = '_'.join([opt.dataset, opt.model, str(opt.n_epochs) + 'epochs',
- str(opt.batch_size) + 'batch-size', opt.name])
+opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
+opt.std = get_std(opt.norm_value)
+# NOTE: removed opt.store_name arg from here
+
+# NOTE: added for norm_method used in test - need to check what it does
+if opt.no_mean_norm and not opt.std_norm:
+    norm_method = Normalize([0, 0, 0], [1, 1, 1])
+elif not opt.std_norm:
+    norm_method = Normalize(opt.mean, [1, 1, 1])
+else:
+    norm_method = Normalize(opt.mean, opt.std)
 
 torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
 
-# FIXME: need to add model import of a pre-trained model, just give opt.resume_path
+best_prec1 = 0
+if opt.resume_path:
+    print('loading checkpoint {}'.format(opt.resume_path))
+    checkpoint = torch.load(opt.resume_path)
+    assert opt.arch == checkpoint['arch']
+    best_prec1 = checkpoint['best_prec1']
+    opt.begin_epoch = checkpoint['epoch']
+    model.load_state_dict(checkpoint['state_dict'])
 
-# print()
-# print(opt.result_path + 'model-summary.csv')
-# print()
+print(model)
 
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='modules')
