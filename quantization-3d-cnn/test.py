@@ -164,8 +164,9 @@ def test_eval(data_loader, model, criterion, opt, logger):
         data_time.update(time.time() - end_time)
 
         # NOTE: removed this as haven't imported opts
-        # if not opt.no_cuda:
-        #     targets = targets.cuda()
+        if not opt.no_cuda:
+            print('here')
+            targets = targets.cuda()
         with torch.no_grad():
             inputs = Variable(inputs)
             targets = Variable(targets)
