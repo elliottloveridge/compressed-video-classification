@@ -57,8 +57,6 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
         raise ValueError("group parameter contains an illegal value: {}".format(group))
     sensitivities = OrderedDict()
 
-    print(model.state_dict())
-
     for param_name in net_params:
         if model.state_dict()[param_name].dim() not in [2,4]:
             continue
@@ -330,18 +328,12 @@ target_transform = ClassLabel()
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
                          target_transform)
 
-print('test_data')
-print(test_data)
-print()
-
 # DEBUG: the size len(test_data) might be too big
 # sample a defined portion of the testing dataset
 subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
 # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
 test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
-print('test_subset')
-print(test_subset)
-print()
+
 test_loader = torch.utils.data.DataLoader(
     test_subset,
     # test_data,
