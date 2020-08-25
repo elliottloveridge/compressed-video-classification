@@ -329,7 +329,7 @@ subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
 test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 test_loader = torch.utils.data.DataLoader(
     # test_subset,
-    test_data
+    test_data,
     batch_size=16,
     shuffle=False,
     num_workers=opt.n_threads,
