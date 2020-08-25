@@ -368,8 +368,6 @@ test_func = test.test_eval(test_loader, model, criterion, opt)
 # group='filter' used to define filter pruning
 # FIXME: the 'filter' command should be editable
 
-print(state_dict)
-
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng,
 test_func=test_func, group='filter')
 sensitivities_to_png(sense, opt.result_path + 'sensitivity.png')
