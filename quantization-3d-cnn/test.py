@@ -202,7 +202,8 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     #             'prec1': top1.avg.item(),
     #             'prec5': top5.avg.item()})
 
+    print()
     print('results')
-    print(losses.avg.item(), top1.avg.item(), top1.avg.item())
+    print(losses.val.item(), top1.val.item(), top1.val.item())
 
     return losses.avg.item(), top1.avg.item(), top1.avg.item()
