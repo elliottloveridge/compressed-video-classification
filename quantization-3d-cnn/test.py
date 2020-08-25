@@ -8,6 +8,10 @@ import json
 
 from util import *
 
+from torch import nn
+from torch import optim
+from torch.optim import lr_scheduler
+
 # DEBUG: need to get this working
 from utils.eval_ucf101 import UCFclassification
 
@@ -163,6 +167,7 @@ def test_eval(data_loader, model, criterion, opt, logger):
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
+        targets = torch.tensor(targets)
         # NOTE: removed this as opts not working for some reason
         # if not opt.no_cuda:
         targets = targets.cuda()
