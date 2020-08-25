@@ -153,7 +153,7 @@ def test(data_loader, model, opt, class_names):
 #
 #     return losses['objective_loss'], top1, top5
 
-def test_eval(data_loader, model, criterion, opt, logger):
+def test_eval(data_loader, model, criterion, opt, logger=None):
 
     model.eval()
 
@@ -167,10 +167,12 @@ def test_eval(data_loader, model, criterion, opt, logger):
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
-        targets = torch.tensor(targets)
+        # print(targets)
+
+        # targets = torch.tensor(targets)
         # NOTE: removed this as opts not working for some reason
-        # if not opt.no_cuda:
-        targets = targets.cuda()
+        if not opt.no_cuda:
+            targets = targets.cuda()
         with torch.no_grad():
             inputs = Variable(inputs)
             targets = Variable(targets)
@@ -185,13 +187,11 @@ def test_eval(data_loader, model, criterion, opt, logger):
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
-        print('Epoch: [{0}][{1}/{2}]\t'
-              'Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
+        print('Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
               'Data {data_time.val:.5f} ({data_time.avg:.5f})\t'
               'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
               'Prec@1 {top1.val:.5f} ({top1.avg:.5f})\t'
               'Prec@5 {top5.val:.5f} ({top5.avg:.5f})'.format(
-                  epoch,
                   i + 1,
                   len(data_loader),
                   batch_time=batch_time,
