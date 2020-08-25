@@ -327,6 +327,10 @@ target_transform = VideoID()
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
                          target_transform)
 
+print('test_data')
+print(test_data)
+print()
+
 # DEBUG: the size len(test_data) might be too big
 # sample a defined portion of the testing dataset
 subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
