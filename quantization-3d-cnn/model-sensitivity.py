@@ -325,7 +325,8 @@ test_data = get_test_set(opt, spatial_transform, temporal_transform,
 # DEBUG: the size len(test_data) might be too big
 # sample a defined portion of the testing dataset
 subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
-test_subset = torch.utils.data.Subset(test_data, subset_ind[0].tolist())
+# NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 test_loader = torch.utils.data.DataLoader(
     test_subset,
     batch_size=16,
