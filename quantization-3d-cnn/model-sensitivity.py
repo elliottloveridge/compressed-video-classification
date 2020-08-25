@@ -171,7 +171,7 @@ opt.std = get_std(opt.norm_value)
 torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
-print(model)
+# print(model)
 
 criterion = nn.CrossEntropyLoss()
 if not opt.no_cuda:
@@ -322,7 +322,8 @@ spatial_transform = Compose([
     ToTensor(opt.norm_value), norm_method])
 # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
 temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-target_transform = VideoID()
+# target_transform = VideoID()
+target_transform = ClassLabel()
 
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
                          target_transform)
