@@ -200,9 +200,9 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
                   top1=top1,
                   top5=top5))
 
-    logger.log({'loss': losses.avg.item(),
-                'prec1': top1.avg.item(),
-                'prec5': top5.avg.item()})
+    # logger.log({'loss': losses.avg.item(),
+    #             'prec1': top1.avg.item(),
+    #             'prec5': top5.avg.item()})
 
     print('results')
     print(losses.avg.item(), top1.avg.item(), top1.avg.item())
