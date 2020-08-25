@@ -184,11 +184,11 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         top1.update(prec1, inputs.size(0))
         top5.update(prec5, inputs.size(0))
 
-        losses.update(losses.data, inputs.size(0))
+        # losses.update(losses.data(), inputs.size(0))
 
-        loss_ls.append(losses.val.item())
-        top1_ls.append(top1.val.item())
-        top5_ls.append(top5.val.item())
+        loss_ls.append(loss)
+        top1_ls.append(prec1)
+        top5_ls.append(prec5)
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
