@@ -168,16 +168,21 @@ opt.arch = '{}'.format(opt.model)
 opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
 opt.std = get_std(opt.norm_value)
 
+torch.manual_seed(opt.manual_seed)
+
+model, parameters = generate_model(opt)
+print(model)
+
+criterion = nn.CrossEntropyLoss()
+if not opt.no_cuda:
+    criterion = criterion.cuda()
+
 if opt.no_mean_norm and not opt.std_norm:
     norm_method = Normalize([0, 0, 0], [1, 1, 1])
 elif not opt.std_norm:
     norm_method = Normalize(opt.mean, [1, 1, 1])
 else:
     norm_method = Normalize(opt.mean, opt.std)
-
-torch.manual_seed(opt.manual_seed)
-
-model, parameters = generate_model(opt)
 
 # FIXME: this shouldn't be hardcoded! - perform a model summary here
 # FIXME: want to do it without adding 'module.module.'
@@ -289,9 +294,9 @@ params = ['module.module.features.0.0.weight',
 
 best_prec1 = 0
 if opt.resume_path:
-    # NOTE: are DataParallel and cuda() needed here?
-    model = nn.DataParallel(model)
-    model.cuda()
+    # # NOTE: are DataParallel and cuda() needed here?
+    # model = nn.DataParallel(model)
+    # model.cuda()
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # NOTE: create new OrderedDict with additional `module.`
