@@ -157,6 +157,10 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
     model.eval()
 
+    loss_ls = []
+    top1_ls = []
+    top5_ls = []
+
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
@@ -182,6 +186,10 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
         losses.update(loss.data, inputs.size(0))
 
+        loss_ls.append(loss.data)
+        top1_ls.append(top1)
+        top5_ls.append(top5)
+
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
@@ -204,6 +212,6 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
     print()
     print('results')
-    print(losses.val.item(), top1.val.item(), top1.val.item())
+    print(loss_ls, top1_ls, top5_ls)
 
-    return losses.avg.item(), top1.avg.item(), top1.avg.item()
+    return loss_ls, top1_ls, top5_ls
