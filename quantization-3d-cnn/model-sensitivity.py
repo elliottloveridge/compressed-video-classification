@@ -297,8 +297,8 @@ params = ['module.module.features.0.0.weight',
 best_prec1 = 0
 if opt.resume_path:
     # # NOTE: are DataParallel and cuda() needed here?
-    # model = nn.DataParallel(model)
-    # model.cuda()
+    model = nn.DataParallel(model)
+    model.cuda()
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # NOTE: create new OrderedDict with additional `module.`
