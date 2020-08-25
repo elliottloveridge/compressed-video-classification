@@ -336,6 +336,9 @@ print()
 subset_ind = np.random.randint(0, len(test_data), size=(1, 100))
 # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
 test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
+print('test_subset')
+print(test_subset)
+print()
 test_loader = torch.utils.data.DataLoader(
     test_subset,
     # test_data,
