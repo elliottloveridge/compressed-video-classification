@@ -167,7 +167,7 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
-        # print(targets)
+        print(targets)
 
         # targets = torch.tensor(targets)
         # NOTE: removed this as opts not working for some reason
