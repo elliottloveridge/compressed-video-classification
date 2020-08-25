@@ -57,6 +57,8 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
         raise ValueError("group parameter contains an illegal value: {}".format(group))
     sensitivities = OrderedDict()
 
+    print(model.state_dict)
+
     for param_name in net_params:
         if model.state_dict()[param_name].dim() not in [2,4]:
             continue
@@ -365,6 +367,9 @@ test_func = test.test_eval(test_loader, model, criterion, opt)
 
 # group='filter' used to define filter pruning
 # FIXME: the 'filter' command should be editable
+
+print(state_dict)
+
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng,
 test_func=test_func, group='filter')
 sensitivities_to_png(sense, opt.result_path + 'sensitivity.png')
