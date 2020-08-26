@@ -5,7 +5,7 @@ import os
 import sys
 import distiller
 
-from utils import *
+from util import *
 
 
 def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
