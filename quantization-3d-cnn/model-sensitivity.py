@@ -13,7 +13,8 @@ from torch.optim import lr_scheduler
 
 from opts import parse_opts
 from model import generate_model
-from utils import *
+# NOTE: do I also need an import of utils?
+from util import *
 import test
 from mean import get_mean, get_std
 from spatial_transforms import *
@@ -294,9 +295,10 @@ params = ['module.module.features.0.0.weight',
 
 best_prec1 = 0
 if opt.resume_path:
-    # # NOTE: are DataParallel and cuda() needed here?
+    # NOTE: is dataparallel needed?
     model = nn.DataParallel(model)
-    model.cuda()
+    # # NOTE: is this needed? - less likely than dataparallel
+    # model = model.cuda()
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     # NOTE: create new OrderedDict with additional `module.`

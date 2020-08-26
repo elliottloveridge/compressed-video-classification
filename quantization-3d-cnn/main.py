@@ -25,7 +25,7 @@ from util import *
 from train import train_epoch
 from validation import val_epoch
 import test
-
+from calculate_FLOP import model_info
 
 if __name__ == '__main__':
 
@@ -163,6 +163,10 @@ if __name__ == '__main__':
     if opt.compress:
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+        par, flo = model_info(model, opt)
+        print('Before Compression:')
+        print('Trainiable Parameters:', par)
+        print('FLOPs:', flo)
     else:
         compression_scheduler = None
 
@@ -204,6 +208,12 @@ if __name__ == '__main__':
         if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_end(i)
 
+    # print flops and params to see if it has been reduced
+    if opt.compress:
+        par, flo = model_info(model, opt)
+        print('Before Compression:')
+        print('Trainiable Parameters:', par)
+        print('FLOPs:', flo)
 
     if opt.test:
         spatial_transform = Compose([
