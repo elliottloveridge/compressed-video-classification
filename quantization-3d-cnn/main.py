@@ -50,8 +50,8 @@ if __name__ == '__main__':
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
     if not opt.compress:
-        opt.compress_type = 'benchmark'
-    opt.store_name = '_'.join([opt.dataset, opt.model, opt.compress_type,
+        opt.compression_type = 'benchmark'
+    opt.store_name = '_'.join([opt.dataset, opt.model, opt.compression_type,
     str(opt.n_epochs) + 'epochs', date_str])
 
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
