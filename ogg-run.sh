@@ -16,8 +16,8 @@
 
 ## filter pruning
 
-# ucf101-mobilenetv2-fp (no testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
-python /app/quantization-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 16  --model mobilenetv2 --width_mult 1.0 --learning_rate 0.1 --n_val_samples 1 --n_epochs 1 --compress --compression_type fp --compression_file /app/quantization-3d-cnn/distiller/fp-mobilenetv2.yaml
+# # ucf101-mobilenetv2-fp (no testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
+# python /app/quantization-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 16  --model mobilenetv2 --width_mult 1.0 --learning_rate 0.1 --n_val_samples 1 --n_epochs 1 --compress --compression_type fp --compression_file /app/quantization-3d-cnn/distiller/fp-mobilenetv2.yaml
 
 
 ## other
@@ -25,5 +25,5 @@ python /app/quantization-3d-cnn/main.py --root_path /data --video_path ucf101_vi
 # # distiller model summary - uses resume_path
 # python /app/quantization-3d-cnn/model-summary.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --model mobilenetv2 --width_mult 1.0 --resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth
 
-# # distiller pruning sensitivity analysis
-# python /app/quantization-3d-cnn/model-sensitivity.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model mobilenetv2 --width_mult 1.0 --n_val_samples 1 --n_epochs 1 --resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth
+# distiller pruning sensitivity analysis
+python /app/quantization-3d-cnn/model-sensitivity.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/quantization-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model mobilenetv2 --width_mult 1.0 --n_val_samples 1 --n_epochs 1 --resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth
