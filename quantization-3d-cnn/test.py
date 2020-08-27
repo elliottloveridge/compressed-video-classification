@@ -167,9 +167,9 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     # top1 = AverageMeter()
     # top5 = AverageMeter()
 
-    end_time = time.time()
+    # end_time = time.time()
     for i, (inputs, targets) in enumerate(data_loader):
-        data_time.update(time.time() - end_time)
+        # data_time.update(time.time() - end_time)
 
         # targets = torch.tensor(targets)
         # NOTE: removed this as opts not working for some reason
@@ -190,8 +190,8 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         top1_ls.append(prec1)
         top5_ls.append(prec5)
 
-        batch_time.update(time.time() - end_time)
-        end_time = time.time()
+        # batch_time.update(time.time() - end_time)
+        # end_time = time.time()
 
         # print('Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
         #       'Data {data_time.val:.5f} ({data_time.avg:.5f})\t'
