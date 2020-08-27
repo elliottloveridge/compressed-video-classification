@@ -163,10 +163,10 @@ if __name__ == '__main__':
     if opt.compress:
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-        par, flo = model_info(model, opt)
-        print('Before Compression:')
-        print('Trainiable Parameters:', par)
-        print('FLOPs:', flo)
+        # par, flo = model_info(model, opt)
+        # print('Before Compression:')
+        # print('Trainiable Parameters:', par)
+        # print('FLOPs:', flo)
     else:
         compression_scheduler = None
 
