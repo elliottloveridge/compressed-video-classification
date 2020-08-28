@@ -4,6 +4,7 @@ import numbers
 import collections
 import numpy as np
 import torch
+# FIXME: need to get this import working
 # import cv2
 import scipy.ndimage
 from PIL import Image, ImageOps

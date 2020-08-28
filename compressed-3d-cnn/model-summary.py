@@ -13,7 +13,7 @@ from torch.optim import lr_scheduler
 
 from opts import parse_opts
 from model import generate_model
-from utils import *
+from util import *
 import test
 from mean import get_mean, get_std
 from spatial_transforms import *
