@@ -9,8 +9,7 @@ import copy
 from numpy.random import randint
 import numpy as np
 import random
-# NOTE: need to uncomment this if running kinetics
-# import cv2
+import cv2
 
 from util import load_value_file
 

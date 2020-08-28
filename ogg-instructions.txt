@@ -7,7 +7,7 @@ screen
 # 6be8c4c3df5c82c42663b04bd6fab6dd31ddb622
 cd research-project/
 # make sure the bash script is runnable -- use 'chmod +x ogg-run.sh' etc
-docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-run.sh
+docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data elliottloveridge/distiller /app/ogg-run.sh
 # Ctrl + a followed by a 'd' to detach
 # Exit the ssh session
 # ssh back into the server like before
@@ -15,6 +15,5 @@ screen -r
 # If your code has finished then collect the results, otherwise exit out again
 
 
-ucf101 docker commands:
-train and test: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data mb2775/distiller /app/ogg-run.sh
-evaluate: docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data ufoym/deepo:all-jupyter /app/ogg-eval.sh
+ucf101 docker command:
+docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data elliottloveridge/distiller /app/ogg-run.sh
