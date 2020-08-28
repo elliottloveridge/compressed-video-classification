@@ -209,11 +209,11 @@ if __name__ == '__main__':
             compression_scheduler.on_epoch_end(i)
 
     # print flops and params to see if it has been reduced
-    if opt.compress:
-        par, flo = model_info(model, opt)
-        print('Before Compression:')
-        print('Trainiable Parameters:', par)
-        print('FLOPs:', flo)
+    # if opt.compress:
+    #     par, flo = model_info(model, opt)
+    #     print('Before Compression:')
+    #     print('Trainiable Parameters:', par)
+    #     print('FLOPs:', flo)
 
     if opt.test:
         spatial_transform = Compose([
