@@ -351,13 +351,13 @@ if not opt.no_cuda:
 
 # return the average losses, top1, top5 accuracies for subset of testing dataset
 # FIXME: need to use validation.py's val_epoch instead for this
-# test_func = test.test_eval(test_loader, model, opt, test_data.class_names, criterion)
+test_func = test.test_eval(test_loader, model, opt, test_data.class_names, criterion)
 
 # test_logger = Logger(
 #     os.path.join(opt.result_path, 'test.log'),
 #     ['loss', 'prec1', 'prec5'])
 
-test_func = test.test_eval(test_loader, model, criterion, opt)
+# test_func = test.test_eval(test_loader, model, criterion, opt)
 
 # group='filter' used to define filter pruning
 # FIXME: the 'filter' command should be editable
