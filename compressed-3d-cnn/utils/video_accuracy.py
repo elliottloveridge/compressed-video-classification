@@ -72,4 +72,4 @@ if not os.path.exists(os.path.join(opt.result_path, *new_path)):
 for f in model_files:
     # ignore hidden files
     if not f.startswith('.'):
-    os.rename(os.path.join(opt.result_path, f), os.path.join(opt.result_path, *new_path, f))
+        os.rename(os.path.join(opt.result_path, f), os.path.join(opt.result_path, *new_path, f))
