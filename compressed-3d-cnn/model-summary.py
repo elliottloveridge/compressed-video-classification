@@ -67,9 +67,6 @@ df = distiller.model_summary(model, what='modules')
 # df.to_csv(opt.result_path + 'model-summary.csv')
 print(df)
 
-# fixme: is this needed?
-# device = torch.device("cpu")
-
 par, flo = model_info(model, opt)
 print('Trainiable Parameters:', par)
 print('FLOPs:', flo)
