@@ -30,10 +30,9 @@ from thop import profile
 def model_info(model, opt):
 
     # # NOTE: if these two lines are needed, in what order should they go?
-    # model = model.cuda()
-    # model = nn.DataParallel(model)
-    # added .cuda() to the below
-    pytorch_total_params = sum(p.numel().cuda() for p in model.parameters() if p.requires_grad)
+    model = model.cuda()
+    model = nn.DataParallel(model, device_ids=None)
+    pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
 
     return pytorch_total_params, flops
