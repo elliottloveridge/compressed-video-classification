@@ -65,6 +65,10 @@ df = distiller.model_summary(model, what='modules')
 # df.to_csv(opt.result_path + 'model-summary.csv')
 print(df)
 
+par, flo = model_info(model, opt)
+print('Trainiable Parameters:', par)
+print('FLOPs:', flo)
+
 # from distiller example jupyter notebooks...
 dummy_input = torch.randn(32, 3, 3, 3, 3)
 ms = distiller.model_performance_summary(model, dummy_input, 32)
