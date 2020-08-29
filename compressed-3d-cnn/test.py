@@ -170,10 +170,6 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     # end_time = time.time()
     for i, (inputs, targets) in enumerate(data_loader):
         # data_time.update(time.time() - end_time)
-        print(len(data_loader))
-        print(i)
-        # targets = torch.tensor(targets)
-        # NOTE: removed this as opts not working for some reason
         if not opt.no_cuda:
             targets = targets.cuda()
         with torch.no_grad():
