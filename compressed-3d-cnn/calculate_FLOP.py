@@ -35,6 +35,7 @@ def model_info(model, opt):
     pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     # flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
 
+    # # FIXME: need to get the slps part working!
     return pytorch_total_params, 1
 
 
