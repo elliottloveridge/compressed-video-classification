@@ -22,6 +22,8 @@ from target_transforms import ClassLabel, VideoID
 from target_transforms import Compose as TargetCompose
 from dataset import get_training_set, get_validation_set, get_test_set
 
+from calculate_FLOP import model_info
+
 # opts kept the same even if not needed
 opt = parse_opts()
 if opt.root_path != '':
