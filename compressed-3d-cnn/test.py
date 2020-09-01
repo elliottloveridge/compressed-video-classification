@@ -189,8 +189,8 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
         print(loss)
 
-        print(top1)
-        print(top5)
+        print(prec1)
+        print(prec5)
 
         # losses.update(losses.data(), inputs.size(0))
 
