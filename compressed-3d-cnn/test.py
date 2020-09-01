@@ -170,8 +170,9 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     end_time = time.time()
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
-        if not opt.no_cuda:
-            targets = targets.cuda()
+        # FIXME: fix the below
+        # if not opt.no_cuda:
+        targets = targets.cuda()
         with torch.no_grad():
             inputs = Variable(inputs)
             targets = Variable(targets)
