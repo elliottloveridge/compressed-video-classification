@@ -161,11 +161,11 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     top1_ls = []
     top5_ls = []
 
-    batch_time = AverageMeter()
-    data_time = AverageMeter()
-    losses = AverageMeter()
-    top1 = AverageMeter()
-    top5 = AverageMeter()
+    # batch_time = AverageMeter()
+    # data_time = AverageMeter()
+    # losses = AverageMeter()
+    # top1 = AverageMeter()
+    # top5 = AverageMeter()
 
     end_time = time.time()
     for i, (inputs, targets) in enumerate(data_loader):
@@ -187,7 +187,10 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         top1.update(prec1, inputs.size(0))
         top5.update(prec5, inputs.size(0))
 
-        # print(loss)
+        print(loss)
+
+        print(top1)
+        print(top5)
 
         # losses.update(losses.data(), inputs.size(0))
 
