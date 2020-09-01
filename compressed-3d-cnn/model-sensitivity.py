@@ -343,7 +343,7 @@ test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 test_loader = torch.utils.data.DataLoader(
     test_subset,
     # test_data,
-    batch_size=4,
+    batch_size=2,
     shuffle=False,
     num_workers=opt.n_threads,
     pin_memory=True)
