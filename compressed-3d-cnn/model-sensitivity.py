@@ -294,8 +294,7 @@ params = ['module.module.features.0.0.weight',
 
 best_prec1 = 0
 if opt.resume_path:
-    # NOTE: is dataparallel needed? - shouldn't be as defined in generate_model()
-    # model = nn.DataParallel(model)
+    model = nn.DataParallel(model)
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
 
