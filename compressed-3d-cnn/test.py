@@ -201,18 +201,18 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
-        print('Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
-              'Data {data_time.val:.5f} ({data_time.avg:.5f})\t'
-              'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-              'Prec@1 {top1.val:.5f} ({top1.avg:.5f})\t'
-              'Prec@5 {top5.val:.5f} ({top5.avg:.5f})'.format(
-                  i + 1,
-                  len(data_loader),
-                  batch_time=batch_time,
-                  data_time=data_time,
-                  loss=losses,
-                  top1=top1,
-                  top5=top5))
+        # print('Time {batch_time.val:.5f} ({batch_time.avg:.5f})\t'
+        #       'Data {data_time.val:.5f} ({data_time.avg:.5f})\t'
+        #       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+        #       'Prec@1 {top1.val:.5f} ({top1.avg:.5f})\t'
+        #       'Prec@5 {top5.val:.5f} ({top5.avg:.5f})'.format(
+        #           i + 1,
+        #           len(data_loader),
+        #           batch_time=batch_time,
+        #           data_time=data_time,
+        #           loss=losses,
+        #           top1=top1,
+        #           top5=top5))
 
     # logger.log({'loss': losses.avg.item(),
     #             'prec1': top1.avg.item(),
