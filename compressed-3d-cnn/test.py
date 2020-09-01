@@ -178,6 +178,10 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
             targets = Variable(targets)
         outputs = model(inputs)
 
+        criterion = nn.CrossEntropyLoss()
+        # if not opt.no_cuda:
+        criterion = criterion.cuda()
+
         print(type(targets))
         print(type(outputs))
 
