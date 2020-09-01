@@ -161,8 +161,8 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     top1_ls = []
     top5_ls = []
 
-    # batch_time = AverageMeter()
-    # data_time = AverageMeter()
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
     # losses = AverageMeter()
     # top1 = AverageMeter()
     # top5 = AverageMeter()
