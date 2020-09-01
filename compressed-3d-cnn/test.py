@@ -177,6 +177,10 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
             inputs = Variable(inputs)
             targets = Variable(targets)
         outputs = model(inputs)
+
+        print(type(targets))
+        print(type(outputs))
+
         loss = criterion(outputs, targets)
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
         top1.update(prec1, inputs.size(0))
