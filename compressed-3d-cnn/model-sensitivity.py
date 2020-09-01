@@ -172,7 +172,6 @@ opt.std = get_std(opt.norm_value)
 torch.manual_seed(opt.manual_seed)
 
 model, parameters = generate_model(opt)
-# print(model)
 
 criterion = nn.CrossEntropyLoss()
 if not opt.no_cuda:
@@ -295,26 +294,29 @@ params = ['module.module.features.0.0.weight',
 
 best_prec1 = 0
 if opt.resume_path:
-    # NOTE: is dataparallel needed?
-    print('devices:', torch.cuda.device_count())
-    model = nn.DataParallel(model)
-    # FIXME: attempted fix for parameters on wrong device!
-    model.to(f'cuda:{model.device_ids[0]}')
-    # # NOTE: is this needed? - less likely than dataparallel
-    # model = model.cuda()
+    # NOTE: is dataparallel needed? - shouldn't be as defined in generate_model()
+    # model = nn.DataParallel(model)
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
+
+    #%%%% need to refine the below code
+
     # NOTE: create new OrderedDict with additional `module.`
     new_state_dict = OrderedDict()
     for k, v in checkpoint['state_dict'].items():
         # NOTE: this is hacky, remove it and get working without
         name = 'module.' + k
         new_state_dict[name] = v
+
+    # %%%% end of refine code
+
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
 
     model.load_state_dict(new_state_dict)
+
+    model.to(f'cuda:{model.device_ids[0]}')
 
 # introduce a range of sparsity values
 # sensitivities = np.arange(*args.sensitivity_range)
