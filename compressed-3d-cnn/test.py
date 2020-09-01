@@ -157,9 +157,9 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
     model.eval()
 
-    # loss_ls = []
-    # top1_ls = []
-    # top5_ls = []
+    loss_ls = []
+    top1_ls = []
+    top5_ls = []
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
@@ -182,21 +182,18 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         # if not opt.no_cuda:
         criterion = criterion.cuda()
 
-        print(type(targets))
-        print(type(outputs))
-
         loss = criterion(outputs, targets)
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
         top1.update(prec1, inputs.size(0))
         top5.update(prec5, inputs.size(0))
 
-        print(loss)
+        # print(loss)
 
         # losses.update(losses.data(), inputs.size(0))
 
-        # loss_ls.append(loss)
-        # top1_ls.append(prec1)
-        # top5_ls.append(prec5)
+        loss_ls.append(loss)
+        top1_ls.append(prec1)
+        top5_ls.append(prec5)
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
@@ -214,12 +211,12 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
                   top1=top1,
                   top5=top5))
 
-    logger.log({'loss': losses.avg.item(),
-                'prec1': top1.avg.item(),
-                'prec5': top5.avg.item()})
+    # logger.log({'loss': losses.avg.item(),
+    #             'prec1': top1.avg.item(),
+    #             'prec5': top5.avg.item()})
 
-    # print()
-    # print('results')
-    # print(loss_ls, top1_ls, top5)
+    print()
+    print('results')
+    print(loss_ls, top1_ls, top5)
 
-    return losses.count.item(), prec1.count.item(), prec5.count.item()
+    # return losses.count.item(), prec1.count.item(), prec5.count.item()

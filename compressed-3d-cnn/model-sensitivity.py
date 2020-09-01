@@ -349,9 +349,9 @@ test_loader = torch.utils.data.DataLoader(
     pin_memory=True)
 
 # NOTE: is this needed?
-criterion = nn.CrossEntropyLoss()
-if not opt.no_cuda:
-    criterion = criterion.cuda()
+# criterion = nn.CrossEntropyLoss()
+# if not opt.no_cuda:
+#     criterion = criterion.cuda()
 
 # return the average losses, top1, top5 accuracies for subset of testing dataset
 # FIXME: need to use validation.py's val_epoch instead for this
