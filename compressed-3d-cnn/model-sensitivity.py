@@ -296,8 +296,8 @@ best_prec1 = 0
 if opt.resume_path:
     model = nn.DataParallel(model)
     print('loading checkpoint {}'.format(opt.resume_path))
-    checkpoint = torch.load(opt.resume_path)
-
+    checkpoint = torch.load(opt.resume_path, map_location=model.device_ids[0])
+    model.to(f'cuda:{model.device_ids[0]}')
     #%%%% need to refine the below code
 
     # NOTE: create new OrderedDict with additional `module.`
@@ -315,7 +315,6 @@ if opt.resume_path:
 
     model.load_state_dict(new_state_dict)
 
-    model.to(f'cuda:{model.device_ids[0]}')
 
 # introduce a range of sparsity values
 # sensitivities = np.arange(*args.sensitivity_range)
