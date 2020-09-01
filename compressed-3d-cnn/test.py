@@ -220,6 +220,6 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
 
     print()
     print('results')
-    print(loss_ls, top1_ls, top5)
+    print(loss_ls, top1_ls, top5_ls)
 
     # return losses.count.item(), prec1.count.item(), prec5.count.item()
