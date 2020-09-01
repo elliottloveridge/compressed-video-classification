@@ -296,7 +296,10 @@ params = ['module.module.features.0.0.weight',
 best_prec1 = 0
 if opt.resume_path:
     # NOTE: is dataparallel needed?
+    print('devices:', torch.cuda.device_count())
     model = nn.DataParallel(model)
+    # FIXME: attempted fix for parameters on wrong device!
+    model.to(f'cuda:{model.device_ids[0]}')
     # # NOTE: is this needed? - less likely than dataparallel
     # model = model.cuda()
     print('loading checkpoint {}'.format(opt.resume_path))
