@@ -106,8 +106,9 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
             scheduler.mask_all_weights()
 
             # Test and record the performance of the pruned model
-            print(model_cpy)
             prec1, prec5, loss = test_func(model=model_cpy)
+
+            # prec1, prec5, loss = test.test_eval(test_loader, model_cpy, opt, test_data.class_names, criterion)
             sensitivity[sparsity_level] = (prec1, prec5, loss)
             sensitivities[param_name] = sensitivity
     return sensitivities
@@ -360,7 +361,7 @@ test_loader = torch.utils.data.DataLoader(
 
 # return the average losses, top1, top5 accuracies for subset of testing dataset
 # FIXME: need to use validation.py's val_epoch instead for this
-test_func = partial(test.test_eval(test_loader, opt, test_data.class_names, criterion))
+test_func = partial(test.test_eval, data_loader=test_loader, criterion=criterion, opt=opt)
 
 # test_logger = Logger(
 #     os.path.join(opt.result_path, 'test.log'),
