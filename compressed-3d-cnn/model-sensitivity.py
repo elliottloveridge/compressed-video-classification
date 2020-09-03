@@ -74,9 +74,8 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
         for sparsity_level in sparsities:
             sparsity_level = float(sparsity_level)
             # msglogger.info("Testing sensitivity of %s [%0.1f%% sparsity]"
-             # % (param_name, sparsity_level*100))
-             print("Testing sensitivity of %s [%0.1f%% sparsity]"
-              % (param_name, sparsity_level*100))
+            # % (param_name, sparsity_level*100))
+            print("Testing sensitivity of %s [%0.1f%% sparsity]"%(param_name, sparsity_level*100))
             # Create the pruner (a level pruner), the pruning policy and the
             # pruning schedule.
             if group == 'element':
