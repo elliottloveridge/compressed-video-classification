@@ -59,8 +59,8 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
     sensitivities = OrderedDict()
 
     for param_name in net_params:
-        print('param_name')
-        print(model.state_dict()[param_name])
+        print(param_name)
+        print(model.state_dict()[param_name].dim())
         if model.state_dict()[param_name].dim() not in [2,4]:
             # print('here')
             continue
