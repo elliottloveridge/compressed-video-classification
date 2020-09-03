@@ -375,6 +375,6 @@ test_func = partial(test.test_eval, data_loader=test_loader, criterion=criterion
 # FIXME: the 'filter' command should be editable
 
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng,
-test_func=test_func, group='channel')
+test_func=test_func, group='filter')
 sensitivities_to_png(sense, os.path.join(opt.result_path,'sensitivity.png'))
 sensitivities_to_csv(sense, os.path.join(opt.result_path, 'sensitivity.csv'))

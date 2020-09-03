@@ -186,12 +186,6 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
         prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
         # top1.update(prec1, inputs.size(0))
         # top5.update(prec5, inputs.size(0))
-
-        print(loss.item())
-
-        print(prec1.item())
-        print(prec5.item())
-
         # losses.update(losses.data(), inputs.size(0))
 
         loss_ls.append(loss.item())
@@ -217,9 +211,5 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     # logger.log({'loss': losses.avg.item(),
     #             'prec1': top1.avg.item(),
     #             'prec5': top5.avg.item()})
-
-    print()
-    print('results')
-    print(loss_ls, top1_ls, top5_ls)
 
     return loss_ls, top1_ls, top5_ls
