@@ -60,6 +60,7 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
 
     for param_name in net_params:
         if model.state_dict()[param_name].dim() not in [2,4]:
+            print('here')
             continue
 
         # Make a copy of the model, because when we apply the zeros mask (i.e.
