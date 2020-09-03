@@ -327,7 +327,7 @@ if opt.resume_path:
 
 # introduce a range of sparsity values
 # sensitivities = np.arange(*args.sensitivity_range)
-sparse_rng = range(0, 1, 10)
+sparse_rng = [0.25, 0.5, 0.75, 1.0]
 
 # same as test call in main.py but includes sampling
 spatial_transform = Compose([
