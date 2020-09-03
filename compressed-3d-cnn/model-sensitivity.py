@@ -59,9 +59,9 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
     sensitivities = OrderedDict()
 
     for param_name in net_params:
-        print(param_name)
-        print(model.state_dict()[param_name].dim())
-        if model.state_dict()[param_name].dim() not in [2,4]:
+        # print(param_name)
+        # print(model.state_dict()[param_name].dim())
+        if model.state_dict()[param_name].dim() not in [2,5]:
             # print('here')
             continue
 
@@ -81,7 +81,7 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
                 pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_levels)
             elif group == 'filter':
                 # Filter ranking
-                if model.state_dict()[param_name].dim() != 4:
+                if model.state_dict()[param_name].dim() != 5:
                     continue
                 pruner = distiller.pruning.L1RankedStructureParameterPruner("sensitivity",
                                                                             group_type="Filters",
@@ -89,7 +89,7 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
                                                                             weights=param_name)
             elif group == 'channel':
                 # Filter ranking
-                if model.state_dict()[param_name].dim() != 4:
+                if model.state_dict()[param_name].dim() != 5:
                     continue
                 pruner = distiller.pruning.L1RankedStructureParameterPruner("sensitivity",
                                                                             group_type="Channels",
