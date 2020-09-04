@@ -143,8 +143,9 @@ def sensitivities_to_png(sensitivities, fname):
     plt.ylabel('top5')
     plt.xlabel('sparsity')
     plt.title('Pruning Sensitivity')
-    plt.legend(loc='lower center',
-               ncol=2, mode="expand", borderaxespad=0.)
+    # FIXME: need to get this to work with all weights, change the name of params for this?
+    # plt.legend(loc='lower center',
+    #            ncol=2, mode="expand", borderaxespad=0.)
     plt.savefig(fname, format='png')
 
 
@@ -327,7 +328,7 @@ if opt.resume_path:
 
 # introduce a range of sparsity values
 # sensitivities = np.arange(*args.sensitivity_range)
-sparse_rng = [0.25, 0.5, 0.75, 1.0]
+sparse_rng = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 # same as test call in main.py but includes sampling
 spatial_transform = Compose([
@@ -344,7 +345,7 @@ test_data = get_test_set(opt, spatial_transform, temporal_transform,
 
 # DEBUG: the size len(test_data) might be too big
 # sample a defined portion of the testing dataset
-subset_ind = np.random.randint(0, len(test_data), size=(1, 16))
+subset_ind = np.random.randint(0, len(test_data), size=(1, 120))
 # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
 test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 
