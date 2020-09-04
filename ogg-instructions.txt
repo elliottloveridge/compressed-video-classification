@@ -4,7 +4,7 @@ cd research-project
 screen
 # hit enter twice
 # if you need to then use git pull
-# 6be8c4c3df5c82c42663b04bd6fab6dd31ddb622
+# b87f85dcf1653a998ce5751bd108ec206e35e449
 cd research-project/
 # make sure the bash script is runnable -- use 'chmod +x ogg-run.sh' etc
 docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data elliottloveridge/distiller /app/ogg-run.sh
