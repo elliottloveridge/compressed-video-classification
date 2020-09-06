@@ -212,4 +212,5 @@ def test_eval(data_loader, model, criterion, opt, logger=None):
     #             'prec1': top1.avg.item(),
     #             'prec5': top5.avg.item()})
 
-    return sum(loss_ls)/len(loss_ls), sum(top1_ls)/len(top1_ls), sum(top5_ls)/len(top5_ls)
+    # # FIXME: switch to using logger
+    return sum(top1_ls)/len(top1_ls), sum(top5_ls)/len(top5_ls), sum(loss_ls)/len(loss_ls)

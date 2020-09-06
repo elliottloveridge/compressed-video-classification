@@ -151,13 +151,29 @@ if __name__ == '__main__':
             os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 
     best_prec1 = 0
-    if opt.resume_path:
 
-        # NOTE: knowledge distillation - load pre-trained teacher model
-        if opt.compression_type == 'kd':
-            opt.arch = opt.teacher_model
-            # %%%%%
-            t_model, parameters = generate_model(opt)
+    # NOTE: knowledge distillation - load pre-trained teacher model
+    if opt.compression_type == 'kd':
+        # add this to opts
+        opt.kd_policy = None
+        # rename all opts for teacher
+        # FIXME: find a better method for this - could mess with things!
+        opt.model = opt.teacher_model
+        opt.arch = opt.teacher_arch
+        t_model, parameters = generate_model(opt)
+        print('loading checkpoint {}'.format(opt.resume_path))
+        checkpoint = torch.load(opt.teacher_path)
+        assert opt.arch == checkpoint['arch']
+        best_prec1 = checkpoint['best_prec1']
+        opt.begin_epoch = checkpoint['epoch']
+        t_model.load_state_dict(checkpoint['state_dict'])
+
+        # create a policy and add to scheduler
+        dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, )
+
+    # NOTE: don't want a resume path for student model - could change this?
+    if opt.resume_path and opt.compression_type != 'kd':
+
         print('loading checkpoint {}'.format(opt.resume_path))
         checkpoint = torch.load(opt.resume_path)
         assert opt.arch == checkpoint['arch']
@@ -171,7 +187,8 @@ if __name__ == '__main__':
     comp['active'] = ['qat, fp']
     comp['passive'] = ['ptq']
 
-    if opt.compress:
+    # NOTE: don't want to do this for knowledge distillation
+    if opt.compress and compression_type != 'kd':
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
         # par, flo = model_info(model, opt)
