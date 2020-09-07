@@ -76,6 +76,17 @@ def parse_opts():
     parser.add_argument('--t_model', default='resnet', type=str, help='Teacher model type')
     parser.add_argument('--t_path', default='/data/results/pretrain/', type=str, help='Teacher model path for knowledge distillation')
     parser.add_argument('--t_model_depth', default='101', type=str, help='Model depth of teacher model')
+    # NOTE: are all of these necessary!
+    parser.add_argument('--t_n_classes', default=400, type=int, help='Teacher model: number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51)')
+    parser.add_argument('--t_sample_size', default=112, type=int, help='Teacher model: Height and width of inputs')
+    parser.add_argument('--t_sample_duration', default=16, type=int, help='Teacher model: Temporal duration of inputs')
+    parser.add_argument('--t_version', default=1.1, type=float, help='Teacher model: Version of the model')
+    parser.add_argument('--t_resnet_shortcut', default='B', type=str, help='Teacher model: Shortcut type of resnet (A | B)')
+    parser.add_argument('--t_resnext_cardinality', default=32, type=int, help='Teacher model: ResNeXt cardinality')
+    parser.add_argument('--t_groups', default=3, type=int, help='Teacher model: The number of groups at group convolutions at conv layers')
+    parser.add_argument('--t_width_mult', default=1.0, type=float, help='Teacher model: The applied width multiplier to scale number of filters')
+
+    
     args = parser.parse_args()
 
     return args
