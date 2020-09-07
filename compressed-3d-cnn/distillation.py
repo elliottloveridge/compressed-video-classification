@@ -212,8 +212,8 @@ if __name__ == '__main__':
 
 
     print('run')
-    print('opt.begin_epoch')
-    print('opt.n_epochs + 1')
+    print(opt.begin_epoch)
+    print(opt.n_epochs + 1)
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
         print('here')
