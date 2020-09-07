@@ -182,7 +182,7 @@ if __name__ == '__main__':
         checkpoint = torch.load(opt.t_path)
         assert opt.t_arch == checkpoint['arch']
         # best_prec1 = checkpoint['best_prec1']
-        # opt.begin_epoch = checkpoint['epoch']
+        opt.begin_epoch = checkpoint['epoch']
         teacher.load_state_dict(checkpoint['state_dict'])
 
         # create a policy and add to scheduler
@@ -191,8 +191,11 @@ if __name__ == '__main__':
         # compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
         #                                  ending_epoch=opt.n_epochs, frequency=1)
         # FIXME: kd_start_epoch not defined
+        # FIXME: had to add +1 to end epoch
+        print('begin epoch:', opt.begin_epoch)
+        end_epoch = opt.n_epochs + 1
         compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.begin_epoch,
-                                         ending_epoch=opt.n_epochs, frequency=1)
+                                         ending_epoch=end_epoch, frequency=1)
 
     # NOTE: don't want a resume path for student model - could change this?
     if opt.resume_path and opt.compression_type != 'kd':
