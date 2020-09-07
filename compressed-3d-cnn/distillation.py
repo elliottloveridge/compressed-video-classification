@@ -52,6 +52,8 @@ if __name__ == '__main__':
     for i in range(1, opt.n_scales):
         opt.scales.append(opt.scales[-1] * opt.scale_step)
     opt.arch = '{}'.format(opt.model)
+    # NOTE: added this for distillation
+    opt.t_arch = '{}'.format(opt.t_model)
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
     if not opt.compress:
