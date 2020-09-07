@@ -192,8 +192,8 @@ if __name__ == '__main__':
         #                                  ending_epoch=opt.n_epochs, frequency=1)
         # FIXME: kd_start_epoch not defined
         # FIXME: had to add +1 to end epoch
-        print('begin epoch:', opt.begin_epoch)
-        end_epoch = opt.n_epochs + 1
+        # print('begin epoch:', opt.begin_epoch)
+        end_epoch = opt.begin_epoch + opt.n_epochs
         compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.begin_epoch,
                                          ending_epoch=end_epoch, frequency=1)
 
