@@ -188,7 +188,10 @@ if __name__ == '__main__':
         # create a policy and add to scheduler
         dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, opt.kd_teacher_wt)
         opt.kd_policy = distiller.KnowledgeDistillationPolicy(model, teacher, opt.kd_temp, dlw)
-        compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
+        # compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
+        #                                  ending_epoch=opt.n_epochs, frequency=1)
+        # FIXME: kd_start_epoch not defined
+        compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.begin_epoch,
                                          ending_epoch=opt.n_epochs, frequency=1)
 
     # NOTE: don't want a resume path for student model - could change this?
