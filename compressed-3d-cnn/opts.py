@@ -78,7 +78,7 @@ def parse_opts():
     parser.add_argument('--t_model_depth', default=101, type=int, help='Model depth of teacher model')
     parser.add_argument('--kd_distill_wt', default=0.7, type=float, help='Weight for distillation loss (student vs. teacher soft targets)')
     parser.add_argument('--kd_student_wt', default=0.3, type=float, help='Weight for student vs. labels loss')
-    parser.add_argument('--kd_teacher_wt', default=1.0, type=float, help='Weight for teacher vs. labels loss')
+    parser.add_argument('--kd_teacher_wt', default=0.0, type=float, help='Weight for teacher vs. labels loss')
     parser.add_argument('--kd_temp', default=0.3, type=float, help='Knowledge distllation softmax temperature)')
     # NOTE: are all of these necessary!
     parser.add_argument('--t_n_classes', default=400, type=int, help='Teacher model: number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51)')
