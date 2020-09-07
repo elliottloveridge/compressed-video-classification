@@ -157,8 +157,10 @@ if __name__ == '__main__':
     # set compression dictionary to validate compression_type input
     # FIXME: move this to somewhere else, not a great implementation
     comp = dict()
+    # FIXME: should move this part to the opts definition at the top when it's moved to main.py
     comp['active'] = ['qat, fp']
-    comp['passive'] = ['ptq']
+    # does kd belong in here?
+    comp['passive'] = ['ptq', 'kd']
 
     # NOTE: this may not work for distillation
     if opt.compress:
@@ -212,11 +214,7 @@ if __name__ == '__main__':
 
 
     print('run')
-    print(opt.begin_epoch)
-    print(opt.n_epochs + 1)
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
-
-        print('here')
 
         if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_begin(i)
