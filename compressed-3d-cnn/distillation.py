@@ -185,7 +185,7 @@ if __name__ == '__main__':
         checkpoint = torch.load(opt.t_path)
         assert opt.t_arch == checkpoint['arch']
         # best_prec1 = checkpoint['best_prec1']
-        opt.begin_epoch = checkpoint['epoch']
+        # opt.begin_epoch = checkpoint['epoch']
         teacher.load_state_dict(checkpoint['state_dict'])
 
         # create a policy and add to scheduler
