@@ -178,7 +178,7 @@ if __name__ == '__main__':
 
     if opt.compression_type == 'kd':
         #FIXME: add this to opts
-        
+
         # generate model using teacher args
         teacher, parameters = generate_model(opt, teacher=True)
         print('loading checkpoint {}'.format(opt.t_path))
@@ -213,6 +213,8 @@ if __name__ == '__main__':
 
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
+
+        print('here')
 
         if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_begin(i)
