@@ -8,8 +8,9 @@ def generate_model(opt, teacher=False):
     assert opt.model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
                          'shufflenet', 'mobilenetv2', 'shufflenetv2']
 
-    assert opt.t_model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
-                           'shufflenet', 'mobilenetv2', 'shufflenetv2']
+    if teacher:
+        assert opt.t_model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
+                               'shufflenet', 'mobilenetv2', 'shufflenetv2']
 
     # NOTE: naive teacher model implementation
     if not teacher:
