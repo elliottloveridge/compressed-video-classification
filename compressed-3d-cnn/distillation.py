@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
         json.dump(vars(opt), opt_file)
- 
+
     torch.manual_seed(opt.manual_seed)
 
     model, parameters = generate_model(opt)
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     # NOTE: this may not work for distillation
     if opt.compress:
         compression_scheduler = distiller.CompressionScheduler(model)
-        if compression_type != 'kd':
+        if opt.compression_type != 'kd':
             compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
