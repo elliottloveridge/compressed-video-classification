@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
         json.dump(vars(opt), opt_file)
-
+ 
     torch.manual_seed(opt.manual_seed)
 
     model, parameters = generate_model(opt)
@@ -152,24 +152,42 @@ if __name__ == '__main__':
 
     best_prec1 = 0
 
+    # set compression dictionary to validate compression_type input
+    # FIXME: move this to somewhere else, not a great implementation
+    comp = dict()
+    comp['active'] = ['qat, fp']
+    comp['passive'] = ['ptq']
+
+    # NOTE: this may not work for distillation
+    if opt.compress:
+        compression_scheduler = distiller.CompressionScheduler(model)
+        if compression_type != 'kd':
+            compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+        # par, flo = model_info(model, opt)
+        # print('Before Compression:')
+        # print('Trainiable Parameters:', par)
+        # print('FLOPs:', flo)
+    else:
+        compression_scheduler = None
+
     # NOTE: knowledge distillation - load pre-trained teacher model
     if opt.compression_type == 'kd':
-        # add this to opts
+        #FIXME: add this to opts
         opt.kd_policy = None
-        # rename all opts for teacher
-        # FIXME: find a better method for this - could mess with things!
-        opt.model = opt.teacher_model
-        opt.arch = opt.teacher_arch
-        t_model, parameters = generate_model(opt)
-        print('loading checkpoint {}'.format(opt.resume_path))
-        checkpoint = torch.load(opt.teacher_path)
-        assert opt.arch == checkpoint['arch']
-        best_prec1 = checkpoint['best_prec1']
-        opt.begin_epoch = checkpoint['epoch']
-        t_model.load_state_dict(checkpoint['state_dict'])
+        # generate model using teacher args
+        teacher, parameters = generate_model(opt, teacher=True)
+        print('loading checkpoint {}'.format(opt.t_path))
+        checkpoint = torch.load(opt.t_path)
+        assert opt.t_arch == checkpoint['arch']
+        # best_prec1 = checkpoint['best_prec1']
+        # opt.begin_epoch = checkpoint['epoch']
+        teacher.load_state_dict(checkpoint['state_dict'])
 
         # create a policy and add to scheduler
-        dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, )
+        dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, opt.kd_teacher_wt)
+        opt.kd_policy = distiller.KnowledgeDistillationPolicy(model, teacher, opt.kd_temp, dlw)
+        compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
+                                         ending_epoch=opt.n_epochs, frequency=1)
 
     # NOTE: don't want a resume path for student model - could change this?
     if opt.resume_path and opt.compression_type != 'kd':
@@ -181,22 +199,6 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    # set compression dictionary to validate compression_type input
-    # FIXME: move this to somewhere else, not a great implementation
-    comp = dict()
-    comp['active'] = ['qat, fp']
-    comp['passive'] = ['ptq']
-
-    # NOTE: don't want to do this for knowledge distillation
-    if opt.compress and compression_type != 'kd':
-        compression_scheduler = distiller.CompressionScheduler(model)
-        compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-        # par, flo = model_info(model, opt)
-        # print('Before Compression:')
-        # print('Trainiable Parameters:', par)
-        # print('FLOPs:', flo)
-    else:
-        compression_scheduler = None
 
     print('run')
     for i in range(opt.begin_epoch, opt.n_epochs + 1):

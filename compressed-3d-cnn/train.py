@@ -34,7 +34,13 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
             targets = targets.cuda()
         inputs = Variable(inputs)
         targets = Variable(targets)
-        outputs = model(inputs)
+        if opt.kd_policy is None:
+            # Revert to a "normal" forward-prop call if no knowledge distillation policy is present
+            outputs = model(inputs)
+        else:
+            # forward pass through 
+            outputs = opt.kd_policy.forward(inputs)
+        # outputs = model(inputs)
         loss = criterion(outputs, targets)
 
         # before backwards pass - update loss to include regularization

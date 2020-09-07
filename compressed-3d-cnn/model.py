@@ -4,119 +4,143 @@ from torch import nn
 from models import c3d, squeezenet, mobilenet, shufflenet, mobilenetv2, shufflenetv2, resnext, resnet
 
 
-def generate_model(opt):
+def generate_model(opt, teacher=False):
     assert opt.model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
                          'shufflenet', 'mobilenetv2', 'shufflenetv2']
 
+    assert opt.t_model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
+                           'shufflenet', 'mobilenetv2', 'shufflenetv2']
 
-    if opt.model == 'c3d':
+    # NOTE: naive teacher model implementation
+    if not teacher:
+        model_name = opt.model
+        num_classes = opt.n_classes
+        sample_size = opt.sample_size
+        sample_duration = opt.sample_duration
+        version = opt.version
+        groups = opt.groups
+        width_mult = opt.width_mult
+        resnet_shortcut = opt.resnet_shortcut
+        resnext_cardinality = opt.resnext_cardinality
+        model_depth = opt.model_depth
+    else:
+        model_name = opt.t_model
+        num_classes = opt.t_n_classes
+        sample_size = opt.t_sample_size
+        sample_duration = opt.t_sample_duration
+        version = opt.t_version
+        groups = opt.t_groups
+        width_mult = opt.t_width_mult
+        resnet_shortcut = opt.t_resnet_shortcut
+        resnext_cardinality = opt.t_resnext_cardinality
+        model_depth = opt.t_model_depth
+
+    if model_name == 'c3d':
         from models.c3d import get_fine_tuning_parameters
         model = c3d.get_model(
-            num_classes=opt.n_classes,
-            sample_size=opt.sample_size,
-            sample_duration=opt.sample_duration)
-    elif opt.model == 'squeezenet':
+            num_classes=num_classes,
+            sample_size=sample_size,
+            sample_duration=sample_duration)
+    elif model_name == 'squeezenet':
         from models.squeezenet import get_fine_tuning_parameters
         model = squeezenet.get_model(
-            version=opt.version,
-            num_classes=opt.n_classes,
-            sample_size=opt.sample_size,
-            sample_duration=opt.sample_duration)
-    elif opt.model == 'shufflenet':
+            version=version,
+            num_classes=num_classes,
+            sample_size=sample_size,
+            sample_duration=sample_duration)
+    elif model_name == 'shufflenet':
         from models.shufflenet import get_fine_tuning_parameters
         model = shufflenet.get_model(
-            groups=opt.groups,
-            width_mult=opt.width_mult,
-            num_classes=opt.n_classes)
-    elif opt.model == 'shufflenetv2':
+            groups=groups,
+            width_mult=width_mult,
+            num_classes=num_classes)
+    elif model_name == 'shufflenetv2':
         from models.shufflenetv2 import get_fine_tuning_parameters
         model = shufflenetv2.get_model(
-            num_classes=opt.n_classes,
-            sample_size=opt.sample_size,
-            width_mult=opt.width_mult)
-    elif opt.model == 'mobilenet':
+            num_classes=num_classes,
+            sample_size=sample_size,
+            width_mult=width_mult)
+    elif model_name == 'mobilenet':
         from models.mobilenet import get_fine_tuning_parameters
         model = mobilenet.get_model(
-            num_classes=opt.n_classes,
-            sample_size=opt.sample_size,
-            width_mult=opt.width_mult)
-    elif opt.model == 'mobilenetv2':
+            num_classes=num_classes,
+            sample_size=sample_size,
+            width_mult=width_mult)
+    elif model_name == 'mobilenetv2':
         from models.mobilenetv2 import get_fine_tuning_parameters
         model = mobilenetv2.get_model(
-            num_classes=opt.n_classes,
-            sample_size=opt.sample_size,
-            width_mult=opt.width_mult)
-    elif opt.model == 'resnext':
-        assert opt.model_depth in [50, 101, 152]
+            num_classes=num_classes,
+            sample_size=sample_size,
+            width_mult=width_mult)
+    elif model_name == 'resnext':
+        assert model_depth in [50, 101, 152]
         from models.resnext import get_fine_tuning_parameters
-        if opt.model_depth == 50:
+        if model_depth == 50:
             model = resnext.resnext50(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                cardinality=opt.resnext_cardinality,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 101:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                cardinality=resnext_cardinality,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 101:
             model = resnext.resnext101(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                cardinality=opt.resnext_cardinality,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 152:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                cardinality=resnext_cardinality,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 152:
             model = resnext.resnext152(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                cardinality=opt.resnext_cardinality,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-    elif opt.model == 'resnet':
-        assert opt.model_depth in [10, 18, 34, 50, 101, 152, 200]
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                cardinality=resnext_cardinality,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+    elif model_name == 'resnet':
+        assert model_depth in [10, 18, 34, 50, 101, 152, 200]
         from models.resnet import get_fine_tuning_parameters
-        if opt.model_depth == 10:
+        if model_depth == 10:
             model = resnet.resnet10(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 18:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 18:
             model = resnet.resnet18(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 34:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 34:
             model = resnet.resnet34(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 50:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 50:
             model = resnet.resnet50(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 101:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 101:
             model = resnet.resnet101(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 152:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 152:
             model = resnet.resnet152(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-        elif opt.model_depth == 200:
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
+        elif model_depth == 200:
             model = resnet.resnet200(
-                num_classes=opt.n_classes,
-                shortcut_type=opt.resnet_shortcut,
-                sample_size=opt.sample_size,
-                sample_duration=opt.sample_duration)
-
-
+                num_classes=num_classes,
+                shortcut_type=resnet_shortcut,
+                sample_size=sample_size,
+                sample_duration=sample_duration)
 
     if not opt.no_cuda:
         model = model.cuda()
@@ -125,6 +149,7 @@ def generate_model(opt):
                                p.requires_grad)
         print("Total number of trainable parameters: ", pytorch_total_params)
 
+        # NOTE: this may not work when using a teacher model - needs to be edited
         if opt.pretrain_path:
             print('loading pretrained model {}'.format(opt.pretrain_path))
             pretrain = torch.load(opt.pretrain_path, map_location=torch.device('cpu'))
