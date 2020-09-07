@@ -67,11 +67,15 @@ def parse_opts():
     parser.add_argument('--groups', default=3, type=int, help='The number of groups at group convolutions at conv layers')
     parser.add_argument('--width_mult', default=1.0, type=float, help='The applied width multiplier to scale number of filters')
     parser.add_argument('--manual_seed', default=1, type=int, help='Manually set random seed')
-    parser.add_argument('--compression_file', default='/app/quantization-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
+    # compression args
+    parser.add_argument('--compression_file', default='/app/compressed-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
     parser.add_argument('--compress', action='store_true', help='If true, compression is performed, defined by compression_type arg')
     parser.set_defaults(compress=False)
     parser.add_argument('--compression_type', default='qat', type=str, help='Compression type to perform (includes fp - filter pruning, cp - channel pruning, ptq - post training quantisation, qat - quantisation aware training)')
-
+    # knowledge distillation args
+    parser.add_argument('--t_model', default='resnet', type=str, help='Teacher model type')
+    parser.add_argument('--t_path', default='/data/results/pretrain/', type=str, help='Teacher model path for knowledge distillation')
+    parser.add_argument('--t_model_depth', default='101', type=str, help='Model depth of teacher model')
     args = parser.parse_args()
 
     return args
