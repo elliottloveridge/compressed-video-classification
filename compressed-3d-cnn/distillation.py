@@ -173,9 +173,12 @@ if __name__ == '__main__':
         compression_scheduler = None
 
     # NOTE: knowledge distillation - load pre-trained teacher model
+
+    opt.kd_policy = None
+
     if opt.compression_type == 'kd':
         #FIXME: add this to opts
-        opt.kd_policy = None
+        
         # generate model using teacher args
         teacher, parameters = generate_model(opt, teacher=True)
         print('loading checkpoint {}'.format(opt.t_path))

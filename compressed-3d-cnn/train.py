@@ -38,7 +38,8 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
             # Revert to a "normal" forward-prop call if no knowledge distillation policy is present
             outputs = model(inputs)
         else:
-            # forward pass through 
+            print('here')
+            # forward pass through
             outputs = opt.kd_policy.forward(inputs)
         # outputs = model(inputs)
         loss = criterion(outputs, targets)
