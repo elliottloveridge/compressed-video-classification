@@ -33,7 +33,7 @@
 
 # ucf101-resnet-101 to resnet-18 knowledge distillation training (no testing)
 # FIXME: need to add more teacher args to this for it to work
-python /app/compressed-3d-cnn/distillation.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 16 --model resnet --model_depth 18 --learning_rate 0.001 --n_val_samples 1 --n_epochs 1 --compress --compression_type kd --t_model resnet --t_model_depth 101 --t_path data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth
+python /app/compressed-3d-cnn/distillation.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 16 --model resnet --model_depth 18 --learning_rate 0.001 --n_val_samples 1 --n_epochs 1 --compress --compression_type kd --t_model resnet --t_model_depth 101 --t_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth
 
 
 
