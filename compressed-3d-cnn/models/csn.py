@@ -30,10 +30,10 @@ class CSNBottleneck(nn.Module):
         # if mode = 'ir' then just DepthwiseConv3d - same as seen in MobileNet
         conv2.append(nn.Conv3d(channels, channels, kernel_size=3, stride=stride, padding=1, bias=False, groups=channels))
         # NOTE: added a nn.Flatten() here for testing
-        conv2.append(nn.Flatten())
+        # conv2.append(nn.Flatten())
 
         self.conv2 = nn.Sequential(*conv2)
-        
+
         self.bn2 = nn.BatchNorm3d(channels)
 
         self.conv3 = nn.Conv3d(channels, channels * self.expansion, kernel_size=1, bias=False)
@@ -45,7 +45,7 @@ class CSNBottleneck(nn.Module):
             self.downsample = nn.Sequential(
                 nn.Conv3d(in_channels, channels * self.expansion, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm3d(channels * self.expansion)
-                # nn.Flatten()
+                nn.Flatten()
             )
 
 
