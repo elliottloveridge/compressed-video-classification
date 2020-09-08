@@ -152,25 +152,25 @@ def generate_model(opt, teacher=False):
                 num_classes=num_classes,
                 sample_size=sample_size,
                 sample_duration=sample_duration,
-                model_type=model_type)
+                mode=model_type)
         elif model_depth == 50:
             model = csn.csn50(
                 num_classes=num_classes,
                 sample_size=sample_size,
                 sample_duration=sample_duration,
-                model_type=model_type)
+                mode=model_type)
         elif model_depth == 101:
             model = csn.csn101(
                 num_classes=num_classes,
                 sample_size=sample_size,
                 sample_duration=sample_duration,
-                model_type=model_type)
+                mode=model_type)
         elif model_depth == 152:
             model = csn.csn152(
                 num_classes=num_classes,
                 sample_size=sample_size,
                 sample_duration=sample_duration,
-                model_type=model_type)
+                mode=model_type)
 
     if not opt.no_cuda:
         model = model.cuda()
