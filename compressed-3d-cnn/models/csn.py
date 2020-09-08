@@ -32,7 +32,8 @@ class CSNBottleneck(nn.Module):
         # NOTE: added a nn.Flatten() here for testing
         conv2.append(nn.Flatten())
 
-        # self.conv2 = nn.Sequential(*conv2)
+        self.conv2 = nn.Sequential(*conv2)
+        
         self.bn2 = nn.BatchNorm3d(channels)
 
         self.conv3 = nn.Conv3d(channels, channels * self.expansion, kernel_size=1, bias=False)
