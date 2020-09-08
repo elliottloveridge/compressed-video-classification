@@ -119,14 +119,13 @@ class CSN(nn.Module):
         out = self.layer3(out)
         out = self.layer4(out)
 
-        out = self.avg_pool(out)
+        out = self.avgpool(out)
         out = out.view(out.size(0), -1)
         out = self.fc(out)
 
         return out
 
 
-# NOTE: taken from mobilenetv2.py - will it work?
 def get_fine_tuning_parameters(model, ft_portion):
     if ft_portion == "complete":
         return model.parameters()
@@ -167,17 +166,3 @@ def csn101(num_classes, sample_size, sample_duration, mode='ip'):
 def csn152(num_classes, sample_size, sample_duration, mode='ip'):
     return CSN(CSNBottleneck, [3,8,36,3], num_classes=num_classes,
      sample_size=sample_size, sample_duration=sample_duration, mode=mode)
-
-
-# NOTE: taken from mobilenetv2.py - not needed in resnet so ignore here?
-
-# if __name__ == "__main__":
-#     model = get_model(num_classes=600, sample_size=112, width_mult=1.)
-#     model = model.cuda()
-#     model = nn.DataParallel(model, device_ids=None)
-#     print(model)
-#
-#
-#     input_var = Variable(torch.randn(8, 3, 16, 112, 112))
-#     output = model(input_var)
-#     print(output.shape)
