@@ -214,7 +214,7 @@ def get_fine_tuning_parameters(model, ft_portion):
 
 
 def resnet10(**kwargs):
-    """Constructs a ResNet-18 model.
+    """Constructs a ResNet-10 model.
     """
     model = ResNet(BasicBlock, [1, 1, 1, 1], **kwargs)
     return model
@@ -249,14 +249,14 @@ def resnet101(**kwargs):
 
 
 def resnet152(**kwargs):
-    """Constructs a ResNet-101 model.
+    """Constructs a ResNet-152 model.
     """
     model = ResNet(Bottleneck, [3, 8, 36, 3], **kwargs)
     return model
 
 
 def resnet200(**kwargs):
-    """Constructs a ResNet-101 model.
+    """Constructs a ResNet-200 model.
     """
     model = ResNet(Bottleneck, [3, 24, 36, 3], **kwargs)
     return model
