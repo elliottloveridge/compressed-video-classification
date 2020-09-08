@@ -208,6 +208,13 @@ if __name__ == '__main__':
         if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_end(i)
 
+    if compression_type == 'ptq':
+        quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=None, bits_weights=8)
+        # NOTE: need to add the input shape!
+        quantizer.prepare_model(torch.rand(*your_input_shape))
+
+        # FIXME: want to save the model again here, call it something else?
+
     # print flops and params to see if it has been reduced
     # if opt.compress:
     #     par, flo = model_info(model, opt)
