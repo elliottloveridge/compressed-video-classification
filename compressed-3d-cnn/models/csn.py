@@ -12,6 +12,7 @@ import torch.nn as nn
 class CSNBottleneck(nn.Module):
     expansion = 4
 
+    # NOTE: could add a downsample arg to this init? - same as in ResNet
     def __init__(self, in_channels, channels, stride=1, mode='ip'):
         super().__init__()
 
@@ -28,21 +29,28 @@ class CSNBottleneck(nn.Module):
             conv2.append(nn.Conv3d(channels, channels, kernel_size=1, stride=1, bias=False))
         # if mode = 'ir' then just DepthwiseConv3d - same as seen in MobileNet
         conv2.append(nn.Conv3d(channels, channels, kernel_size=3, stride=stride, padding=1, bias=False, groups=channels))
-        self.conv2 = nn.Sequential(*conv2)
+        # NOTE: added a nn.Flatten() here for testing
+        conv2.append(nn.Flatten())
+
+        # self.conv2 = nn.Sequential(*conv2)
         self.bn2 = nn.BatchNorm3d(channels)
 
         self.conv3 = nn.Conv3d(channels, channels * self.expansion, kernel_size=1, bias=False)
         self.bn3 = nn.BatchNorm3d(channels * self.expansion)
 
+        # NOTE: having problems with nn.Sequential, do they all require this?
         self.downsample = nn.Sequential()
         if stride != 1 or in_channels != channels * self.expansion:
             self.downsample = nn.Sequential(
                 nn.Conv3d(in_channels, channels * self.expansion, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm3d(channels * self.expansion)
+                # nn.Flatten()
             )
 
+
     def forward(self, x):
-        shortcut = self.downsample(x)
+
+        residual = x
 
         out = self.conv1(x)
         out = self.bn1(out)
@@ -55,7 +63,10 @@ class CSNBottleneck(nn.Module):
         out = self.conv3(out)
         out = self.bn3(out)
 
-        out += shortcut
+        if self.downsample is not None:
+            residual = self.downsample(x)
+
+        out += residual
         out = self.relu(out)
 
         return out
@@ -81,7 +92,7 @@ class CSN(nn.Module):
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
-        # self.avg_pool = nn.AdaptiveAvgPool3d(1)
+        # self.avgpool = nn.AdaptiveAvgPool3d(1)
         # NOTE: adaptive pool replaced with args definition below
         last_duration = int(math.ceil(sample_duration / 16))
         last_size = int(math.ceil(sample_size / 32))
