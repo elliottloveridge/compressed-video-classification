@@ -115,8 +115,10 @@ class ResNet(nn.Module):
                  sample_duration,
                  shortcut_type='B',
                  num_classes=400):
+
         self.inplanes = 64
         super(ResNet, self).__init__()
+
         self.conv1 = nn.Conv3d(
             3,
             64,
@@ -124,6 +126,7 @@ class ResNet(nn.Module):
             stride=(1, 2, 2),
             padding=(3, 3, 3),
             bias=False)
+            
         self.bn1 = nn.BatchNorm3d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool3d(kernel_size=(3, 3, 3), stride=2, padding=1)

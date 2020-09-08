@@ -4,6 +4,7 @@ See the paper "Video Classification with Channel-Separated Convolutional Network
 '''
 
 
+import math
 import torch
 import torch.nn as nn
 
@@ -61,7 +62,9 @@ class CSNBottleneck(nn.Module):
 
 
 class CSN(nn.Module):
-    def __init__(self, block, layers, num_classes, mode='ip'):
+    def __init__(self, block, layers, num_classes, sample_size, sample_duration,
+                 mode='ip'):
+
         super().__init__()
 
         assert mode in ['ip', 'ir']
@@ -78,7 +81,12 @@ class CSN(nn.Module):
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
-        self.avg_pool = nn.AdaptiveAvgPool3d(1)
+        # self.avg_pool = nn.AdaptiveAvgPool3d(1)
+        # NOTE: adaptive pool replaced with args definition below
+        last_duration = int(math.ceil(sample_duration / 16))
+        last_size = int(math.ceil(sample_size / 32))
+        self.avgpool = nn.AvgPool3d(
+            (last_duration, last_size, last_size), stride=1)
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         # initialize
@@ -141,20 +149,24 @@ def get_fine_tuning_parameters(model, ft_portion):
         raise ValueError("Unsupported ft_portion: 'complete' or 'last_layer' expected")
 
 
-def csn26(num_classes, mode='ip'):
-    return CSN(CSNBottleneck, [1,2,4,1], num_classes=num_classes, mode=mode)
+def csn26(num_classes, sample_size, sample_duration, mode='ip'):
+    return CSN(CSNBottleneck, [1,2,4,1], num_classes=num_classes,
+     sample_size=sample_size, sample_duration=sample_duration, mode=mode)
 
 
-def csn50(num_classes, mode='ip'):
-    return CSN(CSNBottleneck, [3,4,6,3], num_classes=num_classes, mode=mode)
+def csn50(num_classes, sample_size, sample_duration, mode='ip'):
+    return CSN(CSNBottleneck, [3,4,6,3], num_classes=num_classes,
+     sample_size=sample_size, sample_duration=sample_duration, mode=mode)
 
 
-def csn101(num_classes, mode='ip'):
-    return CSN(CSNBottleneck, [3,4,23,3], num_classes=num_classes, mode=mode)
+def csn101(num_classes, sample_size, sample_duration, mode='ip'):
+    return CSN(CSNBottleneck, [3,4,23,3], num_classes=num_classes,
+     sample_size=sample_size, sample_duration=sample_duration, mode=mode)
 
 
-def csn152(num_classes, mode='ip'):
-    return CSN(CSNBottleneck, [3,8,36,3], num_classes=num_classes)
+def csn152(num_classes, sample_size, sample_duration, mode='ip'):
+    return CSN(CSNBottleneck, [3,8,36,3], num_classes=num_classes
+     sample_size=sample_size, sample_duration=sample_duration, mode=mode)
 
 
 # NOTE: taken from mobilenetv2.py - not needed in resnet so ignore here?
