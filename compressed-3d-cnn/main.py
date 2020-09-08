@@ -160,6 +160,8 @@ if __name__ == '__main__':
     comp['active'] = ['qat, fp']
     comp['passive'] = ['ptq']
 
+    opt.kd_policy = None
+
     if opt.compress:
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
