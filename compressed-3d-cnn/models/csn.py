@@ -165,7 +165,7 @@ def csn101(num_classes, sample_size, sample_duration, mode='ip'):
 
 
 def csn152(num_classes, sample_size, sample_duration, mode='ip'):
-    return CSN(CSNBottleneck, [3,8,36,3], num_classes=num_classes
+    return CSN(CSNBottleneck, [3,8,36,3], num_classes=num_classes,
      sample_size=sample_size, sample_duration=sample_duration, mode=mode)
 
 
