@@ -24,13 +24,11 @@ class CSNBottleneck(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
         conv2 = []
-        # if mode = 'ip' then replace Conv3d with Conv1d + DepthwiseConv3d
+        # if mode = 'ip' then replace Conv3d with Conv1d + Conv3d [DepthwiseConv3d - same as MobileNet]
         if self.mode == 'ip':
             conv2.append(nn.Conv3d(channels, channels, kernel_size=1, stride=1, bias=False))
-        # if mode = 'ir' then just DepthwiseConv3d - same as seen in MobileNet
+        # if mode = 'ir' then just Conv3d
         conv2.append(nn.Conv3d(channels, channels, kernel_size=3, stride=stride, padding=1, bias=False, groups=channels))
-        # NOTE: added a nn.Flatten() here for testing
-        # conv2.append(nn.Flatten())
 
         self.conv2 = nn.Sequential(*conv2)
 
@@ -39,13 +37,12 @@ class CSNBottleneck(nn.Module):
         self.conv3 = nn.Conv3d(channels, channels * self.expansion, kernel_size=1, bias=False)
         self.bn3 = nn.BatchNorm3d(channels * self.expansion)
 
-        # NOTE: having problems with nn.Sequential, do they all require this?
+        # NOTE: is this sequential pointless? Could just set it as None?
         self.downsample = nn.Sequential()
         if stride != 1 or in_channels != channels * self.expansion:
             self.downsample = nn.Sequential(
                 nn.Conv3d(in_channels, channels * self.expansion, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm3d(channels * self.expansion)
-                # ,nn.Flatten()
             )
 
 
