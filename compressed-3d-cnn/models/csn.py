@@ -44,8 +44,8 @@ class CSNBottleneck(nn.Module):
         if stride != 1 or in_channels != channels * self.expansion:
             self.downsample = nn.Sequential(
                 nn.Conv3d(in_channels, channels * self.expansion, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm3d(channels * self.expansion),
-                nn.Flatten()
+                nn.BatchNorm3d(channels * self.expansion)
+                # ,nn.Flatten()
             )
 
 
