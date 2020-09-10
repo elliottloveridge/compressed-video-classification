@@ -160,6 +160,10 @@ if __name__ == '__main__':
     comp['active'] = ['qat, fp']
     comp['passive'] = ['ptq']
 
+    if opt.compression_type == 'ptq':
+        # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
+        print('here')
+
     opt.kd_policy = None
 
     if opt.compress:
@@ -213,6 +217,7 @@ if __name__ == '__main__':
     if opt.compression_type == 'ptq':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=None, bits_weights=8)
         # NOTE: need to add the input shape!
+        # model.input_shape
         quantizer.prepare_model(torch.rand(*your_input_shape))
 
         # FIXME: want to save the model again here, call it something else?
