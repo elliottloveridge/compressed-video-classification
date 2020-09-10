@@ -19,9 +19,9 @@
 # python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --dataset ucf101 --result_path results
 
 
-## pre-training
+## fine-tuning (pre-trained)
 
-# # ucf101-mobilenetv2 (inc. testing) - 1 epochs, 0.001 learning rate, no checkpoint, kinetics pre-train
+# # ucf101-mobilenetv2 (inc. testing) - 20 epochs, 0.01 learning rate, 5 checkpoint, kinetics pre-train
 python /app/compressed-3d-cnn/main.py --root_path /data \
   --video_path ucf101_videos/jpg/ \
   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
@@ -33,12 +33,12 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --ft_portion complete \
   --model mobilenetv2 \
   --width_mult 1.0 \
-  --learning_rate 0.001 \
+  --learning_rate 0.01 \
   --sample_duration 16 \
   --batch_size 32 \
-  --checkpoint 1 \
+  --checkpoint 5 \
   --n_val_samples 1 \
-  --n_epochs 1 \
+  --n_epochs 20 \
   --test
 
 
