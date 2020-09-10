@@ -38,7 +38,7 @@ python /app/compressed-3d-cnn/main.py -- root_path /data \
   --batch_size 32 \
   --checkpoint 1 \
   --n_val_samples 1 \
-  --test
+  --test \
 
 
 ## compression
