@@ -15,8 +15,8 @@
 
 ## evaluation
 
-# ucf101 evaluation (after testing)
-python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --dataset ucf101 --result_path results
+# # ucf101 evaluation (after testing)
+# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --dataset ucf101 --result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -53,25 +53,24 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data --annota
 
 ## element-wise pruning
 
-# # ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
-# python /app/compressed-3d-cnn/main.py --root_path /data \
-#   --video_path ucf101_videos/jpg/ \
-#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-#   --result_path results \
-#   # NOTE: add this in!
-#   --resume_path results/pretrain/
-#   --dataset ucf101 \
-#   --n_classes 101 \
-#   --batch_size 16  \
-#   --model mobilenetv2 \
-#   --width_mult 1.0 \
-#   --learning_rate 0.1 \
-#   --n_val_samples 1 \
-#   --n_epochs 1 \
-#   --test \
-#   --compress \
-#   --compression_type ep \
-#   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
+# ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
+python /app/compressed-3d-cnn/main.py --root_path /data \
+  --video_path ucf101_videos/jpg/ \
+  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+  --result_path results \
+  --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+  --dataset ucf101 \
+  --n_classes 101 \
+  --batch_size 16  \
+  --model mobilenetv2 \
+  --width_mult 1.0 \
+  --learning_rate 0.1 \
+  --n_val_samples 1 \
+  --n_epochs 1 \
+  --test \
+  --compress \
+  --compression_type ep \
+  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
 
 
 ## knowledge distillation
