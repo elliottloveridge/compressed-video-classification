@@ -179,14 +179,14 @@ def generate_model(opt, teacher=False):
                                p.requires_grad)
         print("Total number of trainable parameters: ", pytorch_total_params)
 
-        # NOTE: this may not work when using a teacher model or csn model
+        # NOTE: this may not work when using a teacher model __or__ csn model
         if opt.pretrain_path:
             print('loading pretrained model {}'.format(opt.pretrain_path))
             pretrain = torch.load(opt.pretrain_path, map_location=torch.device('cpu'))
             assert opt.arch == pretrain['arch']
             model.load_state_dict(pretrain['state_dict'])
 
-            if opt.model in  ['mobilenet', 'mobilenetv2', 'shufflenet', 'shufflenetv2', 'csn']:
+            if opt.model in  ['mobilenet', 'mobilenetv2', 'shufflenet', 'shufflenetv2']:
                 model.module.classifier = nn.Sequential(
                                 nn.Dropout(0.9),
                                 nn.Linear(model.module.classifier[1].in_features, opt.n_finetune_classes))
@@ -211,7 +211,7 @@ def generate_model(opt, teacher=False):
             assert opt.arch == pretrain['arch']
             model.load_state_dict(pretrain['state_dict'])
 
-            if opt.model in  ['mobilenet', 'mobilenetv2', 'shufflenet', 'shufflenetv2', 'csn']:
+            if opt.model in  ['mobilenet', 'mobilenetv2', 'shufflenet', 'shufflenetv2']:
                 model.module.classifier = nn.Sequential(
                                 nn.Dropout(0.9),
                                 nn.Linear(model.module.classifier[1].in_features, opt.n_finetune_classes)
