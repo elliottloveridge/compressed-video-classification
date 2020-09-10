@@ -22,24 +22,7 @@
 ## pre-training
 
 # # ucf101-mobilenetv2 (inc. testing) - 1 epochs, 0.001 learning rate, no checkpoint, kinetics pre-train
-python /app/compressed-3d-cnn/main.py -- root_path /data \
-  --video_path ucf101_videos/jpg/ \
-  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-  --result_path results \
-  --pretrain_path /app/compressed-3d-cnn/results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth \
-  --dataset ucf101 \
-  --n_classes 600 \
-  --n_finetune_classes 101 \
-  --ft_portion complete \
-  --model mobilenetv2 \
-  --width_mult 1.0 \
-  --learning_rate 0.001 \
-  --sample_duration 16 \
-  --batch_size 32 \
-  --checkpoint 1 \
-  --n_val_samples 1 \
-  --test \
-
+python /app/compressed-3d-cnn/main.py -- root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --pretrain_path /app/compressed-3d-cnn/results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth --dataset ucf101 --n_classes 600 --n_finetune_classes 101 --ft_portion complete --model mobilenetv2 --width_mult 1.0 --learning_rate 0.001 --sample_duration 16 --batch_size 32 --checkpoint 1 --n_val_samples 1 --test
 
 ## compression
 
