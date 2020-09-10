@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # set compression dictionary to validate compression_type input
     # FIXME: move this to somewhere else, not a great implementation
     comp = dict()
-    comp['active'] = ['qat, fp']
+    comp['active'] = ['qat, ep']
     comp['passive'] = ['ptq']
 
     if opt.compression_type == 'ptq':

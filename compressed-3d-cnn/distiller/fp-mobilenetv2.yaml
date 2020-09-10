@@ -6,8 +6,8 @@ pruners:
   # NOTE: this part is the name, pretty sure you can define it yourself
   mobile_manual:
     class: 'L1RankedStructureParameterPruner'
-    group_type: Filters
-    desired_sparsity: 0.5
+    group_type: Element
+    desired_sparsity: 0.2
     # NOTE: put in the names of the modules - get this from running model-summary.py in this dir
     weights: ['module.module.features.0.0.weight',
     'module.module.features.0.1.weight',
