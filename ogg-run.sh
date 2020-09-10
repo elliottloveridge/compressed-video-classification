@@ -26,7 +26,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --video_path ucf101_videos/jpg/ \
   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
   --result_path results \
-  --pretrain_path /app/compressed-3d-cnn/results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth \
+  --pretrain_path /data/results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth \
   --dataset ucf101 \
   --n_classes 600 \
   --n_finetune_classes 101 \
