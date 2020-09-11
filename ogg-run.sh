@@ -9,8 +9,21 @@
 
 ## benchmark - csn
 
-# # ucf101-csn (inc. testing) - 1 epochs, 50 depth, 0.1 learning rate, no checkpoint
-# python /app/compressed-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model csn --model_depth 50 --learning_rate 0.1 --n_val_samples 1 --n_epochs 1 --test
+# ucf101-csn (inc. testing) - 50 epochs, 50 depth, 0.1 learning rate, 10 checkpoint
+python /app/compressed-3d-cnn/main.py --root_path /data \
+  --video_path ucf101_videos/jpg/ \
+  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+  --result_path results \
+  --dataset ucf101 \
+  --n_classes 101 \
+  --batch_size 32  \
+  --model csn \
+  --model_depth 50 \
+  --learning_rate 0.1 \
+  --n_val_samples 1 \
+  --n_epochs 50 \
+  --checkpoint 10 \
+  --test
 
 
 ## evaluation
@@ -53,24 +66,24 @@
 
 ## element-wise pruning
 
-# ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
-python /app/compressed-3d-cnn/main.py --root_path /data \
-  --video_path ucf101_videos/jpg/ \
-  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-  --result_path results \
-  --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
-  --dataset ucf101 \
-  --n_classes 101 \
-  --batch_size 16  \
-  --model mobilenetv2 \
-  --width_mult 1.0 \
-  --learning_rate 0.1 \
-  --n_val_samples 1 \
-  --n_epochs 1 \
-  --test \
-  --compress \
-  --compression_type ep \
-  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
+# # ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+#   --video_path ucf101_videos/jpg/ \
+#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+#   --result_path results \
+#   --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+#   --dataset ucf101 \
+#   --n_classes 101 \
+#   --batch_size 16  \
+#   --model mobilenetv2 \
+#   --width_mult 1.0 \
+#   --learning_rate 0.1 \
+#   --n_val_samples 1 \
+#   --n_epochs 1 \
+#   --test \
+#   --compress \
+#   --compression_type ep \
+#   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
 
 
 ## knowledge distillation

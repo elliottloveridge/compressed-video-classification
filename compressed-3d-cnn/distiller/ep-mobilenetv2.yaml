@@ -7,9 +7,9 @@ pruners:
   mobilenetv2_conv:
     class: 'SparsityLevelParameterPruner'
     # NOTE: group type may not be necessary for element-wise pruning
-    group_type: Element
+    name: element
     # 20% sparsity for conv layers
-    desired_sparsity: 0.2
+    levels: 0.2
     # NOTE: put in the names of the modules - get this from running model-summary.py in this dir
     weights: ['module.module.features.0.0.weight',
     # 'module.module.features.0.1.weight',
