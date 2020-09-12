@@ -8,7 +8,7 @@ pruners:
   mobilenetv2_conv:
     class: 'SensitivityPruner'
     sensitivities:
-      'module.module.features.0.0.weight': 0.2
+      'module.features.0.0.weight': 0.2
       'module.module.features.1.conv.0.weight': 0.2
       'module.module.features.1.conv.3.weight': 0.2
       'module.module.features.2.conv.0.weight': 0.2
