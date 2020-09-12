@@ -169,6 +169,9 @@ if __name__ == '__main__':
     if opt.compress:
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+
+        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        print("Before compression zero parameters: ", par)
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
         # print('Trainiable Parameters:', par)
@@ -229,8 +232,8 @@ if __name__ == '__main__':
 
     # print flops and params to see if it has been reduced
     if opt.compress:
-        par = sum(p.numel() for p in model.parameters() if p.requires_grad)
-        print("After compression trainable parameters: ", par)
+        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        print("After compression zero parameters: ", par)
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
         # print('Trainiable Parameters:', par)
