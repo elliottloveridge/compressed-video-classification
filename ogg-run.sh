@@ -117,7 +117,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --learning_rate 0.1 \
   --n_val_samples 1 \
   --n_epochs 1 \
-  --test \
+  # --test \
   --compress \
   --compression_type ep \
   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
