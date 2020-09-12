@@ -7,7 +7,7 @@ pruners:
   # conv layers pruning at 20% sparsity
   mobilenetv2_conv:
     class: 'SparsityLevelParameterPruner'
-    sensitivities:
+    levels:
       'module.module.features.0.0.weight': 0.2
       'module.module.features.1.conv.0.weight': 0.2
       'module.module.features.1.conv.3.weight': 0.2
@@ -64,7 +64,7 @@ pruners:
   # prune batchnorm layers at 20% sparsity
   mobilenetv2_batchnorm:
     class: 'SparsityLevelParameterPruner'
-    sensitivities:
+    levels:
       'module.module.features.0.1.weight': 0.2
       'module.module.features.1.conv.1.weight': 0.2
       'module.module.features.1.conv.4.weight': 0.2
@@ -122,7 +122,7 @@ pruners:
   # NOTE: 18.1 is a dropout layer, should this be pruned?
   mobilenetv2_fullyconnected:
     class: 'SparsityLevelParameterPruner'
-    sensitivities:
+    levels:
       'module.module.features.18.1.weight': 0.8
       'module.module.classifier.1.weight': 0.8
 
