@@ -71,18 +71,18 @@
 #   --n_epochs 20 \
 #   --test
 
-# ucf101-resnet18 (inc. testing) - 20 epochs, 0.01 learning rate, 5 checkpoint, kinetics pre-train
+# ucf101-resnet101 (inc. testing) - 20 epochs, 0.01 learning rate, 5 checkpoint, kinetics pre-train
 python /app/compressed-3d-cnn/main.py --root_path /data \
   --video_path ucf101_videos/jpg/ \
   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
   --result_path results \
-  --pretrain_path /data/results/pretrain/kinetics_resnet_18_RGB_16_best.pth \
+  --pretrain_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth \
   --dataset ucf101 \
   --n_classes 600 \
   --n_finetune_classes 101 \
   --ft_portion complete \
   --model resnet \
-  --model_depth 18 \
+  --model_depth 101 \
   --learning_rate 0.01 \
   --sample_duration 16 \
   --batch_size 32 \
