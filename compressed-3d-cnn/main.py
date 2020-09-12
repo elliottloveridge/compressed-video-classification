@@ -227,12 +227,15 @@ if __name__ == '__main__':
 
         # FIXME: want to save the model again here, call it something else?
 
-    # print flops and params to see if it has been reduced
-    # if opt.compress:
-    #     par, flo = model_info(model, opt)
-    #     print('Before Compression:')
-    #     print('Trainiable Parameters:', par)
-    #     print('FLOPs:', flo)
+    print flops and params to see if it has been reduced
+    if opt.compress:
+        pytorch_total_params = sum(p.numel() for p in model.parameters() if
+                               p.requires_grad)
+        print("Total number of trainable parameters: ", pytorch_total_params)
+        # par, flo = model_info(model, opt)
+        # print('Before Compression:')
+        # print('Trainiable Parameters:', par)
+        # print('FLOPs:', flo)
 
     if opt.test:
         spatial_transform = Compose([
