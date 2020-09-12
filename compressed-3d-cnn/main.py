@@ -230,7 +230,7 @@ if __name__ == '__main__':
     # print flops and params to see if it has been reduced
     if opt.compress:
         par = sum(p.numel() for p in model.parameters() if p.requires_grad)
-        print("Total number of trainable parameters (end): ", par)
+        print("After compression trainable parameters: ", par)
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
         # print('Trainiable Parameters:', par)

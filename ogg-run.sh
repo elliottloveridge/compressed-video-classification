@@ -108,7 +108,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --video_path ucf101_videos/jpg/ \
   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
   --result_path results \
-  --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+  --resume_path results/ucf101_mobilenetv2_ep_1epochs_1209_checkpoint.pth \
   --dataset ucf101 \
   --n_classes 101 \
   --batch_size 16  \
