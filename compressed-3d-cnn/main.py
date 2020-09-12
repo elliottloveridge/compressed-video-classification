@@ -177,12 +177,14 @@ if __name__ == '__main__':
         compression_scheduler = None
 
     print('run')
-    for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
-        print('here')
+    print(opt.begin_epoch)
+    print(opt.n_epochs)
+    for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs + 1):
+
+
 
         if opt.compression_type in comp['active'] and opt.compress:
-            print('here2')
             compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
