@@ -173,6 +173,9 @@ if __name__ == '__main__':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("Before compression zero parameters: ", par)
 
+        for p in model.parameters:
+            print(p)
+
         # zeros = 0
         # for param in model.parameters():
         #     if param is not None:
@@ -189,9 +192,7 @@ if __name__ == '__main__':
 
     print('run')
 
-    print(opt.begin_epoch)
-    print(opt.n_epochs)
-    for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs + 1):
+    for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
 
 
 
@@ -244,7 +245,7 @@ if __name__ == '__main__':
         print("After compression zero parameters: ", par)
 
         for p in model.parameters():
-            print(p, ':', torch.count_nonzero(x, dim=0))
+            print(p, ':', torch.nonzero(x, dim=0))
 
         par, flo = model_info(model, opt)
         print('Post Compression:')
