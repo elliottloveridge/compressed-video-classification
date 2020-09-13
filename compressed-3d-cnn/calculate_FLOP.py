@@ -33,10 +33,10 @@ def model_info(model, opt):
     model = model.cuda()
     model = nn.DataParallel(model, device_ids=None)
     pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    # flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+    flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
 
     # # FIXME: need to get the slps part working!
-    return pytorch_total_params, 1
+    return pytorch_total_params, flops
 
 
 

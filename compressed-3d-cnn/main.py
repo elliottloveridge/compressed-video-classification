@@ -244,10 +244,10 @@ if __name__ == '__main__':
         print("After compression zero parameters: ", par)
 
         for p in model.parameters():
-            print(torch.count_nonzero(x, dim=0))
+            print(p, ':', torch.count_nonzero(x, dim=0))
 
         par, flo = model_info(model, opt)
-        print('Before Compression:')
+        print('Post Compression:')
         print('Trainiable Parameters:', par)
         print('FLOPs:', flo)
 
