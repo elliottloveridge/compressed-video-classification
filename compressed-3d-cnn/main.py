@@ -174,7 +174,7 @@ if __name__ == '__main__':
         print("Before compression zero parameters: ", par)
 
         for p in model.parameters():
-            print(p.item())
+            print(p[0])
 
         # zeros = 0
         # for param in model.parameters():
