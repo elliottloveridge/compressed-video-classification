@@ -173,7 +173,7 @@ if __name__ == '__main__':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("Before compression zero parameters: ", par)
 
-        for p in model.parameters:
+        for p in model.parameters():
             print(p)
 
         # zeros = 0
