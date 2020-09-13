@@ -243,12 +243,8 @@ if __name__ == '__main__':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("After compression zero parameters: ", par)
 
-        # zeros = 0
-        # for param in model.parameters():
-        #     if param is not None:
-        #         zeros += torch.sum((param == 0).int()).data[0]
-        #
-        # print(zeros)
+        for p in model.parameters():
+            print(torch.count_nonzero(x, dim=0))
 
         par, flo = model_info(model, opt)
         print('Before Compression:')
