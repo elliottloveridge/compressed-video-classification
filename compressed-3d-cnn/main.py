@@ -249,10 +249,11 @@ if __name__ == '__main__':
                 zeros += torch.sum((param == 0).int()).data[0]
 
         print(zeros)
-        # par, flo = model_info(model, opt)
-        # print('Before Compression:')
-        # print('Trainiable Parameters:', par)
-        # print('FLOPs:', flo)
+        
+        par, flo = model_info(model, opt)
+        print('Before Compression:')
+        print('Trainiable Parameters:', par)
+        print('FLOPs:', flo)
 
     if opt.test:
         spatial_transform = Compose([
