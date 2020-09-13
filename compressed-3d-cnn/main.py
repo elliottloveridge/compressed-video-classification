@@ -172,6 +172,14 @@ if __name__ == '__main__':
 
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("Before compression zero parameters: ", par)
+
+        zeros = 0
+        for param in model.parameters():
+            if param is not None:
+                zeros += torch.sum((param == 0).int()).data[0]
+
+        print(zeros)
+
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
         # print('Trainiable Parameters:', par)
@@ -234,6 +242,13 @@ if __name__ == '__main__':
     if opt.compress:
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("After compression zero parameters: ", par)
+
+        zeros = 0
+        for param in model.parameters():
+            if param is not None:
+                zeros += torch.sum((param == 0).int()).data[0]
+
+        print(zeros)
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
         # print('Trainiable Parameters:', par)
