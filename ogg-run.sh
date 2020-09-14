@@ -140,7 +140,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --n_epochs 1 \
   --compress \
   --compression_type ep \
-  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-2.yaml
+  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml
 
 
 ## knowledge distillation
