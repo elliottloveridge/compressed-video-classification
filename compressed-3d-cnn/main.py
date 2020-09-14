@@ -174,9 +174,9 @@ if __name__ == '__main__':
         print("Before compression zero parameters: ", par)
 
         for p in model.parameters():
-            if p.required_grad:
-                print(type(p))
-                print(distiller.utils.sparsity(p))
+            # if p.required_grad:
+            print(type(p))
+            print(distiller.utils.sparsity(p))
 
         # zeros = 0
         # for param in model.parameters():
@@ -247,9 +247,9 @@ if __name__ == '__main__':
         print("After compression zero parameters: ", par)
 
         for p in model.parameters():
-            if p.required_grad:
-                print(type(p))
-                print(distiller.utils.sparsity(p))
+            # if p.required_grad:
+            print(type(p))
+            print(distiller.utils.sparsity(p))
 
         # for p in model.parameters():
 
