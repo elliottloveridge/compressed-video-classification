@@ -64,67 +64,67 @@ pruners:
   # prune batchnorm layers at 80% sparsity
   mobilenetv2_batchnorm:
     class: 'SensitivityPruner'
-    sensitivities:
-      {module.features.0.1.weight: 0.8,
-      module.features.1.conv.1.weight: 0.8,
-      module.features.1.conv.4.weight: 0.8,
-      module.features.2.conv.1.weight: 0.8,
-      module.features.2.conv.4.weight: 0.8,
-      module.features.2.conv.7.weight: 0.8,
-      module.features.3.conv.1.weight: 0.8,
-      module.features.3.conv.4.weight: 0.8,
-      module.features.3.conv.7.weight: 0.8,
-      module.features.4.conv.1.weight: 0.8,
-      module.features.4.conv.4.weight: 0.8,
-      module.features.4.conv.7.weight: 0.8,
-      module.features.5.conv.1.weight: 0.8,
-      module.features.5.conv.4.weight: 0.8,
-      module.features.5.conv.7.weight: 0.8,
-      module.features.6.conv.1.weight: 0.8,
-      module.features.6.conv.4.weight: 0.8,
-      module.features.6.conv.7.weight: 0.8,
-      module.features.7.conv.1.weight: 0.8,
-      module.features.7.conv.4.weight: 0.8,
-      module.features.7.conv.7.weight: 0.8,
-      module.features.8.conv.1.weight: 0.8,
-      module.features.8.conv.4.weight: 0.8,
-      module.features.8.conv.7.weight: 0.8,
-      module.features.9.conv.1.weight: 0.8,
-      module.features.9.conv.4.weight: 0.8,
-      module.features.9.conv.7.weight: 0.8,
-      module.features.10.conv.1.weight: 0.8,
-      module.features.10.conv.4.weight: 0.8,
-      module.features.10.conv.7.weight: 0.8,
-      module.features.11.conv.1.weight: 0.8,
-      module.features.11.conv.4.weight: 0.8,
-      module.features.11.conv.7.weight: 0.8,
-      module.features.12.conv.1.weight: 0.8,
-      module.features.12.conv.4.weight: 0.8,
-      module.features.12.conv.7.weight: 0.8,
-      module.features.13.conv.1.weight: 0.8,
-      module.features.13.conv.4.weight: 0.8,
-      module.features.13.conv.7.weight: 0.8,
-      module.features.14.conv.1.weight: 0.8,
-      module.features.14.conv.4.weight: 0.8,
-      module.features.14.conv.7.weight: 0.8,
-      module.features.15.conv.1.weight: 0.8,
-      module.features.15.conv.4.weight: 0.8,
-      module.features.15.conv.7.weight: 0.8,
-      module.features.16.conv.1.weight: 0.8,
-      module.features.16.conv.4.weight: 0.8,
-      module.features.16.conv.7.weight: 0.8,
-      module.features.17.conv.1.weight: 0.8,
-      module.features.17.conv.4.weight: 0.8,
-      module.features.17.conv.7.weight: 0.8,
-      module.features.18.1.weight: 0.8}
+    levels:
+      'module.features.0.1.weight': 0.8
+      'module.features.1.conv.1.weight': 0.8
+      'module.features.1.conv.4.weight': 0.8
+      'module.features.2.conv.1.weight': 0.8
+      'module.features.2.conv.4.weight': 0.8
+      'module.features.2.conv.7.weight': 0.8
+      'module.features.3.conv.1.weight': 0.8
+      'module.features.3.conv.4.weight': 0.8
+      'module.features.3.conv.7.weight': 0.8
+      'module.features.4.conv.1.weight': 0.8
+      'module.features.4.conv.4.weight': 0.8
+      'module.features.4.conv.7.weight': 0.8
+      'module.features.5.conv.1.weight': 0.8
+      'module.features.5.conv.4.weight': 0.8
+      'module.features.5.conv.7.weight': 0.8
+      'module.features.6.conv.1.weight': 0.8
+      'module.features.6.conv.4.weight': 0.8
+      'module.features.6.conv.7.weight': 0.8
+      'module.features.7.conv.1.weight': 0.8
+      'module.features.7.conv.4.weight': 0.8
+      'module.features.7.conv.7.weight': 0.8
+      'module.features.8.conv.1.weight': 0.8
+      'module.features.8.conv.4.weight': 0.8
+      'module.features.8.conv.7.weight': 0.8
+      'module.features.9.conv.1.weight': 0.8
+      'module.features.9.conv.4.weight': 0.8
+      'module.features.9.conv.7.weight': 0.8
+      'module.features.10.conv.1.weight': 0.8
+      'module.features.10.conv.4.weight': 0.8
+      'module.features.10.conv.7.weight': 0.8
+      'module.features.11.conv.1.weight': 0.8
+      'module.features.11.conv.4.weight': 0.8
+      'module.features.11.conv.7.weight': 0.8
+      'module.features.12.conv.1.weight': 0.8
+      'module.features.12.conv.4.weight': 0.8
+      'module.features.12.conv.7.weight': 0.8
+      'module.features.13.conv.1.weight': 0.8
+      'module.features.13.conv.4.weight': 0.8
+      'module.features.13.conv.7.weight': 0.8
+      'module.features.14.conv.1.weight': 0.8
+      'module.features.14.conv.4.weight': 0.8
+      'module.features.14.conv.7.weight': 0.8
+      'module.features.15.conv.1.weight': 0.8
+      'module.features.15.conv.4.weight': 0.8
+      'module.features.15.conv.7.weight': 0.8
+      'module.features.16.conv.1.weight': 0.8
+      'module.features.16.conv.4.weight': 0.8
+      'module.features.16.conv.7.weight': 0.8
+      'module.features.17.conv.1.weight': 0.8
+      'module.features.17.conv.4.weight': 0.8
+      'module.features.17.conv.7.weight': 0.8
+      'module.features.18.1.weight': 0.8
 
   # prune fully connected and dropout layers at 80% sparsity
   # NOTE: 18.1 is a dropout layer, should this be pruned?
   mobilenetv2_fullyconnected:
     class: 'SensitivityPruner'
-    sensitivities:
-      {module.features.18.1.weight: 0.8,
-      module.classifier.1.weight: 0.8}
+    levels:
+      'module.features.18.1.weight': 0.8
+      'module.classifier.1.weight': 0.8
 
 # NOTE: is this necessary?
 lr_schedulers:
@@ -141,13 +141,13 @@ policies:
     starting_epoch: 0
     ending_epoch: 1
     frequency: 1
-  # - pruner:
-  #     instance_name: mobilenetv2_batchnorm
-  #   starting_epoch: 0
-  #   ending_epoch: 1
-  #   frequency: 1
-  # - pruner:
-  #     instance_name: mobilenetv2_fullyconnected
-  #   starting_epoch: 0
-  #   ending_epoch: 1
-  #   frequency: 1
+  - pruner:
+      instance_name: mobilenetv2_batchnorm
+    starting_epoch: 0
+    ending_epoch: 1
+    frequency: 1
+  - pruner:
+      instance_name: mobilenetv2_fullyconnected
+    starting_epoch: 0
+    ending_epoch: 1
+    frequency: 1
