@@ -176,11 +176,11 @@ if __name__ == '__main__':
         # par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
         # par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
         # spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
-        spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+        # spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
 
         # print('item sparsity:', spar1)
         # print('item params:', par1)
-        print('data sparsity:', spar2)
+        # print('data sparsity:', spar2)
         # print('data params:', par2)
 
         # zeros = 0
@@ -189,6 +189,9 @@ if __name__ == '__main__':
         #         zeros += torch.sum((param == 0).int()).data[0]
         #
         # print(zeros)
+
+        for p in model.named_parameters():
+            print(p)
 
         # par, flo = model_info(model, opt)
         # print('Before Compression:')

@@ -141,6 +141,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --compress \
   --compression_type ep \
   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-2.yaml
+  --no_train \
+  --no_val
 
 
 ## knowledge distillation
