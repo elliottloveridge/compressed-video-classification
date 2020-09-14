@@ -173,13 +173,13 @@ if __name__ == '__main__':
         # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         # print("Before compression zero parameters: ", par)
 
-        par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
+        # par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
         par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
-        spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
+        # spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
         spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
 
-        print('item sparsity:', spar1)
-        print('item params:', par1)
+        # print('item sparsity:', spar1)
+        # print('item params:', par1)
         print('data sparsity:', spar2)
         print('data params:', par2)
 
