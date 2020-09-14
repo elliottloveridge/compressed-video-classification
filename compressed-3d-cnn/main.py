@@ -174,7 +174,8 @@ if __name__ == '__main__':
         print("Before compression zero parameters: ", par)
 
         for p in model.parameters():
-            print(p[0])
+            print(type(p))
+            print(distiller.utils.sparsity(p))
 
         # zeros = 0
         # for param in model.parameters():
@@ -235,7 +236,7 @@ if __name__ == '__main__':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=None, bits_weights=8)
         # NOTE: need to add the input shape!
         # model.input_shape
-        quantizer.prepare_model(torch.rand(*your_input_shape))
+        quantizer.prepare_model(torch.rand(input_size=(1, 3, 16, 112, 112))
 
         # FIXME: want to save the model again here, call it something else?
 
