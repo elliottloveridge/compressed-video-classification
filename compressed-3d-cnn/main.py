@@ -170,12 +170,18 @@ if __name__ == '__main__':
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
-        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("Before compression zero parameters: ", par)
+        # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        # print("Before compression zero parameters: ", par)
 
-        for p in model.parameters():
-            # if p.required_grad:
-            print(distiller.utils.sparsity(p.data))
+        par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
+        par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
+        spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
+        spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+
+        print('item sparsity:', spar1)
+        print('item params:', par1)
+        print('data sparsity:', spar2)
+        print('data params:', par2)
 
         # zeros = 0
         # for param in model.parameters():
@@ -242,12 +248,18 @@ if __name__ == '__main__':
 
     # print flops and params to see if it has been reduced
     if opt.compress:
-        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("After compression zero parameters: ", par)
+        # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        # print("After compression zero parameters: ", par)
 
-        for p in model.parameters():
-            # if p.required_grad:
-            print(distiller.utils.sparsity(p.data))
+        par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
+        par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
+        spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
+        spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+
+        print('item sparsity:', spar1)
+        print('item params:', par1)
+        print('data sparsity:', spar2)
+        print('data params:', par2)
 
         # for p in model.parameters():
 
