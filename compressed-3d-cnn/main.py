@@ -175,7 +175,7 @@ if __name__ == '__main__':
 
         for p in model.parameters():
             # if p.required_grad:
-            print(type(p))
+            print(p.data)
             print(distiller.utils.sparsity(p))
 
         # zeros = 0
@@ -253,10 +253,10 @@ if __name__ == '__main__':
 
         # for p in model.parameters():
 
-        par, flo = model_info(model, opt)
-        print('Post Compression:')
-        print('Trainiable Parameters:', par)
-        print('FLOPs:', flo)
+        # par, flo = model_info(model, opt)
+        # print('Post Compression:')
+        # print('Trainiable Parameters:', par)
+        # print('FLOPs:', flo)
 
     if opt.test:
         spatial_transform = Compose([
