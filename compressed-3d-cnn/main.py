@@ -175,8 +175,7 @@ if __name__ == '__main__':
 
         for p in model.parameters():
             # if p.required_grad:
-            print(p.data)
-            print(distiller.utils.sparsity(p))
+            print(distiller.utils.sparsity(p.data))
 
         # zeros = 0
         # for param in model.parameters():
@@ -248,8 +247,7 @@ if __name__ == '__main__':
 
         for p in model.parameters():
             # if p.required_grad:
-            print(type(p))
-            print(distiller.utils.sparsity(p))
+            print(distiller.utils.sparsity(p.data))
 
         # for p in model.parameters():
 
