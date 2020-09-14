@@ -173,9 +173,11 @@ if __name__ == '__main__':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("Before compression zero parameters: ", par)
 
-        for p in model.parameters():
-            print(type(p))
-            print(distiller.utils.sparsity(p))
+        for n, p in model.parameters():
+            if p.required_grad:
+                print(n)
+                print(type(p))
+                print(distiller.utils.sparsity(p))
 
         # zeros = 0
         # for param in model.parameters():
@@ -244,6 +246,12 @@ if __name__ == '__main__':
     if opt.compress:
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("After compression zero parameters: ", par)
+
+        for n, p in model.parameters():
+            if p.required_grad:
+                print(n)
+                print(type(p))
+                print(distiller.utils.sparsity(p))
 
         # for p in model.parameters():
 
