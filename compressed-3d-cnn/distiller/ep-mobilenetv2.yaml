@@ -132,23 +132,27 @@ lr_schedulers:
 
 # NOTE: apply pruning for first epoch only
 policies:
+
   - pruner:
       instance_name: 'mobilenetv2_conv'
     starting_epoch: 0
     ending_epoch: 20
     frequency: 2
+
   - pruner:
       instance_name: 'mobilenetv2_batchnorm'
     starting_epoch: 0
     ending_epoch: 20
     frequency: 2
+
   - pruner:
       instance_name: 'mobilenetv2_fullyconnected'
     starting_epoch: 0
     ending_epoch: 20
     frequency: 1
 
-    - lr_scheduler:
+
+  - lr_scheduler:
       instance_name: pruning_lr
     starting_epoch: 20
     ending_epoch: 30
