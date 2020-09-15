@@ -264,6 +264,9 @@ if __name__ == '__main__':
         print('data sparsity:', spar2)
         # print('data params:', par2)
 
+        for p in model.named_parameters():
+            print(p)
+
         # for p in model.parameters():
 
         # par, flo = model_info(model, opt)
