@@ -144,8 +144,9 @@ def sensitivities_to_png(sensitivities, fname):
     plt.xlabel('sparsity')
     plt.title('Pruning Sensitivity')
     # FIXME: need to get this to work with all weights, change the name of params for this?
-    plt.legend(loc='lower left', bbox_to_anchor=(1.05, 1), fontsize='xx-small',
+    plt.legend(loc='lower left', fontsize='xx-small',
                ncol=2, mode="expand", borderaxespad=0.)
+               # bbox_to_anchor=(1.05, 1) # NOTE: use this to put legend outside of figure
     plt.savefig(fname, format='png')
 
 
