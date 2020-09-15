@@ -144,8 +144,8 @@ def sensitivities_to_png(sensitivities, fname):
     plt.xlabel('sparsity')
     plt.title('Pruning Sensitivity')
     # FIXME: need to get this to work with all weights, change the name of params for this?
-    # plt.legend(loc='lower center',
-    #            ncol=2, mode="expand", borderaxespad=0.)
+    plt.legend(loc='upper left', bbox_to_anchor=(1.05, 1), fontsize='xx-small',
+               ncol=2, mode="expand", borderaxespad=0.)
     plt.savefig(fname, format='png')
 
 
@@ -329,7 +329,7 @@ if opt.resume_path:
 
 # introduce a range of sparsity values
 # sensitivities = np.arange(*args.sensitivity_range)
-sparse_rng = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+sparse_rng = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
 # same as test call in main.py but includes sampling
 spatial_transform = Compose([
