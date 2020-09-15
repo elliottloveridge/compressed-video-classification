@@ -138,13 +138,13 @@ def sensitivities_to_png(sensitivities, fname):
     for param_name, sensitivity in sensitivities.items():
         sense = [values[1] for sparsity, values in sensitivity.items()]
         sparsities = [sparsity for sparsity, values in sensitivity.items()]
-        plt.plot(sparsities, sense, label=param_name[6:])
+        plt.plot(sparsities, sense, label=param_name[7:])
 
     plt.ylabel('top5')
     plt.xlabel('sparsity')
     plt.title('Pruning Sensitivity')
     # FIXME: need to get this to work with all weights, change the name of params for this?
-    plt.legend(loc='upper left', bbox_to_anchor=(1.05, 1), fontsize='xx-small',
+    plt.legend(loc='lower left', bbox_to_anchor=(1.05, 1), fontsize='xx-small',
                ncol=2, mode="expand", borderaxespad=0.)
     plt.savefig(fname, format='png')
 
