@@ -190,8 +190,8 @@ if __name__ == '__main__':
         #
         # print(zeros)
 
-        for p in model.named_parameters():
-            print(p)
+        # for p in model.named_parameters():
+        #     print(p)
 
         # par, flo = model_info(model, opt)
         # print('Before Compression:')
