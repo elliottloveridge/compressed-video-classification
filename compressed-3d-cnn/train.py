@@ -45,7 +45,6 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         # before backwards pass - update loss to include regularization
         if compression_scheduler is not None:
-            print('compression - here')
             loss = compression_scheduler.before_backward_pass(epoch, minibatch_id=i,
             minibatches_per_epoch=len(data_loader), loss=loss)
 

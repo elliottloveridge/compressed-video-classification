@@ -157,6 +157,7 @@ if __name__ == '__main__':
     # set compression dictionary to validate compression_type input
     # FIXME: move this to somewhere else, not a great implementation
     comp = dict()
+    # active compression = element-wise pruning and quantisation aware training
     comp['active'] = ['qat, ep']
     comp['passive'] = ['ptq']
 
@@ -170,41 +171,16 @@ if __name__ == '__main__':
         compression_scheduler = distiller.CompressionScheduler(model)
         compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
-        # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        # print("Before compression zero parameters: ", par)
+        spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
 
-        # par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
-        # par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
-        # spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
-        # spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+        print('sum of weight sparsity:', spar)
 
-        # print('item sparsity:', spar1)
-        # print('item params:', par1)
-        # print('data sparsity:', spar2)
-        # print('data params:', par2)
-
-        # zeros = 0
-        # for param in model.parameters():
-        #     if param is not None:
-        #         zeros += torch.sum((param == 0).int()).data[0]
-        #
-        # print(zeros)
-
-        # for p in model.named_parameters():
-        #     print(p)
-
-        # par, flo = model_info(model, opt)
-        # print('Before Compression:')
-        # print('Trainiable Parameters:', par)
-        # print('FLOPs:', flo)
     else:
         compression_scheduler = None
 
     print('run')
 
     for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
-
-
 
         if opt.compression_type in comp['active'] and opt.compress:
             compression_scheduler.on_epoch_begin(i)
@@ -244,31 +220,21 @@ if __name__ == '__main__':
     if opt.compression_type == 'ptq':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=None, bits_weights=8)
         # NOTE: need to add the input shape!
-        # model.input_shape
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
+        # NOTE: should the model be saved here?
 
-        # FIXME: want to save the model again here, call it something else?
-
-    # print flops and params to see if it has been reduced
+    # print flops and params to check for reduction
     if opt.compress:
         # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        # print("After compression zero parameters: ", par)
+        # print("post-compression zero parameter count: ", par)
 
-        # par1 = sum(torch.nonzero(p.item) for p in model.parameters() if p.requires_grad)
-        # par2 = sum(torch.nonzero(p.data) for p in model.parameters() if p.requires_grad)
-        # spar1 = sum(distiller.utils.sparsity(p.item) for p in model.parameters() if p.requires_grad)
-        spar2 = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
-
-        # print('item sparsity:', spar1)
-        # print('item params:', par1)
-        print('data sparsity:', spar2)
-        # print('data params:', par2)
+        spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+        print('sum of weight sparsity:', spar)
 
         for p in model.named_parameters():
             print(p)
 
-        # for p in model.parameters():
-
+        # NOTE: FLOPs not working
         # par, flo = model_info(model, opt)
         # print('Post Compression:')
         # print('Trainiable Parameters:', par)

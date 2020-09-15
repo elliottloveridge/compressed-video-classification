@@ -91,7 +91,7 @@ class CSN(nn.Module):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
         self.avgpool = nn.AdaptiveAvgPool3d(1)
-        # NOTE: adaptive pool replaced with args definition below
+        # NOTE: args definition below replaced with adaptive pooling
         # last_duration = int(math.ceil(sample_duration / 16))
         # last_size = int(math.ceil(sample_size / 32))
         # self.avgpool = nn.AvgPool3d(
