@@ -138,7 +138,7 @@ def sensitivities_to_png(sensitivities, fname):
     for param_name, sensitivity in sensitivities.items():
         sense = [values[1] for sparsity, values in sensitivity.items()]
         sparsities = [sparsity for sparsity, values in sensitivity.items()]
-        plt.plot(sparsities, sense, label=param_name)
+        plt.plot(sparsities, sense, label=param_name[6:])
 
     plt.ylabel('top5')
     plt.xlabel('sparsity')
