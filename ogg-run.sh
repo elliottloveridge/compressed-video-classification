@@ -4,7 +4,19 @@
 ## benchmark - mobilenetv2
 
 # # ucf101-mobilnetv2 (inc. testing) - 1 epochs, 0.1 learning rate, no checkpoint
-# python /app/compressed-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model mobilenetv2 --width_mult 1.0 --learning_rate 0.1 --n_val_samples 1 --n_epochs 1 --test
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --batch_size 32  \
+# --model mobilenetv2 \
+# --width_mult 1.0 \
+# --learning_rate 0.1 \
+# --n_val_samples 1 \
+# --n_epochs 1 \
+# --test
 
 
 ## benchmark - csn
@@ -45,8 +57,11 @@
 
 ## evaluation
 
-# # ucf101 evaluation (after testing)
-# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --dataset ucf101 --result_path results
+# ucf101 evaluation (after testing)
+python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--dataset ucf101 \
+--result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -124,23 +139,23 @@
 
 ## element-wise pruning
 
-# ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
-python /app/compressed-3d-cnn/main.py --root_path /data \
-  --video_path ucf101_videos/jpg/ \
-  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-  --result_path results \
-  --dataset ucf101 \
-  --n_classes 101 \
-  --batch_size 16  \
-  --model mobilenetv2 \
-  --width_mult 1.0 \
-  --learning_rate 0.1 \
-  --n_val_samples 1 \
-  --n_epochs 20 \
-  --compress \
-  --compression_type ep \
-  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml \
-  --test
+# # ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+#   --video_path ucf101_videos/jpg/ \
+#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+#   --result_path results \
+#   --dataset ucf101 \
+#   --n_classes 101 \
+#   --batch_size 16  \
+#   --model mobilenetv2 \
+#   --width_mult 1.0 \
+#   --learning_rate 0.1 \
+#   --n_val_samples 1 \
+#   --n_epochs 20 \
+#   --compress \
+#   --compression_type ep \
+#   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2.yaml \
+#   --test
 
 
 ## knowledge distillation
@@ -158,16 +173,16 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 # python /app/compressed-3d-cnn/model-summary.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --model mobilenetv2 --width_mult 1.0 --resume_path results/fp/2908/ucf101_mobilenetv2_fp_1epochs_2908_best.pth
 
 
-# distiller pruning sensitivity analysis
-python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
---video_path ucf101_videos/jpg/ \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth \
---result_path results \
---dataset ucf101 \
---n_classes 101 \
---batch_size 32  \
---model mobilenetv2 \
---width_mult 1.0 \
---n_val_samples 1 \
---n_epochs 1
+# # distiller pruning sensitivity analysis
+# python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --batch_size 32  \
+# --model mobilenetv2 \
+# --width_mult 1.0 \
+# --n_val_samples 1 \
+# --n_epochs 1
