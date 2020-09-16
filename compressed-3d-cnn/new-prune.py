@@ -38,6 +38,7 @@ def init_pruning(model, net_params, group):
     for param_name, sparsity in net_params:
         # FIXME: is this dimension check needed/correct?
         if model.state_dict()[param_name].dim() not in [2,5]:
+            print('here')
             continue
 
         # NOTE: no longer need to make a copy as returning the model
