@@ -64,7 +64,8 @@ quantizers:
     #   weights: SYMMETRIC
 
     # Path to stats file assuming this is being invoked from the 'classifier_compression' example directory
-    model_activation_stats: ../quantization/post_train_quant/stats/resnet18_quant_stats.yaml
+    # NOTE: should include a stats file
+    # model_activation_stats: ../quantization/post_train_quant/stats/resnet18_quant_stats.yaml
     per_channel_wts: True
     clip_acts: AVG
 

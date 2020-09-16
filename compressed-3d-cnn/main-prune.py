@@ -230,16 +230,16 @@ if __name__ == '__main__':
                 loss = criterion(outputs, targets)
 
                 # before backwards pass - update loss to include regularization
-                d_loss = compression_scheduler.before_backward_pass(i, minibatch_id=j,
+                compression_scheduler.before_backward_pass(i, minibatch_id=j,
                 minibatches_per_epoch=len(train_loader), loss=loss)
 
-                losses.update(d_loss.data, inputs.size(0))
+                losses.update(loss.data, inputs.size(0))
                 prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
                 top1.update(prec1, inputs.size(0))
                 top5.update(prec5, inputs.size(0))
 
                 optimizer.zero_grad()
-                d_loss.backward()
+                loss.backward()
 
                 compression_scheduler.before_parameter_optimization(i, minibatch_id=j,
                 minibatches_per_epoch=len(train_loader), optimizer=optimizer)
