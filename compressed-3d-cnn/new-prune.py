@@ -141,12 +141,11 @@ if not opt.no_val:
     val_loader = torch.utils.data.DataLoader(validation_data, batch_size=16, shuffle=False, num_workers=opt.n_threads, pin_memory=True)
     val_logger = Logger(os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 
-model_ = init_pruning(model, params, group='element')
+model = init_pruning(model, params, group='element')
 
 # now want to fine-tune?
 
 # now want to test
-
 if opt.test:
     spatial_transform = Compose([
         Scale(int(opt.sample_size / opt.scale_in_test)),
