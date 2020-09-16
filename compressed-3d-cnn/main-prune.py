@@ -28,6 +28,7 @@ import test
 from calculate_FLOP import model_info
 
 import time
+from torch.autograd import Variable
 
 if __name__ == '__main__':
 
