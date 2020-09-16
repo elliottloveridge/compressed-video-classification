@@ -200,8 +200,8 @@ python /app/compressed-3d-cnn/main-prune.py --root_path /data \
   --width_mult 1.0 \
   --learning_rate 0.1 \
   --n_val_samples 1 \
-  --n_epochs 2 \
+  --n_epochs 1 \
   --compress \
   --compression_type ep \
-  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-test1.yaml \
+  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-test2.yaml \
   --test
