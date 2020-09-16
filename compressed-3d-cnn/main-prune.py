@@ -27,6 +27,8 @@ from validation import val_epoch
 import test
 from calculate_FLOP import model_info
 
+import time
+
 if __name__ == '__main__':
 
     date_str = datetime.today().strftime('%d%m')
