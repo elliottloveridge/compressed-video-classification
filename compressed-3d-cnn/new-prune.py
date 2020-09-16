@@ -138,9 +138,9 @@ params = [('module.features.0.0.weight', 1.0),
 #     val_logger = Logger(os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 
 
-model = init_pruning(model, params, group='element')
+model_ = init_pruning(model, params, group='element')
 
-for p in model.named_parameters():
+for p in model_.named_parameters():
     print(p)
 
 # now want to fine-tune
