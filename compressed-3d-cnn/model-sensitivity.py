@@ -300,7 +300,7 @@ params = ['module.module.features.0.0.weight',
 # 'module.module.features.17.conv.6.weight',
 # 'module.module.features.17.conv.7.weight',
 'module.module.features.18.0.weight',
-# 'module.module.features.18.1.weight',
+'module.module.features.18.1.weight',
 'module.module.classifier.1.weight']
 
 best_prec1 = 0

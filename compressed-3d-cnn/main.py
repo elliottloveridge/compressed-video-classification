@@ -232,7 +232,7 @@ if __name__ == '__main__':
         print('sum of weight sparsity:', spar)
 
         for p in model.named_parameters():
-            print(p)
+            print(p.data.dtype())
 
         # NOTE: FLOPs not working
         # par, flo = model_info(model, opt)
