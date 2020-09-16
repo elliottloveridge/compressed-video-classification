@@ -24,6 +24,35 @@ from target_transforms import ClassLabel, VideoID
 from target_transforms import Compose as TargetCompose
 from dataset import get_training_set, get_validation_set, get_test_set
 
+# imports
+import os
+import sys
+import json
+import numpy as np
+import torch
+import distiller
+from datetime import datetime
+
+# torch imports
+from torch import nn
+from torch import optim
+from torch.optim import lr_scheduler
+
+# function imports
+from opts import parse_opts
+from model import generate_model
+from mean import get_mean, get_std
+from spatial_transforms import *
+from temporal_transforms import *
+from target_transforms import ClassLabel, VideoID
+from target_transforms import Compose as TargetCompose
+from dataset import get_training_set, get_validation_set, get_test_set
+from util import *
+from train import train_epoch
+from validation import val_epoch
+import test
+from calculate_FLOP import model_info
+
 msglogger = logging.getLogger()
 
 
@@ -38,7 +67,7 @@ def init_pruning(model, net_params, group):
     for param_name, sparsity in net_params:
         # FIXME: is this dimension check needed/correct?
         if model.state_dict()[param_name].dim() not in [2,5]:
-            print('here')
+            print('here - wrong dim')
             continue
 
         # NOTE: no longer need to make a copy as returning the model
