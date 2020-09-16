@@ -142,8 +142,8 @@ class CompressionScheduler(object):
                                 **kwargs)
 
     def mask_all_weights(self, is_forward=True):
-        print('here')
         for name, param in self.model.named_parameters():
+            print('hereiam')
             try:
                 masker = self.zeros_mask_dict[name]
                 if is_forward or not masker.mask_on_forward_only:
