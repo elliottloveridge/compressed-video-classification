@@ -57,11 +57,11 @@
 
 ## evaluation
 
-# ucf101 evaluation (after testing)
-python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---dataset ucf101 \
---result_path results
+# # ucf101 evaluation (after testing)
+# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --dataset ucf101 \
+# --result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -186,3 +186,22 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
 # --width_mult 1.0 \
 # --n_val_samples 1 \
 # --n_epochs 1
+
+
+# distiller pruning test file
+python /app/compressed-3d-cnn/main-prune.py --root_path /data \
+  --video_path ucf101_videos/jpg/ \
+  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+  --result_path results \
+  --dataset ucf101 \
+  --n_classes 101 \
+  --batch_size 32  \
+  --model mobilenetv2 \
+  --width_mult 1.0 \
+  --learning_rate 0.1 \
+  --n_val_samples 1 \
+  --n_epochs 1 \
+  --compress \
+  --compression_type ep \
+  --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-test1.yaml \
+  --test
