@@ -116,6 +116,10 @@ criterion = nn.CrossEntropyLoss()
 if not opt.no_cuda:
     criterion = criterion.cuda()
 
+params = [('module.features.0.0.weight', 0.2),
+('module.features.18.1.weight', 0.2)]
+
+# load training and validation datasets
 if opt.no_mean_norm and not opt.std_norm:
     norm_method = Normalize([0, 0, 0], [1, 1, 1])
 elif not opt.std_norm:
@@ -123,10 +127,6 @@ elif not opt.std_norm:
 else:
     norm_method = Normalize(opt.mean, opt.std)
 
-params = [('module.features.0.0.weight', 0.2),
-('module.features.18.1.weight', 0.2)]
-
-# load training and validation datasets
 if not opt.no_train:
     assert opt.train_crop in ['random', 'corner', 'center']
     if opt.train_crop == 'random':
@@ -150,25 +150,63 @@ if not opt.no_train:
     ])
     temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
     target_transform = ClassLabel()
-    training_data = get_training_set(opt, spatial_transform, temporal_transform, target_transform)
+    training_data = get_training_set(opt, spatial_transform,
+                                     temporal_transform, target_transform)
 
-    train_loader = torch.utils.data.DataLoader(training_data, batch_size=opt.batch_size, shuffle=True, num_workers=opt.n_threads, pin_memory=True)
-    train_logger = Logger(os.path.join(opt.result_path, 'train.log'), ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
-    train_batch_logger = Logger(os.path.join(opt.result_path, 'train_batch.log'), ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
+    train_loader = torch.utils.data.DataLoader(
+        training_data,
+        batch_size=opt.batch_size,
+        shuffle=True,
+        num_workers=opt.n_threads,
+        pin_memory=True)
+    train_logger = Logger(
+        os.path.join(opt.result_path, 'train.log'),
+        ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
+    train_batch_logger = Logger(
+        os.path.join(opt.result_path, 'train_batch.log'),
+        ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
 
     if opt.nesterov:
         dampening = 0
     else:
         dampening = opt.dampening
-    optimizer = optim.SGD(parameters, lr=opt.learning_rate, momentum=opt.momentum, dampening=dampening, weight_decay=opt.weight_decay, nesterov=opt.nesterov)
-    scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
+    optimizer = optim.SGD(
+        parameters,
+        lr=opt.learning_rate,
+        momentum=opt.momentum,
+        dampening=dampening,
+        weight_decay=opt.weight_decay,
+        nesterov=opt.nesterov)
+    scheduler = lr_scheduler.ReduceLROnPlateau(
+        optimizer, 'min', patience=opt.lr_patience)
 if not opt.no_val:
-    spatial_transform = Compose([Scale(opt.sample_size), CenterCrop(opt.sample_size), ToTensor(opt.norm_value), norm_method])
+    spatial_transform = Compose([
+        Scale(opt.sample_size),
+        CenterCrop(opt.sample_size),
+        ToTensor(opt.norm_value), norm_method
+    ])
+    #temporal_transform = LoopPadding(opt.sample_duration)
     temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
     target_transform = ClassLabel()
-    validation_data = get_validation_set(opt, spatial_transform, temporal_transform, target_transform)
-    val_loader = torch.utils.data.DataLoader(validation_data, batch_size=16, shuffle=False, num_workers=opt.n_threads, pin_memory=True)
-    val_logger = Logger(os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+    validation_data = get_validation_set(
+        opt, spatial_transform, temporal_transform, target_transform)
+    val_loader = torch.utils.data.DataLoader(
+        validation_data,
+        batch_size=16,
+        shuffle=False,
+        num_workers=opt.n_threads,
+        pin_memory=True)
+    val_logger = Logger(
+        os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+
+best_prec1 = 0
+if opt.resume_path:
+    print('loading checkpoint {}'.format(opt.resume_path))
+    checkpoint = torch.load(opt.resume_path)
+    assert opt.arch == checkpoint['arch']
+    best_prec1 = checkpoint['best_prec1']
+    opt.begin_epoch = checkpoint['epoch']
+    model.load_state_dict(checkpoint['state_dict'])
 
 model = init_pruning(model, params, group='element')
 
