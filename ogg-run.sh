@@ -113,7 +113,22 @@
 ## qat
 
 # # ucf101-mobilenetv2-qat (inc. testing) - 20 epochs, 0.1 learning rate, no checkpoint
-# python /app/compressed-3d-cnn/main.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 32  --model mobilenetv2 --width_mult 1.0 --learning_rate 0.1 --n_val_samples 1 --n_epochs 20 --test --compress --compression_type qat --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --batch_size 32  \
+# --model mobilenetv2 \
+# --width_mult 1.0 \
+# --learning_rate 0.1 \
+# --n_val_samples 1 \
+# --n_epochs 20 \
+# --test \
+# --compress \
+# --compression_type qat \
+# --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
 
 ## ptq
@@ -162,15 +177,43 @@
 
 # # ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
 # # FIXME: t_n_classes set as 600, is this right?
-# python /app/compressed-3d-cnn/distillation.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --batch_size 16 --model resnet --model_depth 18 --learning_rate 0.001 --n_val_samples 1 --n_epochs 1 --compress --compression_type kd --t_model resnet --t_model_depth 101 --t_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth --t_n_classes 600 --kd_distill_wt 0.7 --kd_student_wt 0.3 --kd_temp 5.0 --test
-
+# python /app/compressed-3d-cnn/distillation.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --batch_size 16 \
+# --model resnet \
+# --model_depth 18 \
+# --learning_rate 0.001 \
+# --n_val_samples 1 \
+# --n_epochs 1 \
+# --compress \
+# --compression_type kd \
+# --t_model resnet \
+# --t_model_depth 101 \
+# --t_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth \
+# --t_n_classes 600 \
+# --kd_distill_wt 0.7 \
+# --kd_student_wt 0.3 \
+# --kd_temp 5.0 \
+# --test
 
 
 ## other
 
 
 # # distiller model summary - uses resume_path
-# python /app/compressed-3d-cnn/model-summary.py --root_path /data --video_path ucf101_videos/jpg/ --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json --result_path results --dataset ucf101 --n_classes 101 --model mobilenetv2 --width_mult 1.0 --resume_path results/fp/2908/ucf101_mobilenetv2_fp_1epochs_2908_best.pth
+# python /app/compressed-3d-cnn/model-summary.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --model mobilenetv2 \
+# --width_mult 1.0 \
+# --resume_path results/fp/2908/ucf101_mobilenetv2_fp_1epochs_2908_best.pth
 
 
 # # distiller pruning sensitivity analysis
@@ -201,4 +244,5 @@ python /app/compressed-3d-cnn/new-prune.py --root_path /data \
   --learning_rate 0.1 \
   --n_val_samples 1 \
   --n_epochs 1 \
-  --pretrain_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth
+  --pretrain_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth \
+  --test
