@@ -277,6 +277,10 @@ if __name__ == '__main__':
                               top5=top5,
                               lr=optimizer.param_groups[0]['lr']))
 
+                    spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+
+                    print('epoch {0}, sum of weight sparsity: {1}'.format(epoch, spar)
+
             train_logger.log({
                 'epoch': i,
                 'loss': losses.avg.item(),
