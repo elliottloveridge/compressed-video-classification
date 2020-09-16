@@ -142,6 +142,7 @@ class CompressionScheduler(object):
                                 **kwargs)
 
     def mask_all_weights(self, is_forward=True):
+        print('here')
         for name, param in self.model.named_parameters():
             try:
                 masker = self.zeros_mask_dict[name]
@@ -149,6 +150,7 @@ class CompressionScheduler(object):
                     # When we mask on forward-pass only, we allow the gradients to change
                     # the weights.
                     masker.mask_tensor(param)
+                    print('here2')
             except KeyError:
                 # Quantizers for training might modify model parameters in a couple of ways:
                 #   1. By adding a prefix to the parameter tensor name
@@ -160,6 +162,7 @@ class CompressionScheduler(object):
                 # not interested in pruning these parameters - and we just ignore them.
                 #
                 # TODO: This is not scalable at all. Find a solution that doesn't "hard-code" these conditions...
+                print('here3')
                 name_parts = name.split('.')
                 prefixed = name_parts[-1].startswith(FP_BKP_PREFIX)
                 wrapped = name_parts[-2] == 'wrapped_module'
