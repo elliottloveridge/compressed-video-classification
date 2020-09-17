@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
         opt.kd_policy = None
 
-        if opt.compress:
+        if opt.compress and opt.compression_type in comp['active']:
             compression_scheduler = distiller.CompressionScheduler(model)
             compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
