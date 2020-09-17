@@ -199,7 +199,7 @@ def sparsity(tensor):
 
 def sparsity_3D(tensor):
     """Filter-wise sparsity for 4D tensors"""
-    if tensor.dim() != 4:
+    if tensor.dim() != 5:
         return 0
     l1_norms = distiller.norms.filters_lp_norm(tensor, p=1, length_normalized=False)
     num_nonzero_filters = len(torch.nonzero(l1_norms))
@@ -362,19 +362,19 @@ def density_rows(tensor, transposed=True):
     return 1 - sparsity_rows(tensor, transposed)
 
 
-def model_sparsity(model, param_dims=[2, 4], param_types=['weight', 'bias']):
+def model_sparsity(model, param_dims=[2, 4], 5, param_types=['weight', 'bias']):
     """Returns the model sparsity as a fraction in [0..1]"""
     sparsity, _, _ = model_params_stats(model, param_dims, param_types)
     return sparsity
 
 
-def model_params_size(model, param_dims=[2, 4], param_types=['weight', 'bias']):
+def model_params_size(model, param_dims=[2, 4, 5], param_types=['weight', 'bias']):
     """Returns the size of the model parameters, w/o counting zero coefficients"""
     _, _, sparse_params_cnt = model_params_stats(model, param_dims, param_types)
     return sparse_params_cnt
 
 
-def model_params_stats(model, param_dims=[2, 4], param_types=['weight', 'bias']):
+def model_params_stats(model, param_dims=[2, 4, 5], param_types=['weight', 'bias']):
     """Returns the model sparsity, weights count, and the count of weights in the sparse model.
 
     Returns:
@@ -398,7 +398,7 @@ def norm_filters(weights, p=1):
     return distiller.norms.filters_lp_norm(weights, p)
 
 
-def model_numel(model, param_dims=[2, 4], param_types=['weight', 'bias']):
+def model_numel(model, param_dims=[2, 4, 5], param_types=['weight', 'bias']):
     """Count the number elements in a model's parameter tensors"""
     total_numel = 0
     for name, param in model.state_dict().items():

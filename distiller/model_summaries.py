@@ -78,8 +78,8 @@ def model_summary(model, what, dataset=None, logdir=''):
     else:
         raise ValueError("%s is not a supported summary type" % what)
 
-
-def weights_sparsity_summary(model, return_total_sparsity=False, param_dims=[2, 4]):
+# NOTE: added 5D for 3D models
+def weights_sparsity_summary(model, return_total_sparsity=False, param_dims=[2, 4, 5]):
     df = pd.DataFrame(columns=['Name', 'Shape', 'NNZ (dense)', 'NNZ (sparse)',
                                'Cols (%)', 'Rows (%)', 'Ch (%)', '2D (%)', '3D (%)',
                                'Fine (%)', 'Std', 'Mean', 'Abs-Mean'])
@@ -124,7 +124,7 @@ def weights_sparsity_summary(model, return_total_sparsity=False, param_dims=[2, 
     return df
 
 
-def weights_sparsity_tbl_summary(model, return_total_sparsity=False, param_dims=[2, 4]):
+def weights_sparsity_tbl_summary(model, return_total_sparsity=False, param_dims=[2, 4, 5]):
     df, total_sparsity = weights_sparsity_summary(model, return_total_sparsity=True, param_dims=param_dims)
     t = tabulate(df, headers='keys', tablefmt='psql', floatfmt=".5f")
     if return_total_sparsity:
@@ -132,7 +132,7 @@ def weights_sparsity_tbl_summary(model, return_total_sparsity=False, param_dims=
     return t
 
 
-def masks_sparsity_summary(model, scheduler, param_dims=[2, 4]):
+def masks_sparsity_summary(model, scheduler, param_dims=[2, 4, 5]):
     df = pd.DataFrame(columns=['Name', 'Fine (%)'])
     pd.set_option('precision', 2)
     params_size = 0
@@ -155,7 +155,7 @@ def masks_sparsity_summary(model, scheduler, param_dims=[2, 4]):
     return df
 
 
-def masks_sparsity_tbl_summary(model, scheduler, param_dims=[2, 4]):
+def masks_sparsity_tbl_summary(model, scheduler, param_dims=[2, 4, 5]):
     df = masks_sparsity_summary(model, scheduler, param_dims=param_dims)
     return tabulate(df, headers='keys', tablefmt='psql', floatfmt=".5f")
 
@@ -372,7 +372,7 @@ def create_png(sgraph, display_param_nodes=False, rankdir='TB', styles=None):
         if op['type'] == 'Conv':
             return ["sh={}".format(distiller.size2str(op['attrs']['kernel_shape'])),
                     "g={}".format(str(op['attrs']['group']))]
-        return ''   
+        return ''
 
     op_nodes = [op['name'] for op in sgraph.ops.values()]
     data_nodes = []

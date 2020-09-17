@@ -136,7 +136,7 @@ def _append_param_directive(thinning_recipe, param_name, directive):
 def _append_module_directive(thinning_recipe, module_name, key, val):
     """Add a module directive to a recipe.
 
-    Parameter directives contain instructions for changing the attributes of 
+    Parameter directives contain instructions for changing the attributes of
     PyTorch modules (belonging to a specified model).
     """
     msglogger.debug("\t[recipe] setting {}.{} = {}".format(module_name, key, val))
@@ -258,7 +258,7 @@ def create_thinning_recipe_channels(sgraph, model, zeros_mask_dict):
     # Traverse all of the model's parameters, search for zero-channels, and
     # create a thinning recipe that descibes the required changes to the model.
     for layer_name, param_name, param in sgraph.named_params_layers():
-        if param.dim() in (2, 4):
+        if param.dim() in (2, 4, 5):
             num_channels = param.size(1)
             # Find nonzero input channels
             if param.dim() == 2:
@@ -266,7 +266,7 @@ def create_thinning_recipe_channels(sgraph, model, zeros_mask_dict):
                 col_sums = param.abs().sum(dim=0)
                 nonzero_channels = torch.nonzero(col_sums)
                 num_nnz_channels = nonzero_channels.nelement()
-            elif param.dim() == 4:
+            elif param.dim() == 5:
                 # 4D weights (of Convolution layers)
                 nonzero_channels = distiller.non_zero_channels(param)
                 num_nnz_channels = nonzero_channels.nelement()
@@ -366,7 +366,7 @@ def create_thinning_recipe_filters(sgraph, model, zeros_mask_dict):
 
     for layer_name, param_name, param in sgraph.named_params_layers():
         # We are only interested in 4D weights
-        if param.dim() != 4:
+        if param.dim() != 5:
             continue
         # Find the number of zero-valued filters in this weights tensor
         filter_view = param.view(param.size(0), -1)
@@ -389,7 +389,7 @@ def create_thinning_recipe_filters(sgraph, model, zeros_mask_dict):
 class StructureRemover(ScheduledTrainingPolicy):
     """A policy which applies a network thinning function.
 
-    This is a wrapper class that allows us to schedule Thinning operations directly 
+    This is a wrapper class that allows us to schedule Thinning operations directly
     from a CompressionSchedule.
     """
     def __init__(self, thinning_func_str, arch, dataset):
@@ -555,7 +555,7 @@ def execute_thinning_recipe(model, zeros_mask_dict, recipe, optimizer, loaded_fr
 # Todo: consider removing this function
 def resnet_cifar_remove_layers(model):
     """Remove layers from ResNet-Cifar.
-    
+
     Search for convolution layers which have 100% sparse weight tensors and remove
     them from the model.  This ugly code is specific to ResNet for Cifar, using the
     layer gating mechanism that we added in order to remove layers from the network.

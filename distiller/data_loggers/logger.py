@@ -160,7 +160,8 @@ class TensorBoardLogger(DataLogger):
         sparse_params_size = 0
 
         for name, param in model.state_dict().items():
-            if param.dim() in [2, 4]:
+            # NOTE: added dimension 5 for 3D models
+            if param.dim() in [2, 4, 5]:
                 _density = density(param)
                 params_size += torch.numel(param)
                 sparse_params_size += param.numel() * _density
