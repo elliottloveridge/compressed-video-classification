@@ -154,13 +154,15 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
+    comp = dict()
+    # active compression = element-wise pruning and quantisation aware training
+    comp['active'] = ['qat, ep']
+    comp['passive'] = ['ptq']
+
     if not opt.no_train:
         # set compression dictionary to validate compression_type input
         # FIXME: move this to somewhere else, not a great implementation
-        comp = dict()
-        # active compression = element-wise pruning and quantisation aware training
-        comp['active'] = ['qat, ep']
-        comp['passive'] = ['ptq']
+
 
         if opt.compression_type == 'ptq':
             # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
