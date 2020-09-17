@@ -154,29 +154,30 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    # set compression dictionary to validate compression_type input
-    # FIXME: move this to somewhere else, not a great implementation
-    comp = dict()
-    # active compression = element-wise pruning and quantisation aware training
-    comp['active'] = ['qat, ep']
-    comp['passive'] = ['ptq']
+    if not opt.no_train:
+        # set compression dictionary to validate compression_type input
+        # FIXME: move this to somewhere else, not a great implementation
+        comp = dict()
+        # active compression = element-wise pruning and quantisation aware training
+        comp['active'] = ['qat, ep']
+        comp['passive'] = ['ptq']
 
-    if opt.compression_type == 'ptq':
-        # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
-        print('here')
+        if opt.compression_type == 'ptq':
+            # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
+            print('here')
 
-    opt.kd_policy = None
+        opt.kd_policy = None
 
-    if opt.compress:
-        compression_scheduler = distiller.CompressionScheduler(model)
-        compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+        if opt.compress:
+            compression_scheduler = distiller.CompressionScheduler(model)
+            compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
-        spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+            spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
 
-        print('sum of weight sparsity:', spar)
+            print('sum of weight sparsity:', spar)
 
-    else:
-        compression_scheduler = None
+        else:
+            compression_scheduler = None
 
     print('run')
 
