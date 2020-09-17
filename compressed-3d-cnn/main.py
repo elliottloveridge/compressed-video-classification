@@ -221,13 +221,13 @@ if __name__ == '__main__':
             compression_scheduler.on_epoch_end(i)
 
     if opt.compression_type == 'ptq':
-        quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=None, bits_weights=8)
+        quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=8, bits_weights=8)
         # NOTE: need to add the input shape!
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
         # NOTE: should the model be saved here?
 
     # print flops and params to check for reduction
-    if opt.compress:
+    if opt.compress and opt.compression_type=='ep':
         # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         # print("post-compression zero parameter count: ", par)
 
