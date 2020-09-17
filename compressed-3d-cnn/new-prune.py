@@ -179,25 +179,25 @@ else:
 #         nesterov=opt.nesterov)
 #     scheduler = lr_scheduler.ReduceLROnPlateau(
 #         optimizer, 'min', patience=opt.lr_patience)
-# if not opt.no_val:
-#     spatial_transform = Compose([
-#         Scale(opt.sample_size),
-#         CenterCrop(opt.sample_size),
-#         ToTensor(opt.norm_value), norm_method
-#     ])
-#     #temporal_transform = LoopPadding(opt.sample_duration)
-#     temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
-#     target_transform = ClassLabel()
-#     validation_data = get_validation_set(
-#         opt, spatial_transform, temporal_transform, target_transform)
-#     val_loader = torch.utils.data.DataLoader(
-#         validation_data,
-#         batch_size=16,
-#         shuffle=False,
-#         num_workers=opt.n_threads,
-#         pin_memory=True)
-#     val_logger = Logger(
-#         os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+if not opt.no_val:
+    spatial_transform = Compose([
+        Scale(opt.sample_size),
+        CenterCrop(opt.sample_size),
+        ToTensor(opt.norm_value), norm_method
+    ])
+    #temporal_transform = LoopPadding(opt.sample_duration)
+    temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+    target_transform = ClassLabel()
+    validation_data = get_validation_set(
+        opt, spatial_transform, temporal_transform, target_transform)
+    val_loader = torch.utils.data.DataLoader(
+        validation_data,
+        batch_size=16,
+        shuffle=False,
+        num_workers=opt.n_threads,
+        pin_memory=True)
+    val_logger = Logger(
+        os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 #
 # best_prec1 = 0
 # if opt.resume_path:
@@ -210,36 +210,39 @@ else:
 
 model = init_pruning(model, params, group='element')
 
-# is_best = prec1 > best_prec1
-# best_prec1 = max(prec1, best_prec1)
-# state = {
-#     'epoch': i,
-#     'arch': opt.arch,
-#     'state_dict': model.state_dict(),
-#     'optimizer': optimizer.state_dict(),
-#     'best_prec1': best_prec1
-#     }
+
+best_prec1 = 0
+validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
+                            val_logger)
+
+is_best = prec1 > best_prec1
+best_prec1 = max(prec1, best_prec1)
+state = {
+    'epoch': i,
+    'arch': opt.arch,
+    'state_dict': model.state_dict(),
+    'optimizer': optimizer.state_dict(),
+    'best_prec1': best_prec1
+    }
+
+save_checkpoint(state, is_best, opt)
+
+# # now want to test
+# if opt.test:
+#     spatial_transform = Compose([
+#         Scale(int(opt.sample_size / opt.scale_in_test)),
+#         CornerCrop(opt.sample_size, opt.crop_position_in_test),
+#         ToTensor(opt.norm_value), norm_method])
+#     # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+#     temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+#     target_transform = VideoID()
 #
-# save_checkpoint(state, is_best, opt)
-
-# now want to fine-tune?
-
-# now want to test
-if opt.test:
-    spatial_transform = Compose([
-        Scale(int(opt.sample_size / opt.scale_in_test)),
-        CornerCrop(opt.sample_size, opt.crop_position_in_test),
-        ToTensor(opt.norm_value), norm_method])
-    # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-    temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-    target_transform = VideoID()
-
-    test_data = get_test_set(opt, spatial_transform, temporal_transform,
-                             target_transform)
-    test_loader = torch.utils.data.DataLoader(
-        test_data,
-        batch_size=16,
-        shuffle=False,
-        num_workers=opt.n_threads,
-        pin_memory=True)
-    test.test(test_loader, model, opt, test_data.class_names)
+#     test_data = get_test_set(opt, spatial_transform, temporal_transform,
+#                              target_transform)
+#     test_loader = torch.utils.data.DataLoader(
+#         test_data,
+#         batch_size=16,
+#         shuffle=False,
+#         num_workers=opt.n_threads,
+#         pin_memory=True)
+#     test.test(test_loader, model, opt, test_data.class_names)
