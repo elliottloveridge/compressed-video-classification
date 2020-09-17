@@ -128,10 +128,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --test \
 --compress \
 --compression_type qat \
---compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml \
---no_train \
---resume_path results/ucf101_mobilenetv2_qat_2epochs_1709_best.pth \
---no_val
+--compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
 
 ## ptq
