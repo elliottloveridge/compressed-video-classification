@@ -231,8 +231,8 @@ if __name__ == '__main__':
         spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
         print('sum of weight sparsity:', spar)
 
-        for p in model.named_parameters():
-            print(p.data.dtype())
+        # for p in model.named_parameters():
+        #     print(p.data.dtype())
 
         # NOTE: FLOPs not working
         # par, flo = model_info(model, opt)

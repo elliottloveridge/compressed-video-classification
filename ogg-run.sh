@@ -128,7 +128,9 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --test \
 --compress \
 --compression_type qat \
---compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
+--compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml \
+--no_train \
+--no_val
 
 
 ## ptq
