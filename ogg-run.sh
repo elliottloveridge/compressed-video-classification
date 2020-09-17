@@ -112,7 +112,7 @@
 
 ## qat
 
-ucf101-mobilenetv2-qat (inc. testing) - 2 epochs, 0.1 learning rate, no checkpoint
+# ucf101-mobilenetv2-qat (inc. testing) - 2 epochs, 0.1 learning rate, no checkpoint
 python /app/compressed-3d-cnn/main.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
