@@ -221,7 +221,7 @@ if __name__ == '__main__':
             compression_scheduler.on_epoch_end(i)
 
     if opt.compression_type == 'ptq':
-        quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=8, bits_weights=8)
+        quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=1, bits_parameters=1)
         # NOTE: need to add the input shape!
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
         # NOTE: should the model be saved here?
@@ -234,8 +234,6 @@ if __name__ == '__main__':
         spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
         print('sum of weight sparsity:', spar)
 
-        # for p in model.named_parameters():
-        #     print(p.data.dtype())
 
         # NOTE: FLOPs not working
         # par, flo = model_info(model, opt)
