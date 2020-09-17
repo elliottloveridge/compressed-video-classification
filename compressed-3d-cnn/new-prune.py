@@ -127,58 +127,20 @@ elif not opt.std_norm:
 else:
     norm_method = Normalize(opt.mean, opt.std)
 
-# if not opt.no_train:
-#     assert opt.train_crop in ['random', 'corner', 'center']
-#     if opt.train_crop == 'random':
-#         crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
-#     elif opt.train_crop == 'corner':
-#         crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
-#     elif opt.train_crop == 'center':
-#         crop_method = MultiScaleCornerCrop(
-#             opt.scales, opt.sample_size, crop_positions=['c'])
-#     spatial_transform = Compose([
-#         RandomHorizontalFlip(),
-#         #RandomRotate(),
-#         #RandomResize(),
-#         crop_method,
-#         #MultiplyValues(),
-#         #Dropout(),
-#         #SaltImage(),
-#         #Gaussian_blur(),
-#         #SpatialElasticDisplacement(),
-#         ToTensor(opt.norm_value), norm_method
-#     ])
-#     temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-#     target_transform = ClassLabel()
-#     training_data = get_training_set(opt, spatial_transform,
-#                                      temporal_transform, target_transform)
-#
-#     train_loader = torch.utils.data.DataLoader(
-#         training_data,
-#         batch_size=opt.batch_size,
-#         shuffle=True,
-#         num_workers=opt.n_threads,
-#         pin_memory=True)
-#     train_logger = Logger(
-#         os.path.join(opt.result_path, 'train.log'),
-#         ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
-#     train_batch_logger = Logger(
-#         os.path.join(opt.result_path, 'train_batch.log'),
-#         ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
-#
-#     if opt.nesterov:
-#         dampening = 0
-#     else:
-#         dampening = opt.dampening
-#     optimizer = optim.SGD(
-#         parameters,
-#         lr=opt.learning_rate,
-#         momentum=opt.momentum,
-#         dampening=dampening,
-#         weight_decay=opt.weight_decay,
-#         nesterov=opt.nesterov)
-#     scheduler = lr_scheduler.ReduceLROnPlateau(
-#         optimizer, 'min', patience=opt.lr_patience)
+if opt.nesterov:
+    dampening = 0
+else:
+    dampening = opt.dampening
+optimizer = optim.SGD(
+    parameters,
+    lr=opt.learning_rate,
+    momentum=opt.momentum,
+    dampening=dampening,
+    weight_decay=opt.weight_decay,
+    nesterov=opt.nesterov)
+scheduler = lr_scheduler.ReduceLROnPlateau(
+    optimizer, 'min', patience=opt.lr_patience)
+
 if not opt.no_val:
     spatial_transform = Compose([
         Scale(opt.sample_size),
@@ -198,15 +160,6 @@ if not opt.no_val:
         pin_memory=True)
     val_logger = Logger(
         os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
-#
-# best_prec1 = 0
-# if opt.resume_path:
-#     print('loading checkpoint {}'.format(opt.resume_path))
-#     checkpoint = torch.load(opt.resume_path)
-#     assert opt.arch == checkpoint['arch']
-#     best_prec1 = checkpoint['best_prec1']
-#     opt.begin_epoch = checkpoint['epoch']
-#     model.load_state_dict(checkpoint['state_dict'])
 
 model = init_pruning(model, params, group='element')
 
@@ -226,23 +179,3 @@ state = {
     }
 
 save_checkpoint(state, is_best, opt)
-
-# # now want to test
-# if opt.test:
-#     spatial_transform = Compose([
-#         Scale(int(opt.sample_size / opt.scale_in_test)),
-#         CornerCrop(opt.sample_size, opt.crop_position_in_test),
-#         ToTensor(opt.norm_value), norm_method])
-#     # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-#     temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-#     target_transform = VideoID()
-#
-#     test_data = get_test_set(opt, spatial_transform, temporal_transform,
-#                              target_transform)
-#     test_loader = torch.utils.data.DataLoader(
-#         test_data,
-#         batch_size=16,
-#         shuffle=False,
-#         num_workers=opt.n_threads,
-#         pin_memory=True)
-#     test.test(test_loader, model, opt, test_data.class_names)
