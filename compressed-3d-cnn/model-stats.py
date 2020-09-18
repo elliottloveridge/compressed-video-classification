@@ -65,7 +65,39 @@ distiller.utils.assign_layer_fq_names(model)
 collector = QuantCalibrationStatsCollector(model)
 stats_file = os.path.join(opt.result_path, 'quantization_stats.yaml')
 
+# create test function
+spatial_transform = Compose([
+    Scale(int(opt.sample_size / opt.scale_in_test)),
+    CornerCrop(opt.sample_size, opt.crop_position_in_test),
+    ToTensor(opt.norm_value), norm_method])
+temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+target_transform = ClassLabel()
+test_data = get_test_set(opt, spatial_transform, temporal_transform,target_transform)
+subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
+
+test_loader = torch.utils.data.DataLoader(
+    test_subset,
+    # test_data,
+    batch_size=16,
+    shuffle=False,
+    num_workers=opt.n_threads,
+    pin_memory=True)
+
+# NOTE: should this be test dataset or validation?
+evaluate = partial(test.test_eval, data_loader=test_loader, criterion=criterion, opt=opt)
+
 if not os.path.isfile(stats_file):
-    def eval_for_stats(model):
-        evaluate(model, val_data)
-    collect_quant_stats(model, eval_for_stats, save_dir=stas_file)
+    # NOTE: should this be here?
+    evaluate(model)
+    collect_quant_stats(model, evaluate, save_dir=stats_file)
+
+
+
+print("Generating quantization calibration stats")
+collector = distiller.data_loggers.QuantCalibrationStatsCollector(model)
+    with collector_context(collector):
+        # Here call your model evaluation function, making sure to execute only
+        # the portion of the dataset specified by the qe_calibration argument
+    yaml_path = 'some/dir/quantization_stats.yaml'
+    collector.save(yaml_path)

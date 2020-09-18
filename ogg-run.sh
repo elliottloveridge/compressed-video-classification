@@ -57,11 +57,11 @@
 
 ## evaluation
 
-# # ucf101 evaluation (after testing)
-# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
-# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-# --dataset ucf101 \
-# --result_path results
+# ucf101 evaluation (after testing)
+python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--dataset ucf101 \
+--result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -177,30 +177,30 @@
 
 ## knowledge distillation
 
-# ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
-# FIXME: t_n_classes set as 600, is this right?
-python /app/compressed-3d-cnn/distillation.py --root_path /data \
---video_path ucf101_videos/jpg/ \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---result_path results \
---dataset ucf101 \
---n_classes 101 \
---batch_size 16 \
---model resnet \
---model_depth 18 \
---learning_rate 0.01 \
---n_val_samples 1 \
---n_epochs 20 \
---compress \
---compression_type kd \
---t_model resnet \
---t_model_depth 101 \
---t_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth \
---t_n_classes 600 \
---kd_distill_wt 0.7 \
---kd_student_wt 0.3 \
---kd_temp 5.0 \
---test
+# # ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
+# # FIXME: t_n_classes set as 600, is this right?
+# python /app/compressed-3d-cnn/distillation.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 101 \
+# --batch_size 16 \
+# --model resnet \
+# --model_depth 18 \
+# --learning_rate 0.01 \
+# --n_val_samples 1 \
+# --n_epochs 20 \
+# --compress \
+# --compression_type kd \
+# --t_model resnet \
+# --t_model_depth 101 \
+# --t_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth \
+# --t_n_classes 600 \
+# --kd_distill_wt 0.7 \
+# --kd_student_wt 0.3 \
+# --kd_temp 5.0 \
+# --test
 
 
 ## other
