@@ -102,6 +102,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --sample_duration 16 \
   --batch_size 32 \
   --checkpoint 5 \
+  --downsample 1 \
   --n_val_samples 1 \
   --n_epochs 20 \
   --test
