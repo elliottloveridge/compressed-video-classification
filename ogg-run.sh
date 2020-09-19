@@ -149,7 +149,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --width_mult 1.0 \
 --learning_rate 0.01 \
 --n_val_samples 1 \
---n_epochs 20 \
+--n_epochs 5 \
 --checkpoint 5 \
 --test \
 --compress \
