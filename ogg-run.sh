@@ -190,7 +190,7 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --model_depth 18 \
 --learning_rate 0.01 \
 --n_val_samples 1 \
---n_epochs 20 \
+--n_epochs 5 \
 --compress \
 --compression_type kd \
 --t_model resnet \
