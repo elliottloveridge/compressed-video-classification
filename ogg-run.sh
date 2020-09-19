@@ -178,7 +178,7 @@
 ## knowledge distillation
 
 # ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
-# FIXME: t_n_classes set as 600, is this right?
+# NOTE: t_n_classes set as 101 as using fine-tuned teacher model
 python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
@@ -196,7 +196,7 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --t_model resnet \
 --t_model_depth 101 \
 --t_path /data/results/benchmark/1209/ucf101_resnet_benchmark_20epochs_1209_best.pth \
---t_n_classes 600 \
+--t_n_classes 101 \
 --kd_distill_wt 0.7 \
 --kd_student_wt 0.3 \
 --kd_temp 5.0 \
