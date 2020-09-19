@@ -114,7 +114,7 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
 
 ## qat
 
-# # ucf101-mobilenetv2-qat (inc. testing) - 2 epochs, 0.1 learning rate, no checkpoint
+# # ucf101-mobilenetv2-qat (inc. testing) - 20 epochs, 0.01 learning rate, no checkpoint
 # python /app/compressed-3d-cnn/main.py --root_path /data \
 # --video_path ucf101_videos/jpg/ \
 # --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
@@ -124,13 +124,37 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
 # --batch_size 32  \
 # --model mobilenetv2 \
 # --width_mult 1.0 \
-# --learning_rate 0.1 \
+# --learning_rate 0.01 \
 # --n_val_samples 1 \
 # --n_epochs 2 \
 # --test \
 # --compress \
 # --compression_type qat \
 # --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
+
+# ucf101-mobilenetv2-qat-fine-tune (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
+python /app/compressed-3d-cnn/main.py --root_path /data \
+--video_path ucf101_videos/jpg/ \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--result_path results \
+--dataset ucf101 \
+--n_classes 101 \
+--pretrain_path /data/results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth \
+--dataset ucf101 \
+--n_classes 600 \
+--n_finetune_classes 101 \
+--ft_portion complete \
+--batch_size 32  \
+--model mobilenetv2 \
+--width_mult 1.0 \
+--learning_rate 0.01 \
+--n_val_samples 1 \
+--n_epochs 20 \
+--checkpoint 5 \
+--test \
+--compress \
+--compression_type qat \
+--compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
 
 ## ptq
