@@ -56,13 +56,13 @@ from calculate_FLOP import model_info
 msglogger = logging.getLogger()
 
 
-def init_pruning(model, net_params, group):
+def init_pruning(model, net_params, test_func, group):
     """perform pruning before fine-tuning on a given pre-trained model
     """
 
     if group not in ['element']:
         raise ValueError("group parameter contains an illegal value: {}".format(group))
-    sensitivities = OrderedDict()
+    # sensitivities = OrderedDict()
 
     for param_name, sparsity in net_params:
         # FIXME: is this dimension check needed/correct?
@@ -70,10 +70,10 @@ def init_pruning(model, net_params, group):
             print('here - wrong dim')
             continue
 
-        # NOTE: no longer need to make a copy as returning the model
         # model_cpy = deepcopy(model)
 
         if group == 'element':
+            sparsity = float(sparsity)
             # element-wise sparsity pruning
             sparsity_level = {param_name: sparsity}
             pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_level)
@@ -86,7 +86,9 @@ def init_pruning(model, net_params, group):
             scheduler.on_epoch_begin(0)
             scheduler.mask_all_weights()
 
-    return model
+        prec1, prec5, loss = test_func(model=model)
+
+    return prec1, prec5, loss
 
 
 # get necessary args
@@ -214,19 +216,38 @@ if not opt.no_val:
 
 model = init_pruning(model, params, group='element')
 
+# now test...
 
-best_prec1 = 0
-validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
-                            val_logger)
+spatial_transform = Compose([
+    Scale(int(opt.sample_size / opt.scale_in_test)),
+    CornerCrop(opt.sample_size, opt.crop_position_in_test),
+    ToTensor(opt.norm_value), norm_method])
+# temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+# target_transform = VideoID()
+target_transform = ClassLabel()
 
-is_best = prec1 > best_prec1
-best_prec1 = max(prec1, best_prec1)
-state = {
-    'epoch': i,
-    'arch': opt.arch,
-    'state_dict': model.state_dict(),
-    'optimizer': optimizer.state_dict(),
-    'best_prec1': best_prec1
-    }
+test_data = get_test_set(opt, spatial_transform, temporal_transform,
+                         target_transform)
 
-save_checkpoint(state, is_best, opt)
+# DEBUG: the size len(test_data) might be too big
+# sample a defined portion of the testing dataset
+# subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+# NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+# test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
+
+test_loader = torch.utils.data.DataLoader(
+    test_data,
+    # test_data,
+    batch_size=16,
+    shuffle=False,
+    num_workers=opt.n_threads,
+    pin_memory=True)
+
+# return the average losses, top1, top5 accuracies for subset of testing dataset
+# FIXME: need to use validation.py's val_epoch instead for this
+test_func = partial(test.test_eval, data_loader=test_loader, criterion=criterion, opt=opt)
+
+prec1, prec5, loss = init_pruning(model, params, test_func, 'element')
+
+print(prec1, prec5)

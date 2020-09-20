@@ -4,6 +4,7 @@
 version: 1
 pruners:
   mobilenetv2_conv:
+    group: 'sensitivity'
     class: 'SparsityLevelParameterPruner'
     levels:
       'module.features.0.0.weight': 0.5
