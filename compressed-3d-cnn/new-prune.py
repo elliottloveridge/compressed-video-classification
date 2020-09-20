@@ -193,28 +193,28 @@ optimizer = optim.SGD(
     nesterov=opt.nesterov)
 scheduler = lr_scheduler.ReduceLROnPlateau(
     optimizer, 'min', patience=opt.lr_patience)
-
-if not opt.no_val:
-    spatial_transform = Compose([
-        Scale(opt.sample_size),
-        CenterCrop(opt.sample_size),
-        ToTensor(opt.norm_value), norm_method
-    ])
-    #temporal_transform = LoopPadding(opt.sample_duration)
-    temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
-    target_transform = ClassLabel()
-    validation_data = get_validation_set(
-        opt, spatial_transform, temporal_transform, target_transform)
-    val_loader = torch.utils.data.DataLoader(
-        validation_data,
-        batch_size=16,
-        shuffle=False,
-        num_workers=opt.n_threads,
-        pin_memory=True)
-    val_logger = Logger(
-        os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
-
-model = init_pruning(model, params, group='element')
+#
+# if not opt.no_val:
+#     spatial_transform = Compose([
+#         Scale(opt.sample_size),
+#         CenterCrop(opt.sample_size),
+#         ToTensor(opt.norm_value), norm_method
+#     ])
+#     #temporal_transform = LoopPadding(opt.sample_duration)
+#     temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+#     target_transform = ClassLabel()
+#     validation_data = get_validation_set(
+#         opt, spatial_transform, temporal_transform, target_transform)
+#     val_loader = torch.utils.data.DataLoader(
+#         validation_data,
+#         batch_size=16,
+#         shuffle=False,
+#         num_workers=opt.n_threads,
+#         pin_memory=True)
+#     val_logger = Logger(
+#         os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+#
+# model = init_pruning(model, params, group='element')
 
 # now test...
 
