@@ -139,8 +139,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
 --result_path results \
 --dataset ucf101 \
---n_classes 101 \
---pretrain_path /data/results/benchmark/1109_1/ucf101_csn_benchmark_50epochs_1109_best.pth \
+--n_classes 600 \
+--pretrain_path /data/results/pretrain/kinetics_resnet_18_RGB_16_best.pth \
 --dataset ucf101 \
 --n_finetune_classes 101 \
 --ft_portion complete \
