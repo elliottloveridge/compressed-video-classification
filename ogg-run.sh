@@ -147,6 +147,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --batch_size 32  \
 --model resnet \
 --model_depth 18 \
+--downsample  1 \
+--resnet_shortcut A \
 --learning_rate 0.01 \
 --n_val_samples 1 \
 --n_epochs 20 \
