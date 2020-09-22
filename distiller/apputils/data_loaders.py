@@ -58,8 +58,8 @@ def classification_get_input_shape(dataset):
     elif dataset == 'mnist':
         return 1, 1, 28, 28
     elif dataset == 'ucf101':
-        # NOTE: need to check if these dimensions are correct for input shape
-        return 1, 3, 224, 224
+        # FIXME: should this be 224x224?
+        return 1, 3, 112, 112
     else:
         raise ValueError("dataset %s is not supported" % dataset)
 

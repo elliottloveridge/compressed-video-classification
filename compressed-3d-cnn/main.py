@@ -49,6 +49,8 @@ if __name__ == '__main__':
     opt.arch = '{}'.format(opt.model)
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
+    if opt.compression_type != '':
+        assert opt.compression_type in ['ep', 'ptq', 'qat', 'kd']
     if not opt.compress:
         opt.compression_type = 'benchmark'
     opt.store_name = '_'.join([opt.dataset, opt.model, opt.compression_type,
@@ -84,14 +86,7 @@ if __name__ == '__main__':
                 opt.scales, opt.sample_size, crop_positions=['c'])
         spatial_transform = Compose([
             RandomHorizontalFlip(),
-            #RandomRotate(),
-            #RandomResize(),
             crop_method,
-            #MultiplyValues(),
-            #Dropout(),
-            #SaltImage(),
-            #Gaussian_blur(),
-            #SpatialElasticDisplacement(),
             ToTensor(opt.norm_value), norm_method
         ])
         temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
@@ -131,7 +126,6 @@ if __name__ == '__main__':
             CenterCrop(opt.sample_size),
             ToTensor(opt.norm_value), norm_method
         ])
-        #temporal_transform = LoopPadding(opt.sample_duration)
         temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
         target_transform = ClassLabel()
         validation_data = get_validation_set(
@@ -154,29 +148,24 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    comp = dict()
-    # active compression = element-wise pruning and quantisation aware training
-    comp['active'] = ['qat, ep']
-    comp['passive'] = ['ptq']
-
     if not opt.no_train:
-        # set compression dictionary to validate compression_type input
-        # FIXME: move this to somewhere else, not a great implementation
 
-
-        if opt.compression_type == 'ptq':
-            # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
-            print('here')
-
+        # set distillation policy as None
         opt.kd_policy = None
 
-        if opt.compress and opt.compression_type in comp['active']:
+        if opt.compression_type == 'ptq':
+            # FIXME: add stats collection here
+            # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
+            print('add stats file here')
+
+        if opt.compress and opt.compression_type in ['qat', 'ep']:
             compression_scheduler = distiller.CompressionScheduler(model)
             compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
-            spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
-
-            print('sum of weight sparsity:', spar)
+            # get initial sparsity sum as a test for pruning
+            if opt.compression_type == 'ep':
+                spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
+                print('sum of weight sparsity:', spar)
 
         else:
             compression_scheduler = None
@@ -185,7 +174,7 @@ if __name__ == '__main__':
 
     for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
 
-        if opt.compression_type in comp['active'] and opt.compress:
+        if opt.compress and opt.compression_type in ['qat', 'ep']:
             compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
@@ -217,36 +206,24 @@ if __name__ == '__main__':
                 }
             save_checkpoint(state, is_best, opt)
 
-        if opt.compression_type in comp['active'] and opt.compress:
+        if opt.compress and opt.compression_type in ['qat', 'ep']:
             compression_scheduler.on_epoch_end(i)
 
     if opt.compression_type == 'ptq':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=1, bits_parameters=1)
-        # NOTE: need to add the input shape!
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
         # NOTE: should the model be saved here?
 
-    # print flops and params to check for reduction
-    if opt.compress and opt.compression_type=='ep':
-        # par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        # print("post-compression zero parameter count: ", par)
-
-        spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
-        print('sum of weight sparsity:', spar)
-
-
-        # NOTE: FLOPs not working
-        # par, flo = model_info(model, opt)
-        # print('Post Compression:')
-        # print('Trainiable Parameters:', par)
-        # print('FLOPs:', flo)
+    # test for parameter reduction
+    if opt.compress and opt.compression_type == 'ep':
+        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        print("post-compression zero parameter count: ", par)
 
     if opt.test:
         spatial_transform = Compose([
             Scale(int(opt.sample_size / opt.scale_in_test)),
             CornerCrop(opt.sample_size, opt.crop_position_in_test),
             ToTensor(opt.norm_value), norm_method])
-        # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
         temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
         target_transform = VideoID()
 

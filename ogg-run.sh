@@ -57,12 +57,12 @@
 
 
 ## evaluation
-#
-# # ucf101 evaluation (after testing)
-# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
-# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-# --dataset ucf101 \
-# --result_path results
+
+# ucf101 evaluation (after testing)
+python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--dataset ucf101 \
+--result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -133,30 +133,30 @@
 # --compression_type qat \
 # --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
-# ucf101-mobilenetv2-qat-fine-tuning (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
-python /app/compressed-3d-cnn/main.py --root_path /data \
---video_path ucf101_videos/jpg/ \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---result_path results \
---dataset ucf101 \
---n_classes 600 \
---pretrain_path /data/results/pretrain/kinetics_resnet_18_RGB_16_best.pth \
---dataset ucf101 \
---n_finetune_classes 101 \
---ft_portion complete \
---batch_size 32  \
---model resnet \
---model_depth 18 \
---downsample  1 \
---resnet_shortcut A \
---learning_rate 0.01 \
---n_val_samples 1 \
---n_epochs 20 \
---checkpoint 5 \
---test \
---compress \
---compression_type qat \
---compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
+# # ucf101-mobilenetv2-qat-fine-tuning (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 600 \
+# --pretrain_path /data/results/pretrain/kinetics_resnet_18_RGB_16_best.pth \
+# --dataset ucf101 \
+# --n_finetune_classes 101 \
+# --ft_portion complete \
+# --batch_size 32  \
+# --model resnet \
+# --model_depth 18 \
+# --downsample  1 \
+# --resnet_shortcut A \
+# --learning_rate 0.01 \
+# --n_val_samples 1 \
+# --n_epochs 20 \
+# --checkpoint 5 \
+# --test \
+# --compress \
+# --compression_type qat \
+# --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
 
 ## ptq
