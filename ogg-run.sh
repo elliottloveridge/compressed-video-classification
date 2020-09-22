@@ -56,6 +56,15 @@
 #   --test
 
 
+## evaluation
+#
+# # ucf101 evaluation (after testing)
+# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --dataset ucf101 \
+# --result_path results
+
+
 ## fine-tuning (pre-trained)
 
 # # ucf101-mobilenetv2 (inc. testing) - 20 epochs, 0.01 learning rate, 5 checkpoint, kinetics pre-train
@@ -305,12 +314,3 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 #   --no_train \
 #   --no_val \
 #   --test
-
-
-## evaluation
-
-# ucf101 evaluation (after testing)
-python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---dataset ucf101 \
---result_path results
