@@ -145,8 +145,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --n_finetune_classes 101 \
 --ft_portion complete \
 --batch_size 32  \
---model mobilenetv2 \
---width_mult 1.0 \
+--model resnet \
+--model_depth 18 \
 --learning_rate 0.01 \
 --n_val_samples 1 \
 --n_epochs 20 \
