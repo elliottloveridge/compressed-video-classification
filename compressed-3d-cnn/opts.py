@@ -71,7 +71,8 @@ def parse_opts():
     parser.add_argument('--compression_file', default='/app/compressed-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
     parser.add_argument('--compress', action='store_true', help='If true, compression is performed, defined by compression_type arg')
     parser.set_defaults(compress=False)
-    parser.add_argument('--compression_type', default='', type=str, help='Compression type to perform (includes (ep|ptq|qat|kd)')
+    parser.add_argument('--compression_type', default='', help='Compression type to perform (includes (ep|ptq|qat|kd) - if using compress_combine use a list ["ep", "kd"]')
+    parser.add_argument('--compress_combine', action='store_true', help='If true, methods of compression are combined via compression_type inputs)
     # knowledge distillation args
     parser.add_argument('--t_model', default='resnet', type=str, help='Teacher model type')
     parser.add_argument('--t_path', default='/data/results/pretrain/', type=str, help='Teacher model path for knowledge distillation')
@@ -80,8 +81,7 @@ def parse_opts():
     parser.add_argument('--kd_student_wt', default=0.3, type=float, help='Weight for student vs. labels loss')
     parser.add_argument('--kd_teacher_wt', default=0.0, type=float, help='Weight for teacher vs. labels loss')
     parser.add_argument('--kd_temp', default=0.3, type=float, help='Knowledge distllation softmax temperature)')
-    # NOTE: are all of these necessary!
-    parser.add_argument('--t_n_classes', default=400, type=int, help='Teacher model: number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51)')
+    parser.add_argument('--t_n_classes', default=400, type=int, help='Teacher model: number of classes (kinetics: 600, ucf101: 101)')
     parser.add_argument('--t_sample_size', default=112, type=int, help='Teacher model: Height and width of inputs')
     parser.add_argument('--t_sample_duration', default=16, type=int, help='Teacher model: Temporal duration of inputs')
     parser.add_argument('--t_version', default=1.1, type=float, help='Teacher model: Version of the model')
