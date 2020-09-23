@@ -47,6 +47,7 @@ if __name__ == '__main__':
     for i in range(1, opt.n_scales):
         opt.scales.append(opt.scales[-1] * opt.scale_step)
     opt.arch = '{}'.format(opt.model)
+    opt.t_arch = '{}'.format(opt.t_model)
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
     if opt.compression_type != '':
@@ -140,7 +141,9 @@ if __name__ == '__main__':
             os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 
     best_prec1 = 0
-    if opt.resume_path:
+
+    # don't currently allow for resumed training whilst using kd
+    if opt.resume_path and opt.compression_type != 'kd':
         print('loading checkpoint {}'.format(opt.resume_path))
         checkpoint = torch.load(opt.resume_path)
         assert opt.arch == checkpoint['arch']
@@ -150,25 +153,47 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
-        # set distillation policy as None
-        opt.kd_policy = None
-
         if opt.compression_type == 'ptq':
             # FIXME: add stats collection here
             # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
             print('add stats file here')
 
-        if opt.compress and opt.compression_type in ['qat', 'ep']:
+        if opt.compress and opt.compression_type in ['qat', 'ep', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
-            compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+            if opt.compression_type in ['qat', 'ep']:
+                compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
             # get initial sparsity sum as a test for pruning
             if opt.compression_type == 'ep':
-                spar = sum(distiller.utils.sparsity(p.data) for p in model.parameters() if p.requires_grad)
-                print('sum of weight sparsity:', spar)
+                par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+                print("pre-compression zero parameter count:", par)
 
         else:
             compression_scheduler = None
+
+    # set distillation policy as None
+    opt.kd_policy = None
+
+    if opt.compress and opt.compression_type == 'kd':
+
+        # generate teacher model and load state_dict
+        teacher, parameters = generate_model(opt, teacher=True)
+        print('loading checkpoint {}'.format(opt.t_path))
+        checkpoint = torch.load(opt.t_path)
+        assert opt.t_arch == checkpoint['arch']
+        teacher.load_state_dict(checkpoint['state_dict'])
+
+        # create a distillation policy and add to compression_scheduler
+        dlw = distiller.DistillationLossWeights(opt.kd_distill_wt,
+              opt.kd_student_wt, opt.kd_teacher_wt)
+        opt.kd_policy = distiller.KnowledgeDistillationPolicy(model,
+                        teacher, opt.kd_temp, dlw)
+        # FIXME: this may not be correct
+        end_epoch = opt.begin_epoch + opt.n_epochs
+        compression_scheduler.add_policy(opt.kd_policy,
+                                        starting_epoch=opt.begin_epoch,
+                                        ending_epoch=end_epoch, frequency=1)
+
 
     print('run')
 
@@ -217,7 +242,7 @@ if __name__ == '__main__':
     # test for parameter reduction
     if opt.compress and opt.compression_type == 'ep':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("post-compression zero parameter count: ", par)
+        print("post-compression zero parameter count:", par)
 
     if opt.test:
         spatial_transform = Compose([

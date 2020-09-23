@@ -144,7 +144,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --dataset ucf101 \
 --n_finetune_classes 101 \
 --ft_portion complete \
---batch_size 32  \
+--batch_size 16  \
 --model resnet \
 --model_depth 101 \
 --learning_rate 0.01 \
