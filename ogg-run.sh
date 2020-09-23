@@ -125,7 +125,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --batch_size 32  \
 --model mobilenetv2 \
 --width_mult 1.0 \
---learning_rate 0.01 \
+--learning_rate 0.1 \
 --n_val_samples 1 \
 --n_epochs 5 \
 --test \
