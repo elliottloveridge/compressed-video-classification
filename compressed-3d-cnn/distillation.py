@@ -75,277 +75,273 @@ if __name__ == '__main__':
     else:
         norm_method = Normalize(opt.mean, opt.std)
 
-    for opt.kd_temp in [5]:
-        for opt.kd_distill_wt in [0.8]:
-            for opt.kd_student_wt in [0.3, 0.4]:
+    print("testing for temp={}, distill_wt={}, student_wt={}".format(opt.kd_temp, opt.kd_distill_wt, opt.kd_student_wt))
 
-                print("testing for temp={}, distill_wt={}, student_wt={}".format(opt.kd_temp, opt.kd_distill_wt, opt.kd_student_wt))
+    with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
+        json.dump(vars(opt), opt_file)
 
-                with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
-                    json.dump(vars(opt), opt_file)
+    torch.manual_seed(opt.manual_seed)
 
-                torch.manual_seed(opt.manual_seed)
+    model, parameters = generate_model(opt)
+    # print(model)
 
-                model, parameters = generate_model(opt)
-                # print(model)
+    if not opt.no_train:
+        assert opt.train_crop in ['random', 'corner', 'center']
+        if opt.train_crop == 'random':
+            crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
+        elif opt.train_crop == 'corner':
+            crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
+        elif opt.train_crop == 'center':
+            crop_method = MultiScaleCornerCrop(
+                opt.scales, opt.sample_size, crop_positions=['c'])
+        spatial_transform = Compose([
+            RandomHorizontalFlip(),
+            #RandomRotate(),
+            #RandomResize(),
+            crop_method,
+            #MultiplyValues(),
+            #Dropout(),
+            #SaltImage(),
+            #Gaussian_blur(),
+            #SpatialElasticDisplacement(),
+            ToTensor(opt.norm_value), norm_method
+        ])
+        temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        target_transform = ClassLabel()
+        training_data = get_training_set(opt, spatial_transform,
+                                         temporal_transform, target_transform)
 
-                if not opt.no_train:
-                    assert opt.train_crop in ['random', 'corner', 'center']
-                    if opt.train_crop == 'random':
-                        crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
-                    elif opt.train_crop == 'corner':
-                        crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
-                    elif opt.train_crop == 'center':
-                        crop_method = MultiScaleCornerCrop(
-                            opt.scales, opt.sample_size, crop_positions=['c'])
-                    spatial_transform = Compose([
-                        RandomHorizontalFlip(),
-                        #RandomRotate(),
-                        #RandomResize(),
-                        crop_method,
-                        #MultiplyValues(),
-                        #Dropout(),
-                        #SaltImage(),
-                        #Gaussian_blur(),
-                        #SpatialElasticDisplacement(),
-                        ToTensor(opt.norm_value), norm_method
-                    ])
-                    temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-                    target_transform = ClassLabel()
-                    training_data = get_training_set(opt, spatial_transform,
-                                                     temporal_transform, target_transform)
+        # subset_ind = np.random.randint(0, len(training_data), size=(1, 1000))
+        # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+        # training_data = torch.utils.data.Subset(training_data, subset_ind[0])
 
-                    # subset_ind = np.random.randint(0, len(training_data), size=(1, 1000))
-                    # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
-                    # training_data = torch.utils.data.Subset(training_data, subset_ind[0])
+        train_loader = torch.utils.data.DataLoader(
+            training_data,
+            batch_size=opt.batch_size,
+            shuffle=True,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        train_logger = Logger(
+            os.path.join(opt.result_path, 'train.log'),
+            ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
+        train_batch_logger = Logger(
+            os.path.join(opt.result_path, 'train_batch.log'),
+            ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
 
-                    train_loader = torch.utils.data.DataLoader(
-                        training_data,
-                        batch_size=opt.batch_size,
-                        shuffle=True,
-                        num_workers=opt.n_threads,
-                        pin_memory=True)
-                    train_logger = Logger(
-                        os.path.join(opt.result_path, 'train.log'),
-                        ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
-                    train_batch_logger = Logger(
-                        os.path.join(opt.result_path, 'train_batch.log'),
-                        ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
+        if opt.nesterov:
+            dampening = 0
+        else:
+            dampening = opt.dampening
+        optimizer = optim.SGD(
+            parameters,
+            lr=opt.learning_rate,
+            momentum=opt.momentum,
+            dampening=dampening,
+            weight_decay=opt.weight_decay,
+            nesterov=opt.nesterov)
+        scheduler = lr_scheduler.ReduceLROnPlateau(
+            optimizer, 'min', patience=opt.lr_patience)
+    if not opt.no_val:
+        spatial_transform = Compose([
+            Scale(opt.sample_size),
+            CenterCrop(opt.sample_size),
+            ToTensor(opt.norm_value), norm_method
+        ])
+        #temporal_transform = LoopPadding(opt.sample_duration)
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+        target_transform = ClassLabel()
+        validation_data = get_validation_set(
+            opt, spatial_transform, temporal_transform, target_transform)
 
-                    if opt.nesterov:
-                        dampening = 0
-                    else:
-                        dampening = opt.dampening
-                    optimizer = optim.SGD(
-                        parameters,
-                        lr=opt.learning_rate,
-                        momentum=opt.momentum,
-                        dampening=dampening,
-                        weight_decay=opt.weight_decay,
-                        nesterov=opt.nesterov)
-                    scheduler = lr_scheduler.ReduceLROnPlateau(
-                        optimizer, 'min', patience=opt.lr_patience)
-                if not opt.no_val:
-                    spatial_transform = Compose([
-                        Scale(opt.sample_size),
-                        CenterCrop(opt.sample_size),
-                        ToTensor(opt.norm_value), norm_method
-                    ])
-                    #temporal_transform = LoopPadding(opt.sample_duration)
-                    temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
-                    target_transform = ClassLabel()
-                    validation_data = get_validation_set(
-                        opt, spatial_transform, temporal_transform, target_transform)
+        # subset_ind = np.random.randint(0, len(validation_data), size=(1, 1000))
+        # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+        # validation_data = torch.utils.data.Subset(validation_data, subset_ind[0])
 
-                    # subset_ind = np.random.randint(0, len(validation_data), size=(1, 1000))
-                    # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
-                    # validation_data = torch.utils.data.Subset(validation_data, subset_ind[0])
+        val_loader = torch.utils.data.DataLoader(
+            validation_data,
+            batch_size=16,
+            shuffle=False,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        val_logger = Logger(
+            os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
 
-                    val_loader = torch.utils.data.DataLoader(
-                        validation_data,
-                        batch_size=16,
-                        shuffle=False,
-                        num_workers=opt.n_threads,
-                        pin_memory=True)
-                    val_logger = Logger(
-                        os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+    best_prec1 = 0
 
-                best_prec1 = 0
+    # set compression dictionary to validate compression_type input
+    # FIXME: move this to somewhere else, not a great implementation
+    comp = dict()
+    # FIXME: should move this part to the opts definition at the top when it's moved to main.py
+    comp['active'] = ['qat, fp']
+    # does kd belong in here?
+    comp['passive'] = ['ptq', 'kd']
 
-                # set compression dictionary to validate compression_type input
-                # FIXME: move this to somewhere else, not a great implementation
-                comp = dict()
-                # FIXME: should move this part to the opts definition at the top when it's moved to main.py
-                comp['active'] = ['qat, fp']
-                # does kd belong in here?
-                comp['passive'] = ['ptq', 'kd']
+    # NOTE: this may not work for distillation
+    if opt.compress:
+        compression_scheduler = distiller.CompressionScheduler(model)
+        if opt.compression_type != 'kd':
+            compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+        # par, flo = model_info(model, opt)
+        # print('Before Compression:')
+        # print('Trainiable Parameters:', par)
+        # print('FLOPs:', flo)
+    else:
+        compression_scheduler = None
 
-                # NOTE: this may not work for distillation
-                if opt.compress:
-                    compression_scheduler = distiller.CompressionScheduler(model)
-                    if opt.compression_type != 'kd':
-                        compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-                    # par, flo = model_info(model, opt)
-                    # print('Before Compression:')
-                    # print('Trainiable Parameters:', par)
-                    # print('FLOPs:', flo)
-                else:
-                    compression_scheduler = None
+    # NOTE: knowledge distillation - load pre-trained teacher model
 
-                # NOTE: knowledge distillation - load pre-trained teacher model
+    opt.kd_policy = None
 
-                opt.kd_policy = None
+    if opt.compression_type == 'kd':
+        #FIXME: add this to opts
 
-                if opt.compression_type == 'kd':
-                    #FIXME: add this to opts
+        # generate model using teacher args
+        teacher, parameters = generate_model(opt, teacher=True)
+        print('loading checkpoint {}'.format(opt.t_path))
+        checkpoint = torch.load(opt.t_path)
+        assert opt.t_arch == checkpoint['arch']
+        # best_prec1 = checkpoint['best_prec1']
+        # opt.begin_epoch = checkpoint['epoch']
+        teacher.load_state_dict(checkpoint['state_dict'])
 
-                    # generate model using teacher args
-                    teacher, parameters = generate_model(opt, teacher=True)
-                    print('loading checkpoint {}'.format(opt.t_path))
-                    checkpoint = torch.load(opt.t_path)
-                    assert opt.t_arch == checkpoint['arch']
-                    # best_prec1 = checkpoint['best_prec1']
-                    # opt.begin_epoch = checkpoint['epoch']
-                    teacher.load_state_dict(checkpoint['state_dict'])
+        # create a policy and add to scheduler
+        dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, opt.kd_teacher_wt)
+        opt.kd_policy = distiller.KnowledgeDistillationPolicy(model, teacher, opt.kd_temp, dlw)
+        # compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
+        #                                  ending_epoch=opt.n_epochs, frequency=1)
+        # FIXME: kd_start_epoch not defined
+        # FIXME: had to add +1 to end epoch
+        # print('begin epoch:', opt.begin_epoch)
+        end_epoch = opt.begin_epoch + opt.n_epochs
+        compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.begin_epoch,
+                                         ending_epoch=end_epoch, frequency=1)
 
-                    # create a policy and add to scheduler
-                    dlw = distiller.DistillationLossWeights(opt.kd_distill_wt, opt.kd_student_wt, opt.kd_teacher_wt)
-                    opt.kd_policy = distiller.KnowledgeDistillationPolicy(model, teacher, opt.kd_temp, dlw)
-                    # compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.kd_start_epoch,
-                    #                                  ending_epoch=opt.n_epochs, frequency=1)
-                    # FIXME: kd_start_epoch not defined
-                    # FIXME: had to add +1 to end epoch
-                    # print('begin epoch:', opt.begin_epoch)
-                    end_epoch = opt.begin_epoch + opt.n_epochs
-                    compression_scheduler.add_policy(opt.kd_policy, starting_epoch=opt.begin_epoch,
-                                                     ending_epoch=end_epoch, frequency=1)
+    # NOTE: don't want a resume path for student model - could change this?
+    if opt.resume_path and opt.compression_type != 'kd':
 
-                # NOTE: don't want a resume path for student model - could change this?
-                if opt.resume_path and opt.compression_type != 'kd':
-
-                    print('loading checkpoint {}'.format(opt.resume_path))
-                    checkpoint = torch.load(opt.resume_path)
-                    assert opt.arch == checkpoint['arch']
-                    best_prec1 = checkpoint['best_prec1']
-                    opt.begin_epoch = checkpoint['epoch']
-                    model.load_state_dict(checkpoint['state_dict'])
+        print('loading checkpoint {}'.format(opt.resume_path))
+        checkpoint = torch.load(opt.resume_path)
+        assert opt.arch == checkpoint['arch']
+        best_prec1 = checkpoint['best_prec1']
+        opt.begin_epoch = checkpoint['epoch']
+        model.load_state_dict(checkpoint['state_dict'])
 
 
-                print('run')
-                for i in range(opt.begin_epoch, opt.n_epochs + 1):
+    print('run')
+    for i in range(opt.begin_epoch, opt.n_epochs + 1):
 
-                    if opt.compression_type in comp['active'] and opt.compress:
-                        compression_scheduler.on_epoch_begin(i)
+        if opt.compression_type in comp['active'] and opt.compress:
+            compression_scheduler.on_epoch_begin(i)
 
-                    if not opt.no_train:
+        if not opt.no_train:
 
-                        adjust_learning_rate(optimizer, i, opt)
-                        train_epoch(i, train_loader, model, criterion, optimizer, opt,
-                                    train_logger, train_batch_logger, compression_scheduler)
-                        state = {
-                            'epoch': i,
-                            'arch': opt.arch,
-                            'state_dict': model.state_dict(),
-                            'optimizer': optimizer.state_dict(),
-                            'best_prec1': best_prec1
-                            }
-                        save_checkpoint(state, False, opt)
+            adjust_learning_rate(optimizer, i, opt)
+            train_epoch(i, train_loader, model, criterion, optimizer, opt,
+                        train_logger, train_batch_logger, compression_scheduler)
+            state = {
+                'epoch': i,
+                'arch': opt.arch,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'best_prec1': best_prec1
+                }
+            save_checkpoint(state, False, opt)
 
-                    if not opt.no_val:
+        if not opt.no_val:
 
-                        validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
-                                                    val_logger)
-                        is_best = prec1 > best_prec1
-                        best_prec1 = max(prec1, best_prec1)
-                        state = {
-                            'epoch': i,
-                            'arch': opt.arch,
-                            'state_dict': model.state_dict(),
-                            'optimizer': optimizer.state_dict(),
-                            'best_prec1': best_prec1
-                            }
-                        save_checkpoint(state, is_best, opt)
+            validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
+                                        val_logger)
+            is_best = prec1 > best_prec1
+            best_prec1 = max(prec1, best_prec1)
+            state = {
+                'epoch': i,
+                'arch': opt.arch,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'best_prec1': best_prec1
+                }
+            save_checkpoint(state, is_best, opt)
 
-                    if opt.compression_type in comp['active'] and opt.compress:
-                        compression_scheduler.on_epoch_end(i)
+        if opt.compression_type in comp['active'] and opt.compress:
+            compression_scheduler.on_epoch_end(i)
 
-                # print flops and params to see if it has been reduced
-                # if opt.compress:
-                #     par, flo = model_info(model, opt)
-                #     print('Before Compression:')
-                #     print('Trainiable Parameters:', par)
-                #     print('FLOPs:', flo)
+    # print flops and params to see if it has been reduced
+    # if opt.compress:
+    #     par, flo = model_info(model, opt)
+    #     print('Before Compression:')
+    #     print('Trainiable Parameters:', par)
+    #     print('FLOPs:', flo)
 
-                if opt.test:
-                    spatial_transform = Compose([
-                        Scale(int(opt.sample_size / opt.scale_in_test)),
-                        CornerCrop(opt.sample_size, opt.crop_position_in_test),
-                        ToTensor(opt.norm_value), norm_method])
-                    # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-                    temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-                    target_transform = VideoID()
+    if opt.test:
+        spatial_transform = Compose([
+            Scale(int(opt.sample_size / opt.scale_in_test)),
+            CornerCrop(opt.sample_size, opt.crop_position_in_test),
+            ToTensor(opt.norm_value), norm_method])
+        # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+        temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        target_transform = VideoID()
 
-                    test_data = get_test_set(opt, spatial_transform, temporal_transform,
-                                             target_transform)
+        test_data = get_test_set(opt, spatial_transform, temporal_transform,
+                                 target_transform)
 
-                    # sample a defined portion of the testing dataset
-                    # subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
-                    # test_data = torch.utils.data.Subset(test_data, subset_ind[0])
+        # sample a defined portion of the testing dataset
+        # subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+        # test_data = torch.utils.data.Subset(test_data, subset_ind[0])
 
-                    test_loader = torch.utils.data.DataLoader(
-                        test_data,
-                        batch_size=16,
-                        shuffle=False,
-                        num_workers=opt.n_threads,
-                        pin_memory=True)
-                    test.test(test_loader, model, opt, test_data.class_names)
+        test_loader = torch.utils.data.DataLoader(
+            test_data,
+            batch_size=16,
+            shuffle=False,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        test.test(test_loader, model, opt, test_data.class_names)
 
 
 
-                from utils.eval_ucf101 import UCFclassification
-                from utils.eval_kinetics import KINETICSclassification
+    from utils.eval_ucf101 import UCFclassification
+    from utils.eval_kinetics import KINETICSclassification
 
-                opt = parse_opts()
-                if opt.root_path != '':
-                    opt.result_path = os.path.join(opt.root_path, opt.result_path)
-                    # NOTE: below used in main.py, shouldn't be needed?
-                    # opt.annotation_path = os.path.join(opt.root_path, opt.annotation_path)
+    opt = parse_opts()
+    if opt.root_path != '':
+        opt.result_path = os.path.join(opt.root_path, opt.result_path)
+        # NOTE: below used in main.py, shouldn't be needed?
+        # opt.annotation_path = os.path.join(opt.root_path, opt.annotation_path)
 
-                model_files = [f for f in os.listdir(opt.result_path) if os.path.splitext(f)[-1].lower() == '.pth']
-                new_path = []
+    model_files = [f for f in os.listdir(opt.result_path) if os.path.splitext(f)[-1].lower() == '.pth']
+    new_path = []
 
-                f = model_files[0].split('.')[0].split('_')
-                # compression type
-                new_path.append(f[2])
-                # date string
-                new_path.append(f[4])
-                path = os.path.join(opt.result_path, 'val.json')
+    f = model_files[0].split('.')[0].split('_')
+    # compression type
+    new_path.append(f[2])
+    # date string
+    new_path.append(f[4])
+    path = os.path.join(opt.result_path, 'val.json')
 
-                # DEBUG: should subset='testing' instead? - not calculating for validation set
-                if opt.dataset == 'ucf101':
-                    ucf_classification = UCFclassification(opt.annotation_path, path, subset='validation', top_k=1)
-                    ucf_classification.evaluate()
-                    a = ucf_classification.hit_at_k
+    # DEBUG: should subset='testing' instead? - not calculating for validation set
+    if opt.dataset == 'ucf101':
+        ucf_classification = UCFclassification(opt.annotation_path, path, subset='validation', top_k=1)
+        ucf_classification.evaluate()
+        a = ucf_classification.hit_at_k
 
-                    ucf_classification = UCFclassification(opt.annotation_path, path, subset='validation', top_k=5)
-                    ucf_classification.evaluate()
-                    b = ucf_classification.hit_at_k
+        ucf_classification = UCFclassification(opt.annotation_path, path, subset='validation', top_k=5)
+        ucf_classification.evaluate()
+        b = ucf_classification.hit_at_k
 
-                elif dataset == 'kinetics':
-                    kinetics_classification = KINETICSclassification(opt.annotation_path, path, subset='validation', top_k=1, check_status=False)
-                    kinetics_classification.evaluate()
-                    a = kinetics_classification.hit_at_k
+    elif dataset == 'kinetics':
+        kinetics_classification = KINETICSclassification(opt.annotation_path, path, subset='validation', top_k=1, check_status=False)
+        kinetics_classification.evaluate()
+        a = kinetics_classification.hit_at_k
 
-                    kinetics_classification = KINETICSclassification(opt.annotation_path, path, subset='validation', top_k=5, check_status=False)
-                    kinetics_classification.evaluate()
-                    b = kinetics_classification.hit_at_k
+        kinetics_classification = KINETICSclassification(opt.annotation_path, path, subset='validation', top_k=5, check_status=False)
+        kinetics_classification.evaluate()
+        b = kinetics_classification.hit_at_k
 
 
-                with open(path, "w") as text_file:
-                    text_file.write("Parameters: \n")
-                    text_file.write("Temperature: {}, Distill Weight {}, Student Weight {} \n".format(opt.kd_temp, opt.kd_distill_wt, opt.kd_student_wt))
-                    text_file.write("Top-1 Accuracy: %s \n" % a)
-                    text_file.write("Top-5 Accuracy: %s \n" % b)
+    with open(path, "w") as text_file:
+        text_file.write("Parameters: \n")
+        text_file.write("Temperature: {}, Distill Weight {}, Student Weight {} \n".format(opt.kd_temp, opt.kd_distill_wt, opt.kd_student_wt))
+        text_file.write("Top-1 Accuracy: %s \n" % a)
+        text_file.write("Top-5 Accuracy: %s \n" % b)
 
 # # use os.rename(oldfullpath, newfullpath) to move a file
 # model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(os.path.join(opt.result_path, f))]
