@@ -209,12 +209,12 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
---batch_size 16 \
+--batch_size 32 \
 --model resnet \
 --model_depth 18 \
 --learning_rate 0.1 \
 --n_val_samples 1 \
---n_epochs 5 \
+--n_epochs 1 \
 --compress \
 --compression_type kd \
 --t_model resnet \
