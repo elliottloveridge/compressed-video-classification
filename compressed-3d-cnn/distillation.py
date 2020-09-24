@@ -64,6 +64,17 @@ if __name__ == '__main__':
     # save results as a text file
     path = os.path.join(opt.result_path, 'accuracy.txt')
 
+    criterion = nn.CrossEntropyLoss()
+    if not opt.no_cuda:
+        criterion = criterion.cuda()
+
+    if opt.no_mean_norm and not opt.std_norm:
+        norm_method = Normalize([0, 0, 0], [1, 1, 1])
+    elif not opt.std_norm:
+        norm_method = Normalize(opt.mean, [1, 1, 1])
+    else:
+        norm_method = Normalize(opt.mean, opt.std)
+
     for opt.kd_temp in [5]:
         for opt.kd_distill_wt in [0.8]:
             for opt.kd_student_wt in [0.3, 0.4]:
@@ -77,17 +88,6 @@ if __name__ == '__main__':
 
                 model, parameters = generate_model(opt)
                 # print(model)
-
-                criterion = nn.CrossEntropyLoss()
-                if not opt.no_cuda:
-                    criterion = criterion.cuda()
-
-                if opt.no_mean_norm and not opt.std_norm:
-                    norm_method = Normalize([0, 0, 0], [1, 1, 1])
-                elif not opt.std_norm:
-                    norm_method = Normalize(opt.mean, [1, 1, 1])
-                else:
-                    norm_method = Normalize(opt.mean, opt.std)
 
                 if not opt.no_train:
                     assert opt.train_crop in ['random', 'corner', 'center']
