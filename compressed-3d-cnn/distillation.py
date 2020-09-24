@@ -115,9 +115,9 @@ if __name__ == '__main__':
                     training_data = get_training_set(opt, spatial_transform,
                                                      temporal_transform, target_transform)
 
-                    subset_ind = np.random.randint(0, len(training_data), size=(1, 1000))
-                    # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
-                    training_data = torch.utils.data.Subset(training_data, subset_ind[0])
+                    # subset_ind = np.random.randint(0, len(training_data), size=(1, 1000))
+                    # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+                    # training_data = torch.utils.data.Subset(training_data, subset_ind[0])
 
                     train_loader = torch.utils.data.DataLoader(
                         training_data,
@@ -157,9 +157,9 @@ if __name__ == '__main__':
                     validation_data = get_validation_set(
                         opt, spatial_transform, temporal_transform, target_transform)
 
-                    subset_ind = np.random.randint(0, len(validation_data), size=(1, 1000))
-                    # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
-                    validation_data = torch.utils.data.Subset(validation_data, subset_ind[0])
+                    # subset_ind = np.random.randint(0, len(validation_data), size=(1, 1000))
+                    # # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+                    # validation_data = torch.utils.data.Subset(validation_data, subset_ind[0])
 
                     val_loader = torch.utils.data.DataLoader(
                         validation_data,
