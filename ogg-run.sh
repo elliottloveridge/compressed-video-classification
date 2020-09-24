@@ -214,7 +214,7 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --model_depth 18 \
 --learning_rate 0.1 \
 --n_val_samples 1 \
---n_epochs 1 \
+--n_epochs 2 \
 --compress \
 --compression_type kd \
 --t_model resnet \
@@ -224,7 +224,6 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --kd_distill_wt 0.7 \
 --kd_student_wt 0.3 \
 --kd_temp 5.0 \
---no_val \
 --test
 
 

@@ -343,20 +343,20 @@ if __name__ == '__main__':
         text_file.write("Top-1 Accuracy: %s \n" % a)
         text_file.write("Top-5 Accuracy: %s \n" % b)
 
-# # use os.rename(oldfullpath, newfullpath) to move a file
-# model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(os.path.join(opt.result_path, f))]
-#
-# # NOTE: add an 'if folder exists then add a _0 or _1 etc' loop
-#
-# # test if compression/date directories exists
-# # FIXME: assumes compression directory already exists but want to change this!
-# if not os.path.exists(os.path.join(opt.result_path, new_path[0])):
-#     os.mkdir(os.path.join(opt.result_path, new_path[0]))
-# if not os.path.exists(os.path.join(opt.result_path, *new_path)):
-#     os.mkdir(os.path.join(opt.result_path, *new_path))
-#
-# # move all files
-# for f in model_files:
-#     # ignore hidden files
-#     if not f.startswith('.'):
-#         os.rename(os.path.join(opt.result_path, f), os.path.join(opt.result_path, *new_path, f))
+# use os.rename(oldfullpath, newfullpath) to move a file
+model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(os.path.join(opt.result_path, f))]
+
+# NOTE: add an 'if folder exists then add a _0 or _1 etc' loop
+
+# test if compression/date directories exists
+# FIXME: assumes compression directory already exists but want to change this!
+if not os.path.exists(os.path.join(opt.result_path, new_path[0])):
+    os.mkdir(os.path.join(opt.result_path, new_path[0]))
+if not os.path.exists(os.path.join(opt.result_path, *new_path)):
+    os.mkdir(os.path.join(opt.result_path, *new_path))
+
+# move all files
+for f in model_files:
+    # ignore hidden files
+    if not f.startswith('.'):
+        os.rename(os.path.join(opt.result_path, f), os.path.join(opt.result_path, *new_path, f))
