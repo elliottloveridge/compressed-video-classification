@@ -156,6 +156,11 @@ if __name__ == '__main__':
                     target_transform = ClassLabel()
                     validation_data = get_validation_set(
                         opt, spatial_transform, temporal_transform, target_transform)
+
+                    subset_ind = np.random.randint(0, len(validation_data), size=(1, 1000))
+                    # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+                    validation_data = torch.utils.data.Subset(validation_data, subset_ind[0])
+
                     val_loader = torch.utils.data.DataLoader(
                         validation_data,
                         batch_size=16,
