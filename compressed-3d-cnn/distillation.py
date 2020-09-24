@@ -297,8 +297,8 @@ if __name__ == '__main__':
 
 
 
-                from eval_ucf101 import UCFclassification
-                from eval_kinetics import KINETICSclassification
+                from utils.eval_ucf101 import UCFclassification
+                from utils.eval_kinetics import KINETICSclassification
 
                 opt = parse_opts()
                 if opt.root_path != '':
