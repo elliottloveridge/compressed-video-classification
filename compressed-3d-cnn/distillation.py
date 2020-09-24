@@ -343,6 +343,11 @@ if __name__ == '__main__':
         text_file.write("Top-1 Accuracy: %s \n" % a)
         text_file.write("Top-5 Accuracy: %s \n" % b)
 
+    print("Parameters: \n")
+    print("Temperature: {}, Distill Weight {}, Student Weight {} \n".format(opt.kd_temp, opt.kd_distill_wt, opt.kd_student_wt))
+    print("Top-1 Accuracy: %s \n" % a)
+    print("Top-5 Accuracy: %s \n" % b)
+
 # use os.rename(oldfullpath, newfullpath) to move a file
 model_files = [f for f in os.listdir(opt.result_path) if os.path.isfile(os.path.join(opt.result_path, f))]
 
