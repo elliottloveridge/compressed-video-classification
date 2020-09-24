@@ -223,7 +223,7 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --t_n_classes 101 \
 --kd_distill_wt 0.6 \
 --kd_student_wt 0.4 \
---kd_temp 3.0 \
+--kd_temp 7.0 \
 --test
 
 
