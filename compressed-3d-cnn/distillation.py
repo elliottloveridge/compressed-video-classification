@@ -115,6 +115,10 @@ if __name__ == '__main__':
                     training_data = get_training_set(opt, spatial_transform,
                                                      temporal_transform, target_transform)
 
+                    subset_ind = np.random.randint(0, len(training_data), size=(1, 1000))
+                    # NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
+                    training_data = torch.utils.data.Subset(training_data, subset_ind[0])
+
                     train_loader = torch.utils.data.DataLoader(
                         training_data,
                         batch_size=opt.batch_size,
@@ -278,6 +282,11 @@ if __name__ == '__main__':
 
                     test_data = get_test_set(opt, spatial_transform, temporal_transform,
                                              target_transform)
+
+                    # sample a defined portion of the testing dataset
+                    subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+                    test_data = torch.utils.data.Subset(test_data, subset_ind[0])
+
                     test_loader = torch.utils.data.DataLoader(
                         test_data,
                         batch_size=16,
