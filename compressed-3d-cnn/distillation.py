@@ -289,8 +289,8 @@ if __name__ == '__main__':
                                              target_transform)
 
                     # sample a defined portion of the testing dataset
-                    subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
-                    test_data = torch.utils.data.Subset(test_data, subset_ind[0])
+                    # subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+                    # test_data = torch.utils.data.Subset(test_data, subset_ind[0])
 
                     test_loader = torch.utils.data.DataLoader(
                         test_data,
