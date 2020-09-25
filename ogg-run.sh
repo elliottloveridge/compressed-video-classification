@@ -203,18 +203,18 @@
 
 # ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
 # NOTE: t_n_classes set as 101 as using fine-tuned teacher model
-python /app/compressed-3d-cnn/distillation.py --root_path /data \
+python /app/compressed-3d-cnn/main.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
 --batch_size 32 \
---model resnet \
---model_depth 18 \
+--model csn \
+--model_depth 50 \
 --learning_rate 0.01 \
 --n_val_samples 1 \
---n_epochs 5 \
+--n_epochs 20 \
 --compress \
 --compression_type kd \
 --t_model resnet \
@@ -224,6 +224,7 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --kd_distill_wt 0.7 \
 --kd_student_wt 0.3 \
 --kd_temp 3.0 \
+--checkpoint 5 \
 --test
 
 
