@@ -221,9 +221,9 @@ python /app/compressed-3d-cnn/distillation.py --root_path /data \
 --t_model_depth 101 \
 --t_path /data/results/benchmark/1209/ucf101_resnet_benchmark_20epochs_1209_best.pth \
 --t_n_classes 101 \
---kd_distill_wt 0.6 \
---kd_student_wt 0.4 \
---kd_temp 7.0 \
+--kd_distill_wt 0.8 \
+--kd_student_wt 0.2 \
+--kd_temp 3.0 \
 --test
 
 
