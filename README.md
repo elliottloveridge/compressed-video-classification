@@ -15,7 +15,6 @@ PyTorch Implementation of Elliott Loveridge's master's thesis, including code fo
 
 ## Pre-trained models
 
-## FIXME: add link to pre-trained models
 Pre-trained models can be downloaded from a Google Drive [here](https://drive.google.com/drive/folders/1k93wkBQSZYpBSM1sTqwD3RzU9t7dahcr?usp=sharing).
 
 Tested models:
@@ -82,7 +81,7 @@ Model configurations are given as follows:
 ResNet-18	 : --model resnet  --model_depth 18  --resnet_shortcut A
 ResNet-50	 : --model resnet  --model_depth 50  --resnet_shortcut B
 ResNet-101	 : --model resnet  --model_depth 101 --resnet_shortcut B
-MobileNetV2-1.0x  : --model mobilenetv2  --width_mult 1.0 
+MobileNetV2-1.0x  : --model mobilenetv2  --width_mult 1.0
 CSN-50  : --model csn --model_depth 50
 ```
 
