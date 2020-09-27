@@ -9,12 +9,13 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
---batch_size 32  \
+--batch_size 64  \
 --model mobilenetv2 \
 --width_mult 1.0 \
 --learning_rate 0.1 \
 --n_val_samples 1 \
---n_epochs 20 \
+--n_epochs 50 \
+--checkpoint 10
 --test
 
 ## benchmark - csn
@@ -63,7 +64,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 # --result_path results
 
 
-## fine-tuning (pre-trained)
+## fine-tuning & transfer learning (pre-trained kinetics-600)
 
 # # ucf101-mobilenetv2 (inc. testing) - 20 epochs, 0.01 learning rate, 5 checkpoint, kinetics pre-train
 # python /app/compressed-3d-cnn/main.py --root_path /data \
