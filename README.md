@@ -16,7 +16,7 @@ PyTorch Implementation of Elliott Loveridge's master's thesis, including code fo
 ## Pre-trained models
 
 ## FIXME: add link to pre-trained models
-Pre-trained models can be downloaded from a Google Drive [here]().
+Pre-trained models can be downloaded from a Google Drive [here](https://drive.google.com/drive/folders/1k93wkBQSZYpBSM1sTqwD3RzU9t7dahcr?usp=sharing).
 
 Tested models:
  - 3D MobileNetv2
