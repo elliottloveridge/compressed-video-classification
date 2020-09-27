@@ -240,7 +240,12 @@ if __name__ == '__main__':
         # NOTE: should the model be saved here?
 
     # test for parameter reduction
-    if opt.compress and opt.compression_type == 'ep':
+    if opt.compress:
+
+        # FIXME: this may not be working
+        prms, flps = model_info(model, opt)
+        print("number of flops:", flps)
+
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("post-compression zero parameter count:", par)
 
