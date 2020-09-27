@@ -26,7 +26,7 @@ from thop import profile
 # model = resnet.resnet18( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet50( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
-model = csn.csn50(num_classes=600, sample_size=112, sample_duration=16)
+# model = csn.csn50(num_classes=600, sample_size=112, sample_duration=16)
 
 def model_info(model, opt):
 
@@ -46,9 +46,9 @@ def model_info(model, opt):
 # model = model.cuda()
 # model = nn.DataParallel(model, device_ids=None)
 # print(model)
-
-pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-print("Total number of trainable parameters: ", pytorch_total_params)
-
-flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
-print("Total number of FLOPs: ", flops)
+#
+# pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+# print("Total number of trainable parameters: ", pytorch_total_params)
+#
+# flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+# print("Total number of FLOPs: ", flops)
