@@ -1,166 +1,142 @@
 # University of Bath Research Project
 
-### Methods of Deep Model Compression for Video Classification
+## Methods of Deep Model Compression for Video Classification
 
-PyTorch Implementation of the Elliott Loveridge's master's thesis, including code for video classification and model compression.
+PyTorch Implementation of Elliott Loveridge's master's thesis, including code for video classification and model compression.
 
-### Requirements
+## Requirements
 
-- Python 3
-- PyTorch 1.0.1.post2
-- FFmpeg, FFprobe
-- Distiller
+* [PyTorch 1.0.1.post2](http://pytorch.org/)
+* OpenCV
+* FFmpeg, FFprobe
+* Python 3
+* Distiller
+* Docker
 
-### Pretrained Models
+## Pre-trained models
 
-All pretrained models can be downloaded from here
+## FIXME: add link to pre-trained models
+Pre-trained models can be downloaded from a Google Drive [here](https://drive.google.com/drive/folders/1k93wkBQSZYpBSM1sTqwD3RzU9t7dahcr?usp=sharing).
 
-Implemented models:
+Tested models:
+ - 3D MobileNetv2
+ - 3D ResNet
+ - 3D CSN
 
-3D SqueezeNet
-3D MobileNet
-3D ShuffleNet
-3D MobileNetv2
-3D ShuffleNetv2
-For state-of-the-art comparison, the following models are also evaluated:
+ MobileNetV2's complexity may be adjusted via a 'width_multiplier' arg, with 'model_depth' choices possible for both ResNet and CSN.
 
-ResNet-18
-ResNet-50
-ResNet-101
-ResNext-101
-All models (except for SqueezeNet) are evaluated for 4 different complexity levels by adjusting their 'width_multiplier' with 2 different hardware platforms.
+## Dataset Preparation
 
-Results
+### UCF101
 
-Results of Efficient 3DCNNs
+If using Bath University's OGG, data has been saved in the following dir:
+```misc
+/mnt/slow0/ucf101/data/
+```
 
-Dataset Preparation
+* Download videos and train/test splits [here](http://crcv.ucf.edu/data/UCF101.php).
+* Convert from avi to jpg files using ```utils/video_jpg_ucf101_hmdb51.py```
 
-Kinetics
-
-Download videos using the official crawler.
-
-Locate test set in video_directory/test.
-Different from the other datasets, we did not extract frames from the videos. Insted, we read the frames directly from videos using OpenCV throughout the training. If you want to extract the frames for Kinetics dataset, please follow the preperation steps in Kensho Hara's codebase. You also need to modify the kinetics.py file in the datasets folder.
-
-Generate annotation file in json format similar to ActivityNet using utils/kinetics_json.py
-
-The CSV files (kinetics_{train, val, test}.csv) are included in the crawler.
-python utils/kinetics_json.py train_csv_path val_csv_path video_dataset_path dst_json_path
-Jester
-
-Download videos here.
-Generate n_frames files using utils/n_frames_jester.py
-python utils/n_frames_jester.py dataset_directory
-Generate annotation file in json format similar to ActivityNet using utils/jester_json.py
-annotation_dir_path includes classInd.txt, trainlist.txt, vallist.txt
-python utils/jester_json.py annotation_dir_path
-UCF-101
-
-Download videos and train/test splits here.
-Convert from avi to jpg files using utils/video_jpg_ucf101_hmdb51.py
+```bash
 python utils/video_jpg_ucf101_hmdb51.py avi_video_directory jpg_video_directory
-Generate n_frames files using utils/n_frames_ucf101_hmdb51.py
+```
+
+* Generate n_frames files using ```utils/n_frames_ucf101_hmdb51.py```
+
+```bash
 python utils/n_frames_ucf101_hmdb51.py jpg_video_directory
-Generate annotation file in json format similar to ActivityNet using utils/ucf101_json.py
-annotation_dir_path includes classInd.txt, trainlist0{1, 2, 3}.txt, testlist0{1, 2, 3}.txt
+```
+
+* Generate annotation file in json format similar to ActivityNet using ```utils/ucf101_json.py```
+  * ```annotation_dir_path``` includes classInd.txt, trainlist0{1, 2, 3}.txt, testlist0{1, 2, 3}.txt
+
+```bash
 python utils/ucf101_json.py annotation_dir_path
-Running the code
+```
+
+All experiments use annotation file 1, saved within this repo.
+
+### Dataset Dir
+
+Data is assumed to be stored under the following schema:
+```misc
+/data/
+    ucf101-videos/
+        jpg/
+            'ucf101-class'/
+    results/
+        benchmark/
+            DDMM/
+```
+
+## Docker
+
+This project was maintained within Docker to ensure the correct installation of Distiller and other relevant packages. If running this code on Bath University's OGG Service, reference the relevant Docker image via the below examples of running a test. The Dockerfile has been provided should you wish to create a similar image.
+
+## Running the code
 
 Model configurations are given as follows:
 
-ShuffleNetV1-1.0x : --model shufflenet   --width_mult 1.0 --groups 3
-ShuffleNetV2-1.0x : --model shufflenetv2 --width_mult 1.0
-MobileNetV1-1.0x  : --model mobilenet    --width_mult 1.0
-MobileNetV2-1.0x  : --model mobilenetv2  --width_mult 1.0 
-SqueezeNet      : --model squeezenet --version 1.1
-ResNet-18      : --model resnet  --model_depth 18  --resnet_shortcut A
-ResNet-50      : --model resnet  --model_depth 50  --resnet_shortcut B
-ResNet-101      : --model resnet  --model_depth 101 --resnet_shortcut B
-ResNeXt-101      : --model resnext --model_depth 101 --resnet_shortcut B --resnext_cardinality 32
-Please check all the 'Resource efficient 3D CNN models' in models folder and run the code by providing the necessary parameters. An example run is given as follows:
+```misc
 
-Training from scratch:
-python main.py --root_path ~/ \
-    --video_path ~/datasets/jester \
-    --annotation_path Efficient-3DCNNs/annotation_Jester/jester.json \
-    --result_path Efficient-3DCNNs/results \
-    --dataset jester \
-    --n_classes 27 \
-    --model mobilenet \
-    --width_mult 0.5 \
-    --train_crop random \
-    --learning_rate 0.1 \
-    --sample_duration 16 \
-    --downsample 2 \
-    --batch_size 64 \
-    --n_threads 16 \
-    --checkpoint 1 \
-    --n_val_samples 1 \
-Resuming training from a checkpoint:
-python main.py --root_path ~/ \
-    --video_path ~/datasets/jester \
-    --annotation_path Efficient-3DCNNs/annotation_Jester/jester.json \
-    --result_path Efficient-3DCNNs/results \
-    --resume_path Efficient-3DCNNs/results/jester_shufflenet_0.5x_G3_RGB_16_best.pth \
-    --dataset jester \
-    --n_classes 27 \
-    --model shufflenet \
-    --groups 3 \
-    --width_mult 0.5 \
-    --train_crop random \
-    --learning_rate 0.1 \
-    --sample_duration 16 \
-    --downsample 2 \
-    --batch_size 64 \
-    --n_threads 16 \
-    --checkpoint 1 \
-    --n_val_samples 1 \
-Training from a pretrained model. Use '--ft_portion' and select 'complete' or 'last_layer' for the fine tuning:
-python main.py --root_path ~/ \
-    --video_path ~/datasets/jester \
-    --annotation_path Efficient-3DCNNs/annotation_UCF101/ucf101_01.json \
-    --result_path Efficient-3DCNNs/results \
-    --pretrain_path Efficient-3DCNNs/results/kinetics_shufflenet_0.5x_G3_RGB_16_best.pth \
+ResNet-18	 : --model resnet  --model_depth 18  --resnet_shortcut A
+ResNet-50	 : --model resnet  --model_depth 50  --resnet_shortcut B
+ResNet-101	 : --model resnet  --model_depth 101 --resnet_shortcut B
+MobileNetV2-1.0x  : --model mobilenetv2  --width_mult 1.0 
+CSN-50  : --model csn --model_depth 50
+```
+
+Example code runs are saved in ogg-run.py, and it is assumed this is. Make sure to specify all parameters required for a given run.
+
+An example run is given as follows:
+
+- Docker Code:
+```bash
+docker run --rm --ipc=host --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -v "$(pwd)":/app -v "/mnt/slow0/ucf101/data":/data elliottloveridge/distiller /app/ogg-run.sh
+```
+
+* NVIDIA_VISIBLE_DEVICES defines which available GPU to use
+
+Then, ogg-run.py contains the following examples;
+
+- Training from scratch:
+```bash
+python /app/compressed-3d-cnn/main.py --root_path /data \
+    --video_path ucf101_videos/jpg/ \
+    --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+    --result_path results \
     --dataset ucf101 \
-    --n_classes 600 \
-    --n_finetune_classes 101 \
-    --ft_portion last_layer \
-    --model shufflenet \
-    --groups 3 \
-    --width_mult 0.5 \
-    --train_crop random \
+    --n_classes 101 \
+    --batch_size 32  \
+    --model mobilenetv2 \
+    --width_mult 1.0 \
     --learning_rate 0.1 \
-    --sample_duration 16 \
-    --downsample 1 \
-    --batch_size 64 \
-    --n_threads 16 \
-    --checkpoint 1 \
     --n_val_samples 1 \
-Augmentations
+    --n_epochs 20 \
+    --test
+```
+
+- Evaluation:
+```bash
+python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+    --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+    --dataset ucf101 \
+    --result_path results
+```
+
+* Evaluation will create a folder for MMYY and store it within the relevant sub-folder ('benchmark' for the above example)
+
+* Example runs for model-compression methods are saved within ogg-run.py
+
+### Augmentations
 
 There are several augmentation techniques available. Please check spatial_transforms.py and temporal_transforms.py for the details of the augmentation methods.
 
-Note: Do not use "RandomHorizontalFlip" for trainings of Jester dataset, as it alters the class type of some classes (e.g. Swipe_Left --> RandomHorizontalFlip() --> Swipe_Right)
+Note: "RandomHorizontalFlip" and "RandomCrop" were used for training of UCF101
 
-Calculating Video Accuracy
+### Calculating Video Accuracy
 
-In order to calculate viceo accuracy, you should first run the models with '--test' mode in order to create 'val.json'. Then, you need to run 'video_accuracy.py' in utils folder to calculate video accuracies.
+In order to calculate viceo accuracy, you should first run the models with '--test' mode in order to create 'val.json'. Then, you need to run the evaluation script, given as an example above
 
-Calculating FLOPs
-
-In order to calculate FLOPs, run the file 'calculate_FLOP.py'. You need to fist uncomment the desired model in the file.
-
-Citation
-
-Please cite the following article if you use this code or pre-trained models:
-
-@article{kopuklu2019resource,
-  title={Resource Efficient 3D Convolutional Neural Networks},
-  author={K{\"o}p{\"u}kl{\"u}, Okan and Kose, Neslihan and Gunduz, Ahmet and Rigoll, Gerhard},
-  journal={arXiv preprint arXiv:1904.02422},
-  year={2019}
-}
-Acknowledgement
-
-We thank Kensho Hara for releasing his codebase, which we build our work on top.
+## Acknowledgement
+I'd like to thank both Kensho Hara for releasing his [codebase](https://github.com/kenshohara/3D-ResNets-PyTorch), the people who [extended](https://github.com/okankop/Efficient-3DCNNs) this work, and the team working on [Distiller](https://github.com/NervanaSystems/distiller) who allowed for model compression to be implemented.
