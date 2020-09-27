@@ -42,7 +42,7 @@ def model_info(model, opt):
 
 
 # model = resnet.get_model( num_classes=600, sample_size=112, sample_duration=16)
-model = model.cuda()
+# model = model.cuda()
 # model = nn.DataParallel(model, device_ids=None)
 # print(model)
 
