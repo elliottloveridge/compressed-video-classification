@@ -17,7 +17,6 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --n_epochs 20 \
 --test
 
-
 ## benchmark - csn
 
 # # ucf101-csn (inc. testing) - 50 epochs, 50 depth, 0.1 learning rate, 10 checkpoint
