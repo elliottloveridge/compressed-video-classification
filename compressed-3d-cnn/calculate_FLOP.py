@@ -3,7 +3,7 @@ from thop import profile
 # from opts import parse_opts
 # from models import *
 
-from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnext, resnet
+from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnext, resnet, csn
 
 # model = shufflenet.get_model(groups=3, width_mult=0.5, num_classes=600)#1
 # model = shufflenetv2.get_model( width_mult=0.25, num_classes=600, sample_size = 112)#2
@@ -42,9 +42,9 @@ def model_info(model, opt):
 
 
 # model = resnet.get_model( num_classes=600, sample_size=112, sample_duration=16)
-model.cuda()
+model = model.cuda()
 # model = nn.DataParallel(model, device_ids=None)
-print(model)
+# print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 print("Total number of trainable parameters: ", pytorch_total_params)
