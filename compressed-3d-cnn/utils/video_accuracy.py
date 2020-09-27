@@ -55,7 +55,7 @@ elif dataset == 'kinetics':
 # save results as a text file
 path = os.path.join(opt.result_path, 'accuracy.txt')
 with open(path, "w") as text_file:
-    text_file.write("Top-1 Accuracy: %s /n" % a)
+    text_file.write("Top-1 Accuracy: %s\n" % a)
     text_file.write("Top-5 Accuracy: %s" % b)
 
 # use os.rename(oldfullpath, newfullpath) to move a file
