@@ -1,8 +1,5 @@
 #! /bin/bash
 
-# flops/params
-python /app/compressed-3d-cnn/calculate_FLOP.py
-
 ## benchmark - mobilenetv2
 
 # # ucf101-mobilnetv2 (inc. testing) - 2 epochs, 0.1 learning rate, no checkpoint
@@ -60,11 +57,11 @@ python /app/compressed-3d-cnn/calculate_FLOP.py
 
 ## evaluation
 
-# # ucf101 evaluation (after testing)
-# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
-# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-# --dataset ucf101 \
-# --result_path results
+# ucf101 evaluation (after testing)
+python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--dataset ucf101 \
+--result_path results
 
 
 ## fine-tuning (pre-trained)
@@ -216,17 +213,17 @@ python /app/compressed-3d-cnn/calculate_FLOP.py
 # --model_depth 18 \
 # --learning_rate 0.1 \
 # --n_val_samples 1 \
-# --n_epochs 20 \
+# --n_epochs 2 \
 # --compress \
 # --compression_type kd \
 # --t_model resnet \
 # --t_model_depth 101 \
 # --t_path /data/results/benchmark/1209/ucf101_resnet_benchmark_20epochs_1209_best.pth \
-# --t_n_classes 101 \
+# --t_n_classes 600 \
 # --kd_distill_wt 0.7 \
 # --kd_student_wt 0.3 \
 # --kd_temp 5.0 \
-# --checkpoint 5 \
+# --checkpoint 2 \
 # --test
 
 
