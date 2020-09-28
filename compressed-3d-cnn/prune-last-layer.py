@@ -178,7 +178,7 @@ if __name__ == '__main__':
                 scheduler = distiller.CompressionScheduler(model)
                 # FIXME: this may not prune properly
                 print(opt.begin_epoch)
-                scheduler.add_policy(policy, epochs=[opt.begin_epoch])
+                scheduler.add_policy(policy, epochs=[0])
 
                 # Compute the pruning mask per the pruner and apply the mask on the weights
                 scheduler.on_epoch_begin(0)
