@@ -64,8 +64,10 @@ name_ = []
 module_ = []
 
 for name, module in model.named_modules():
-    name_.append(name)
-    module_.append(module)
+
+    if len(module._modules) == 0:
+        name_.append(name)
+        module_.append(module.__class__.__name__)
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
