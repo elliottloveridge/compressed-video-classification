@@ -62,9 +62,10 @@ if opt.resume_path:
 
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='modules')
-# df.to_csv(opt.result_path + 'model-summary.csv')
-print(df)
 
-# par, flo = model_info(model, opt)
-# print('Trainiable Parameters:', par)
-# print('FLOPs:', flo)
+f = opt.arch
+if opt.arch in ['resnet', 'csn']:
+    name += str(opt.model_depth)
+name += '.csv'
+
+df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', name))
