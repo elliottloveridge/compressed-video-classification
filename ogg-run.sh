@@ -286,7 +286,6 @@ python /app/compressed-3d-cnn/prune-last-layer.py --root_path /data \
   --learning_rate 0.01 \
   --n_val_samples 1 \
   --n_epochs 2 \
-  --compress \
   --compression_type ep-test \
   --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
   --ft_portion last_layer \
