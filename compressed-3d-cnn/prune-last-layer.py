@@ -175,7 +175,7 @@ if __name__ == '__main__':
                 sparsity_level = {param_name: sparsity}
                 pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_level)
                 policy = distiller.PruningPolicy(pruner, pruner_args=None)
-                scheduler = CompressionScheduler(model)
+                scheduler = distiller.CompressionScheduler(model)
                 # FIXME: this may not prune properly
                 print(opt.begin_epoch)
                 scheduler.add_policy(policy, epochs=[opt.begin_epoch])
@@ -240,7 +240,10 @@ if __name__ == '__main__':
     ('module.features.17.conv.6.weight', 0.2),
     ('module.features.18.0.weight', 0.2)]
 
-
+    print('pruning model')
+    model = init_pruning(model, params, group='element', compression_scheduler)
+    par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+    print("post-compression zero parameter count:", par)
 
     # %% end of pruning test
 
@@ -255,12 +258,6 @@ if __name__ == '__main__':
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat', 'ep']:
                 compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-            if opt.compression_type == 'ep-test':
-                ('pruning model')
-                model = init_pruning(model, params, group='element')
-                par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-                print("post-compression zero parameter count:", par)
-
             # get initial sparsity sum as a test for pruning
             if opt.compression_type == 'ep':
                 par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
