@@ -7,4 +7,4 @@ with open(path, newline='') as f:
     df = df[df['Type']=='Conv3d']
 
 for index, row in df.iterrows():
-    print((reader['Name'], reader['Sparsity']))
+    print((df['Name'], df['Sparsity']))
