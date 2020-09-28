@@ -60,10 +60,14 @@ if opt.resume_path:
     opt.begin_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
 
-df = pd.DataFrame(columns=['Name', 'Type'])
+name_ = []
+module_ = []
 
 for name, module in model.named_modules():
-    df = df.append(pd.DataFrame({'Name': name, 'Module': module}, index=[0]), ignore_index=True)
+    name_.append(name)
+    module_.append(module)
+
+df = pd.DataFrame({'Name': name_, 'Type': module_})
 
 print(df)
 
