@@ -240,10 +240,7 @@ if __name__ == '__main__':
     ('module.features.17.conv.6.weight', 0.2),
     ('module.features.18.0.weight', 0.2)]
 
-    ('pruning model')
-    model = init_pruning(model, params, group='element')
-    par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-    print("post-compression zero parameter count:", par)
+
 
     # %% end of pruning test
 
@@ -254,10 +251,15 @@ if __name__ == '__main__':
             # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
             print('add stats file here')
 
-        if opt.compress and opt.compression_type in ['qat', 'ep', 'kd']:
+        if opt.compress and opt.compression_type in ['qat', 'ep', 'kd', 'ep-test']:
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat', 'ep']:
                 compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+            if opt.comperssion_type == 'ep-test':
+                ('pruning model')
+                model = init_pruning(model, params, group='element')
+                par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+                print("post-compression zero parameter count:", par)
 
             # get initial sparsity sum as a test for pruning
             if opt.compression_type == 'ep':
