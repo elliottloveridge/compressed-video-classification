@@ -28,7 +28,7 @@ import test
 from calculate_FLOP import model_info
 
 # FIXME: new import
-from new-prune import init_pruning
+# from new-prune import init_pruning
 
 
 if __name__ == '__main__':
@@ -157,6 +157,34 @@ if __name__ == '__main__':
         model.load_state_dict(checkpoint['state_dict'])
 
     # %% start of pruning test
+
+    def init_pruning(model, net_params, group):
+        """perform pruning before fine-tuning on a given pre-trained model
+        """
+
+        if group not in ['element']:
+            raise ValueError("group parameter contains an illegal value: {}".format(group))
+
+        for param_name, sparsity in net_params:
+            if model.state_dict()[param_name].dim() not in [2,5]:
+                continue
+
+            if group == 'element':
+                sparsity = float(sparsity)
+                # element-wise sparsity pruning
+                sparsity_level = {param_name: sparsity}
+                pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_level)
+                policy = distiller.PruningPolicy(pruner, pruner_args=None)
+                scheduler = CompressionScheduler(model)
+                # FIXME: this may not prune properly
+                print(opt.begin_epoch)
+                scheduler.add_policy(policy, epochs=[opt.begin_epoch])
+
+                # Compute the pruning mask per the pruner and apply the mask on the weights
+                scheduler.on_epoch_begin(0)
+                scheduler.mask_all_weights()
+
+        return model
 
     params = [('module.features.0.0.weight', 0.2),
     ('module.features.0.0.weight', 0.2),
