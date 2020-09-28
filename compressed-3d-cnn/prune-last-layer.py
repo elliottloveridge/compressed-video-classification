@@ -255,7 +255,7 @@ if __name__ == '__main__':
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat', 'ep']:
                 compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-            if opt.comperssion_type == 'ep-test':
+            if opt.compression_type == 'ep-test':
                 ('pruning model')
                 model = init_pruning(model, params, group='element')
                 par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
