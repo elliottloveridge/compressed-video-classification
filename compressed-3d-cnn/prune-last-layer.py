@@ -239,7 +239,7 @@ if __name__ == '__main__':
     ('module.features.18.0.weight', 0.2)]
 
     print('pruning model')
-    model = Pruner.init_pruning(model, params, group='element')
+    model = Pruner.init_pruning(model, params)
     par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
     print("post-compression zero parameter count:", par)
 
