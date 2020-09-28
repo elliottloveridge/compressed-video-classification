@@ -65,7 +65,7 @@ df = distiller.model_summary(model, what='modules')
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
-    name += str(opt.model_depth)
-name += '.csv'
+    f += str(opt.model_depth)
+f += '.csv'
 
 df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', name))
