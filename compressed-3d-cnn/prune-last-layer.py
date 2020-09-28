@@ -240,11 +240,10 @@ if __name__ == '__main__':
     ('module.features.17.conv.6.weight', 0.2),
     ('module.features.18.0.weight', 0.2)]
 
-    if opt.compression_type == 'ep-test':
-        ('pruning model')
-        model = init_pruning(model, params, group='element')
-        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("post-compression zero parameter count:", par)
+    ('pruning model')
+    model = init_pruning(model, params, group='element')
+    par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+    print("post-compression zero parameter count:", par)
 
     # %% end of pruning test
 
