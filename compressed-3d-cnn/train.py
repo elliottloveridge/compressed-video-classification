@@ -102,14 +102,3 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
         'prec5': top5.avg.item(),
         'lr': optimizer.param_groups[0]['lr']
     })
-
-    #if epoch % opt.checkpoint == 0:
-    #    save_file_path = os.path.join(opt.result_path,
-    #                                  'save_{}.pth'.format(epoch))
-    #    states = {
-    #        'epoch': epoch + 1,
-    #        'arch': opt.arch,
-    #        'state_dict': model.state_dict(),
-    #        'optimizer': optimizer.state_dict(),
-    #    }
-    #    torch.save(states, save_file_path)

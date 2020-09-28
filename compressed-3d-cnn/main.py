@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import numpy as np
+import pandas as pd
 import torch
 import distiller
 from datetime import datetime
@@ -161,15 +162,15 @@ if __name__ == '__main__':
             # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
             print('add stats file here')
 
-        if opt.compress and opt.compression_type in ['qat', 'ep', 'kd']:
+        if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
-            if opt.compression_type in ['qat', 'ep']:
+            if opt.compression_type in ['qat']:
                 compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
 
-            # get initial sparsity sum as a test for pruning
-            if opt.compression_type == 'ep':
-                par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-                print("pre-compression zero parameter count:", par)
+        # get initial sparsity sum as a test for pruning
+        if opt.compression_type == 'ep':
+            par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+            print("pre-compression zero parameter count:", par)
 
         else:
             compression_scheduler = None
@@ -202,7 +203,7 @@ if __name__ == '__main__':
 
     for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
 
-        if opt.compress and opt.compression_type in ['qat', 'ep']:
+        if opt.compress and opt.compression_type in ['qat']:
             compression_scheduler.on_epoch_begin(i)
 
         if not opt.no_train:
@@ -234,7 +235,7 @@ if __name__ == '__main__':
                 }
             save_checkpoint(state, is_best, opt)
 
-        if opt.compress and opt.compression_type in ['qat', 'ep']:
+        if opt.compress and opt.compression_type in ['qat']:
             compression_scheduler.on_epoch_end(i)
 
     if opt.compression_type == 'ptq':
@@ -244,11 +245,6 @@ if __name__ == '__main__':
 
     # test for parameter reduction
     if opt.compress:
-
-        # # FIXME: this may not be working
-        # prms, flps = model_info(model, opt)
-        # print("number of flops:", flps)
-
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("post-compression zero parameter count:", par)
 

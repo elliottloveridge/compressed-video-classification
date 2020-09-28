@@ -89,6 +89,8 @@ def parse_opts():
     parser.add_argument('--t_resnext_cardinality', default=32, type=int, help='Teacher model: ResNeXt cardinality')
     parser.add_argument('--t_groups', default=3, type=int, help='Teacher model: The number of groups at group convolutions at conv layers')
     parser.add_argument('--t_width_mult', default=1.0, type=float, help='Teacher model: The applied width multiplier to scale number of filters')
+    # pruning args
+    parser.add_argument('--summary_path', default='/app/compressed-3d-cnn/model_summary/mobilenetv2.csv', type=str, help='Path to model summary that defines sparsity on a per layer basis')
     # CSN specific args
     parser.add_argument('--model_type', default='ip', type=str, help='CSN Network type (ip | ir)')
 
