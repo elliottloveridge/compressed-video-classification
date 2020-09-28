@@ -70,7 +70,7 @@ Data is assumed to be stored under the following schema:
 
 ## Docker
 
-This project was maintained within Docker to ensure the correct installation of Distiller and other relevant packages. If running this code on Bath University's OGG Service, reference the relevant Docker image via the below examples of running a test. The Dockerfile has been provided should you wish to create a similar image.
+This project was maintained within Docker to ensure the correct installation of Distiller and other relevant packages. If running this code on Bath University's OGG Service, reference the relevant Docker image via the below examples of running a test. The Dockerfile has been provided should you wish to create a similar image yourself.
 
 ## Running the code
 
@@ -85,7 +85,7 @@ MobileNetV2-1.0x  : --model mobilenetv2  --width_mult 1.0
 CSN-50  : --model csn --model_depth 50
 ```
 
-Example code runs are saved in ogg-run.py, and it is assumed this is. Make sure to specify all parameters required for a given run.
+Example code runs are saved in ogg-run.py, and it is assumed this is used to run tests. Make sure to specify all parameters required for a given run. Also, __make sure__ the bash script is runnable - use 'chmod +x ogg-run.sh' for a script.
 
 An example run is given as follows:
 
@@ -123,9 +123,11 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
     --result_path results
 ```
 
-* Evaluation will create a folder for MMYY and store it within the relevant sub-folder ('benchmark' for the above example)
+* Evaluation will create a folder for MMYY (see __Dataset Dir__ above) and store it within the relevant sub-folder (this would be 'benchmark' for the above example)
 
-* Example runs for model-compression methods are saved within ogg-run.py
+* Example runs for model-compression methods are saved within ogg-run.py, see opts.py for all required compression arguments
+
+* The ```distiller``` folder within ```compressed-3d-cnn``` contains YAML files required by the compression scheduler
 
 ### Augmentations
 
@@ -135,7 +137,7 @@ Note: "RandomHorizontalFlip" and "RandomCrop" were used for training of UCF101
 
 ### Calculating Video Accuracy
 
-In order to calculate viceo accuracy, you should first run the models with '--test' mode in order to create 'val.json'. Then, you need to run the evaluation script, given as an example above
+In order to calculate video accuracy, you should first run the models with '--test' mode in order to create 'val.json'. Then, you need to run the evaluation script, given as an example above
 
 ## Acknowledgement
 I'd like to thank both Kensho Hara for releasing his [codebase](https://github.com/kenshohara/3D-ResNets-PyTorch), the people who [extended](https://github.com/okankop/Efficient-3DCNNs) this work, and the team working on [Distiller](https://github.com/NervanaSystems/distiller) who allowed for model compression to be implemented.
