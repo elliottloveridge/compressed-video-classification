@@ -76,8 +76,4 @@ if opt.arch in ['resnet', 'csn']:
     f += str(opt.model_depth)
 f += '.csv'
 
-print(f)
-
-print(os.path.join('/app/compressed-3d-cnn/model_summary/', f))
-
-df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f))
+df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f), index=False)
