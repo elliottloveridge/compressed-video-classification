@@ -71,7 +71,8 @@ for name, module in model.named_modules():
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-print(df)
+cwd = os.getcwd()
+print(cwd)
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
