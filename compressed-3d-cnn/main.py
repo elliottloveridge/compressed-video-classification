@@ -157,21 +157,21 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
+        if opt.compression_type == 'ep':
+            params = Pruner.get_params(opt)
+            print('pruning model')
+            model = Pruner.init_pruning(model, params)
+            par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+            print("post-compression zero parameter count:", par)
+
         if opt.compression_type == 'ptq':
+            print('add collection stats')
             # FIXME: add stats collection here
             # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
-            print('add stats file here')
-
         if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat']:
                 compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-
-        # get initial sparsity sum as a test for pruning
-        if opt.compression_type == 'ep':
-            par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-            print("pre-compression zero parameter count:", par)
-
         else:
             compression_scheduler = None
 
@@ -241,10 +241,9 @@ if __name__ == '__main__':
     if opt.compression_type == 'ptq':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=1, bits_parameters=1)
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
-        # NOTE: should the model be saved here?
 
     # test for parameter reduction
-    if opt.compress:
+    if opt.compression_type = 'ep':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("post-compression zero parameter count:", par)
 
