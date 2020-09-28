@@ -6,6 +6,7 @@
 python /app/compressed-3d-cnn/main.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--resume_path results/ucf101_mobilenetv2_benchmark_50epochs_2709_best.pth \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
@@ -14,8 +15,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --width_mult 1.0 \
 --learning_rate 0.1 \
 --n_val_samples 1 \
---n_epochs 50 \
---checkpoint 10
+--no_val \
+--no_train \
 --test
 
 ## benchmark - csn
