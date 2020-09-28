@@ -7,5 +7,5 @@ with open(path, newline='') as f:
     # data = list(reader)
 
 # print(data)
-for row in reader:
-    print(row)
+for index, row in reader.iterrows():
+    print(index, row)
