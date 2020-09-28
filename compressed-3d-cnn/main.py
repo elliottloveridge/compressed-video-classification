@@ -243,7 +243,7 @@ if __name__ == '__main__':
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
 
     # test for parameter reduction
-    if opt.compression_type = 'ep':
+    if opt.compression_type == 'ep':
         par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
         print("post-compression zero parameter count:", par)
 
