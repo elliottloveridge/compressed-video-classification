@@ -63,9 +63,9 @@ if opt.resume_path:
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='modules')
 
-df = pd.DataFrame(df)
 
-print(df)
+
+print(df['Name'])
 
 # for row in df:
 #     if
