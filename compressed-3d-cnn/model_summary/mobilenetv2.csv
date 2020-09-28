@@ -1,4 +1,4 @@
-﻿Name,Type,Prune
+﻿Name,Type,Sparsity
 module.features.0.0,Conv3d,0.2
 module.features.0.1,BatchNorm3d,0.2
 module.features.0.2,ReLU6,0.2
