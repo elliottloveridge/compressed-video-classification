@@ -179,29 +179,30 @@
 
 ## element-wise pruning
 
-# # ucf101-mobilenetv2-ep (inc. testing) - 1 epoch, 16 batch_size, 0.1 learning rate, no checkpoint
+
+# # element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
 # python /app/compressed-3d-cnn/main.py --root_path /data \
 #   --video_path ucf101_videos/jpg/ \
 #   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
 #   --result_path results \
 #   --dataset ucf101 \
 #   --n_classes 101 \
-#   --batch_size 16  \
+#   --batch_size 32  \
 #   --model mobilenetv2 \
 #   --width_mult 1.0 \
-#   --learning_rate 0.1 \
+#   --learning_rate 0.01 \
 #   --n_val_samples 1 \
-#   --n_epochs 5 \
+#   --n_epochs 1 \
 #   --compress \
 #   --compression_type ep \
-#   --compression_file /app/compressed-3d-cnn/distiller/ep-mobilenetv2-test1.yaml \
+#   --ft_portion last_layer \
+#   --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
 #   --test
 
 
 ## knowledge distillation
 
 # # ucf101-resnet-101 to resnet-18 knowledge distillation training (inc. testing)
-# # NOTE: t_n_classes set as 101 as using fine-tuned teacher model
 # python /app/compressed-3d-cnn/main.py --root_path /data \
 # --video_path ucf101_videos/jpg/ \
 # --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
@@ -230,16 +231,19 @@
 ## other
 
 
-# # distiller model summary - uses resume_path
-# python /app/compressed-3d-cnn/model-summary.py --root_path /data \
-# --video_path ucf101_videos/jpg/ \
-# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-# --result_path results \
-# --dataset ucf101 \
-# --n_classes 101 \
-# --model mobilenetv2 \
-# --width_mult 1.0 \
-# --resume_path results/fp/2908/ucf101_mobilenetv2_fp_1epochs_2908_best.pth
+# distiller model summary
+python /app/compressed-3d-cnn/model-summary.py --root_path /data \
+--video_path ucf101_videos/jpg/ \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--result_path results \
+--dataset ucf101 \
+--n_classes 101 \
+--model resnet \
+--model_depth 18 \
+--resnet_shortcut A \
+--downsample 1 \
+--width_mult 1.0 \
+--resume_path results/benchmark/1209/ucf101_resnet_benchmark_20epochs_1209_best.pth
 
 
 # # distiller pruning sensitivity analysis
@@ -255,46 +259,3 @@
 # --width_mult 1.0 \
 # --n_val_samples 1 \
 # --n_epochs 1
-
-
-# # distiller new pruning file
-# python /app/compressed-3d-cnn/new-prune.py
-
-
-# # distller pruning test only
-# python /app/compressed-3d-cnn/prune-last-layer.py --root_path /data \
-#   --video_path ucf101_videos/jpg/ \
-#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-#   --result_path results \
-#   --dataset ucf101 \
-#   --n_classes 101 \
-#   --batch_size 32  \
-#   --model mobilenetv2 \
-#   --width_mult 1.0 \
-#   --learning_rate 0.01 \
-#   --n_val_samples 1 \
-#   --n_epochs 2 \
-#   --compression_type ep-test \
-#   --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
-#   --ft_portion last_layer \
-#   --compress \
-#   --test
-
-  # element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
-  python /app/compressed-3d-cnn/main.py --root_path /data \
-    --video_path ucf101_videos/jpg/ \
-    --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-    --result_path results \
-    --dataset ucf101 \
-    --n_classes 101 \
-    --batch_size 32  \
-    --model mobilenetv2 \
-    --width_mult 1.0 \
-    --learning_rate 0.01 \
-    --n_val_samples 1 \
-    --n_epochs 1 \
-    --compress \
-    --compression_type ep \
-    --ft_portion last_layer \
-    --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
-    --test

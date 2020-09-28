@@ -60,19 +60,11 @@ if opt.resume_path:
     opt.begin_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
 
-print(model)
-
 # what = 'model' should print a simple form of the model
 df = distiller.model_summary(model, what='modules')
 # df.to_csv(opt.result_path + 'model-summary.csv')
 print(df)
 
-par, flo = model_info(model, opt)
-print('Trainiable Parameters:', par)
-print('FLOPs:', flo)
-
-# from distiller example jupyter notebooks...
-dummy_input = torch.randn(32, 3, 3, 3, 3)
-ms = distiller.model_performance_summary(model, dummy_input, 32)
-# ms.to_csv(opt.result_path + 'performance-summary.csv')
-# print(ms)
+# par, flo = model_info(model, opt)
+# print('Trainiable Parameters:', par)
+# print('FLOPs:', flo)
