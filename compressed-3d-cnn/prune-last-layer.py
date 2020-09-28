@@ -27,8 +27,7 @@ from validation import val_epoch
 import test
 from calculate_FLOP import model_info
 
-# FIXME: new import
-# from new-prune import init_pruning
+from utils.model_pruning import Pruner
 
 
 if __name__ == '__main__':
@@ -158,32 +157,32 @@ if __name__ == '__main__':
 
     # %% start of pruning test
 
-    def init_pruning(model, net_params, group):
-        """perform pruning before fine-tuning on a given pre-trained model
-        """
-
-        if group not in ['element']:
-            raise ValueError("group parameter contains an illegal value: {}".format(group))
-
-        for param_name, sparsity in net_params:
-            if model.state_dict()[param_name].dim() not in [2,5]:
-                continue
-
-            if group == 'element':
-                sparsity = float(sparsity)
-                # element-wise sparsity pruning
-                sparsity_level = {param_name: sparsity}
-                pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_level)
-                policy = distiller.PruningPolicy(pruner, pruner_args=None)
-                scheduler = distiller.CompressionScheduler(model)
-                # FIXME: this may not prune properly
-                scheduler.add_policy(policy, epochs=[0])
-
-                # Compute the pruning mask per the pruner and apply the mask on the weights
-                scheduler.on_epoch_begin(0)
-                scheduler.mask_all_weights()
-
-        return model
+    # def init_pruning(model, net_params, group):
+    #     """perform pruning before fine-tuning on a given pre-trained model
+    #     """
+    #
+    #     if group not in ['element']:
+    #         raise ValueError("group parameter contains an illegal value: {}".format(group))
+    #
+    #     for param_name, sparsity in net_params:
+    #         if model.state_dict()[param_name].dim() not in [2,5]:
+    #             continue
+    #
+    #         if group == 'element':
+    #             sparsity = float(sparsity)
+    #             # element-wise sparsity pruning
+    #             sparsity_level = {param_name: sparsity}
+    #             pruner = distiller.pruning.SparsityLevelParameterPruner(name="sensitivity", levels=sparsity_level)
+    #             policy = distiller.PruningPolicy(pruner, pruner_args=None)
+    #             scheduler = distiller.CompressionScheduler(model)
+    #             # FIXME: this may not prune properly
+    #             scheduler.add_policy(policy, epochs=[0])
+    #
+    #             # Compute the pruning mask per the pruner and apply the mask on the weights
+    #             scheduler.on_epoch_begin(0)
+    #             scheduler.mask_all_weights()
+    #
+    #     return model
 
     params = [('module.features.0.0.weight', 0.2),
     ('module.features.0.0.weight', 0.2),
@@ -240,7 +239,7 @@ if __name__ == '__main__':
     ('module.features.18.0.weight', 0.2)]
 
     print('pruning model')
-    model = init_pruning(model, params, group='element')
+    model = Pruner.init_pruning(model, params, group='element')
     par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
     print("post-compression zero parameter count:", par)
 
