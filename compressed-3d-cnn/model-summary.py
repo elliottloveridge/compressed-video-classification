@@ -71,11 +71,9 @@ for name, module in model.named_modules():
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-print(df)
+f = opt.arch
+if opt.arch in ['resnet', 'csn']:
+    f += str(opt.model_depth)
+f += '.csv'
 
-# f = opt.arch
-# if opt.arch in ['resnet', 'csn']:
-#     f += str(opt.model_depth)
-# f += '.csv'
-#
-# df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', name))
+df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f))
