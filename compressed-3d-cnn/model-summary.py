@@ -60,19 +60,13 @@ if opt.resume_path:
     opt.begin_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
 
-# what = 'model' should print a simple form of the model
-df = distiller.model_summary(model, what='modules')
+df = pd.DataFrame(data=model.named_modules(), columns=['Name', 'Type'])
 
+print(df)
 
-
-print(df['Name'])
-
-# for row in df:
-#     if
-
-f = opt.arch
-if opt.arch in ['resnet', 'csn']:
-    f += str(opt.model_depth)
-f += '.csv'
-
-df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', name))
+# f = opt.arch
+# if opt.arch in ['resnet', 'csn']:
+#     f += str(opt.model_depth)
+# f += '.csv'
+#
+# df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', name))
