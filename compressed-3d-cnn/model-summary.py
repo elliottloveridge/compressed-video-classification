@@ -65,7 +65,9 @@ module_ = []
 
 for name, module in model.named_modules():
     if len(module._modules) == 0:
-        module_.append(module.__class__.__name__)
+        # FIXME: don't want this hardcoded
+        if module.__class__.__name__ not in ['ReLU', 'MaxPool3D', 'AvgPool3d']:
+            module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
     if name[-6:] == 'weight':
@@ -78,7 +80,7 @@ print(name_)
 print()
 print(module_)
 
-# df = pd.DataFrame({'Name': name_, 'Type': module_})
+df = pd.DataFrame({'Name': name_, 'Type': module_})
 
 print('df')
 
