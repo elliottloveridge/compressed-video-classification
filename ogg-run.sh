@@ -248,7 +248,7 @@
 python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---resume_path results/benchmark/1809_1/ucf101_resnet18_benchmark_20epochs_1809_best.pth \
+--resume_path results/benchmark/1809_1/ucf101_resnet_benchmark_20epochs_1809_best.pth \
 --result_path results/sensitivity/ \
 --dataset ucf101 \
 --n_classes 101 \
