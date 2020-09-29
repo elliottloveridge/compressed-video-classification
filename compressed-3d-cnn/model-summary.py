@@ -73,6 +73,13 @@ for name, state in model.named_parameters():
     if name[-6:] == 'weight':
         name_.append(name)
 
+print(len(module_))
+print(len(name_))
+print()
+print(module_)
+print()
+print(name_)
+
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
 print(df)
