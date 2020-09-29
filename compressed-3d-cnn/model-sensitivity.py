@@ -190,11 +190,12 @@ else:
 
 
 best_prec1 = 0
+
+
 if opt.resume_path:
-    model = nn.DataParallel(model)
+    # model = nn.DataParallel(model)
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
-    # model.to(f'cuda:{model.device_ids[0]}')
     model.to(torch.device("cuda"))
     # #%%%% need to refine the below code
     #
