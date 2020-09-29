@@ -194,7 +194,7 @@ python /app/compressed-3d-cnn/multi-compress.py --root_path /data \
   --n_val_samples 1 \
   --n_epochs 1 \
   --compress \
-  --compression_type ('ep', 'kd')
+  --compression_type ('ep', 'kd') \
   --ft_portion last_layer \
   --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
   --summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv \
