@@ -253,6 +253,6 @@ python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
 --dataset ucf101 \
 --n_classes 101 \
 --batch_size 32  \
---model resnet \
+--model csn \
 --model_depth 50 \
 --summary_path /app/compressed-3d-cnn/model_summary/csn50.csv
