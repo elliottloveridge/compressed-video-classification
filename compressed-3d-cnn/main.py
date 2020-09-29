@@ -157,6 +157,9 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
+        for name, param in model.named_parameters():
+            print(name)
+
         if opt.compression_type == 'ep':
             params = Pruner.get_params(opt)
             print('pruning model')
