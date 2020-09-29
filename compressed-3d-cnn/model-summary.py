@@ -66,23 +66,16 @@ module_ = []
 for name, module in model.named_modules():
     if len(module._modules) == 0:
         # FIXME: don't want this hardcoded
-        if module.__class__.__name__ not in ['ReLU', 'MaxPool3D', 'AvgPool3d']:
+        if module.__class__.__name__ not in ['ReLU', 'MaxPool3d', 'AvgPool3d']:
             module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
     if name[-6:] == 'weight':
         name_.append(name)
 
-print(len(name_))
-print(len(module_))
-print()
-print(name_)
-print()
-print(module_)
-
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-print('df')
+print(df)
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
