@@ -81,37 +81,37 @@ def test(data_loader, model, opt, class_names):
         json.dump(test_results, f)
 
 
-    def test_eval(data_loader, model, criterion, opt, logger=None):
+def test_eval(data_loader, model, criterion, opt, logger=None):
 
-        model.eval()
+    model.eval()
 
-        loss_ls = []
-        top1_ls = []
-        top5_ls = []
+    loss_ls = []
+    top1_ls = []
+    top5_ls = []
 
-        batch_time = AverageMeter()
-        data_time = AverageMeter()
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
 
+    end_time = time.time()
+    for i, (inputs, targets) in enumerate(data_loader):
+        data_time.update(time.time() - end_time)
+        targets = targets.cuda()
+        with torch.no_grad():
+            inputs = Variable(inputs)
+            targets = Variable(targets)
+        outputs = model(inputs)
+
+        criterion = nn.CrossEntropyLoss()
+        criterion = criterion.cuda()
+
+        loss = criterion(outputs, targets)
+        prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
+
+        loss_ls.append(loss.item())
+        top1_ls.append(prec1.item())
+        top5_ls.append(prec5.item())
+
+        batch_time.update(time.time() - end_time)
         end_time = time.time()
-        for i, (inputs, targets) in enumerate(data_loader):
-            data_time.update(time.time() - end_time)
-            targets = targets.cuda()
-            with torch.no_grad():
-                inputs = Variable(inputs)
-                targets = Variable(targets)
-            outputs = model(inputs)
 
-            criterion = nn.CrossEntropyLoss()
-            criterion = criterion.cuda()
-
-            loss = criterion(outputs, targets)
-            prec1, prec5 = calculate_accuracy(outputs.data, targets.data, topk=(1,5))
-
-            loss_ls.append(loss.item())
-            top1_ls.append(prec1.item())
-            top5_ls.append(prec5.item())
-
-            batch_time.update(time.time() - end_time)
-            end_time = time.time()
-
-        return sum(top1_ls)/len(top1_ls), sum(top5_ls)/len(top5_ls), sum(loss_ls)/len(loss_ls)
+    return sum(top1_ls)/len(top1_ls), sum(top5_ls)/len(top5_ls), sum(loss_ls)/len(loss_ls)
