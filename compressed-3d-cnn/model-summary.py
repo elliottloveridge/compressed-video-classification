@@ -66,7 +66,8 @@ module_ = []
 for name, module in model.named_modules():
 
     if len(module._modules) == 0:
-        name_.append(name)
+        # append weight to name
+        name_.append(name + '.weight')
         module_.append(module.__class__.__name__)
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
