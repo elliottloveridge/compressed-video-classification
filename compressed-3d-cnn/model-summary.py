@@ -64,20 +64,24 @@ name_ = []
 module_ = []
 
 for name, module in model.named_modules():
-    module_.append(module.__class__.__name__)
+    if len(module._modules) == 0:
+        module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
     if name[-6:] == 'weight':
         name_.append(name)
 
-print(name_)
-print(module_)
+df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-# df = pd.DataFrame({'Name': name_, 'Type': module_})
+print('df')
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
     f += str(opt.model_depth)
 f += '.csv'
 
-df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f), index=False)
+f = os.path.join('/app/compressed-3d-cnn/model_summary/', f)
+
+print('saved to file:', f)
+
+df.to_csv(f, index=False)
