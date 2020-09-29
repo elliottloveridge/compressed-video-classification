@@ -61,12 +61,19 @@ if opt.resume_path:
     model.load_state_dict(checkpoint['state_dict'])
 
 name_ = []
+module_ = []
+
+for name, module in model.named_modules():
+    module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
     if name[-6:] == 'weight':
         name_.append(name)
 
-df = pd.DataFrame({'Name': name_})
+print(name_)
+print(module_)
+
+# df = pd.DataFrame({'Name': name_, 'Type': module_})
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
