@@ -238,12 +238,9 @@ python /app/compressed-3d-cnn/model-summary.py --root_path /data \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
---model resnet \
---model_depth 18 \
---resnet_shortcut A \
---downsample 1 \
+--model mobilenetv2 \
 --width_mult 1.0 \
---resume_path results/benchmark/1809_1/ucf101_resnet_benchmark_20epochs_1809_best.pth
+--resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth
 
 
 # # distiller pruning sensitivity analysis
