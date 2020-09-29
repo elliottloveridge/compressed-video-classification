@@ -239,8 +239,8 @@ python /app/compressed-3d-cnn/model-summary.py --root_path /data \
 --dataset ucf101 \
 --n_classes 101 \
 --model csn \
---model_depth 50 \
---resume_path results/benchmark/1109_1/ucf101_csn50_benchmark_50epochs_1109_best.pth
+--model_depth 50
+# --resume_path results/benchmark/1109_1/ucf101_csn50_benchmark_50epochs_1109_best.pth
 
 
 # # distiller pruning sensitivity analysis
