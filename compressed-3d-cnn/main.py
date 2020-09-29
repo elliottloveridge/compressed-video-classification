@@ -269,4 +269,4 @@ if __name__ == '__main__':
         text_file.write("Parameter Reduction Before Fine-Tune: %s\n" % par1)
         text_file.write("Parameter Reduction After Fine-Tune: %s\n" % par2)
         text_file.write("Number of Parameters After: %s\n" % post)
-        text_file.write("% Reduction in Parameters: %s %\n" % per)
+        text_file.write("Reduction in Parameters: %s \n" % per)
