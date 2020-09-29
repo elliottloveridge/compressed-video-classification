@@ -71,8 +71,7 @@ def parse_opts():
     parser.add_argument('--compression_file', default='/app/compressed-3d-cnn/distiller/', type=str, help='File path for distiller compression yaml file')
     parser.add_argument('--compress', action='store_true', help='If true, compression is performed, defined by compression_type arg')
     parser.set_defaults(compress=False)
-    parser.add_argument('--compression_type', default='', help='Compression type to perform (includes (ep|ptq|qat|kd) - if using compress_combine use a list ["ep", "kd"]')
-    parser.add_argument('--compress_combine', action='store_true', help='If true, methods of compression are combined via compression_type inputs')
+    parser.add_argument('--compression_type', default='', help='Compression type to perform (includes (ep|ptq|qat|kd) - if using multiple, use a list ["ep", "kd"]')
     # knowledge distillation args
     parser.add_argument('--t_model', default='resnet', type=str, help='Teacher model type')
     parser.add_argument('--t_path', default='/data/results/pretrain/', type=str, help='Teacher model path for knowledge distillation')
