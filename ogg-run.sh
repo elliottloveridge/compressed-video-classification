@@ -199,8 +199,8 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --compression_type ep \
   --ft_portion last_layer \
   --pretrain_path results/benchmark/1809_1/ucf101_resnet_benchmark_20epochs_1809_best.pth \
-  --summary_path /app/compressed-3d-cnn/model_summary/resnet18.csv \
-  --test
+  --summary_path /app/compressed-3d-cnn/model_summary/resnet18.csv
+  # --test
 
 
 ## knowledge distillation
