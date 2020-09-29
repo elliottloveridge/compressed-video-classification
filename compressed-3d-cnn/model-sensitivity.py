@@ -187,114 +187,7 @@ elif not opt.std_norm:
 else:
     norm_method = Normalize(opt.mean, opt.std)
 
-# FIXME: this shouldn't be hardcoded! - perform a model summary here
-# FIXME: want to do it without adding 'module.module.'
-# NOTE: only using fully connected and conv layers
-params = ['module.module.features.0.0.weight',
-# 'module.module.features.0.1.weight',
-'module.module.features.1.conv.0.weight',
-# 'module.module.features.1.conv.1.weight',
-'module.module.features.1.conv.3.weight',
-# 'module.module.features.1.conv.4.weight',
-# 'module.module.features.2.conv.0.weight',
-# 'module.module.features.2.conv.1.weight',
-# 'module.module.features.2.conv.3.weight',
-# 'module.module.features.2.conv.4.weight',
-# 'module.module.features.2.conv.6.weight',
-# 'module.module.features.2.conv.7.weight',
-# 'module.module.features.3.conv.0.weight',
-# 'module.module.features.3.conv.1.weight',
-# 'module.module.features.3.conv.3.weight',
-# 'module.module.features.3.conv.4.weight',
-# 'module.module.features.3.conv.6.weight',
-# 'module.module.features.3.conv.7.weight',
-# 'module.module.features.4.conv.0.weight',
-# 'module.module.features.4.conv.1.weight',
-# 'module.module.features.4.conv.3.weight',
-# 'module.module.features.4.conv.4.weight',
-# 'module.module.features.4.conv.6.weight',
-# 'module.module.features.4.conv.7.weight',
-# 'module.module.features.5.conv.0.weight',
-# 'module.module.features.5.conv.1.weight',
-# 'module.module.features.5.conv.3.weight',
-# 'module.module.features.5.conv.4.weight',
-# 'module.module.features.5.conv.6.weight',
-# 'module.module.features.5.conv.7.weight',
-# 'module.module.features.6.conv.0.weight',
-# 'module.module.features.6.conv.1.weight',
-# 'module.module.features.6.conv.3.weight',
-# 'module.module.features.6.conv.4.weight',
-# 'module.module.features.6.conv.6.weight',
-# 'module.module.features.6.conv.7.weight',
-# 'module.module.features.7.conv.0.weight',
-# 'module.module.features.7.conv.1.weight',
-# 'module.module.features.7.conv.3.weight',
-# 'module.module.features.7.conv.4.weight',
-# 'module.module.features.7.conv.6.weight',
-# 'module.module.features.7.conv.7.weight',
-# 'module.module.features.8.conv.0.weight',
-# 'module.module.features.8.conv.1.weight',
-# 'module.module.features.8.conv.3.weight',
-# 'module.module.features.8.conv.4.weight',
-# 'module.module.features.8.conv.6.weight',
-# 'module.module.features.8.conv.7.weight',
-# 'module.module.features.9.conv.0.weight',
-# 'module.module.features.9.conv.1.weight',
-# 'module.module.features.9.conv.3.weight',
-# 'module.module.features.9.conv.4.weight',
-# 'module.module.features.9.conv.6.weight',
-# 'module.module.features.9.conv.7.weight',
-# 'module.module.features.10.conv.0.weight',
-# 'module.module.features.10.conv.1.weight',
-# 'module.module.features.10.conv.3.weight',
-# 'module.module.features.10.conv.4.weight',
-# 'module.module.features.10.conv.6.weight',
-# 'module.module.features.10.conv.7.weight',
-# 'module.module.features.11.conv.0.weight',
-# 'module.module.features.11.conv.1.weight',
-# 'module.module.features.11.conv.3.weight',
-# 'module.module.features.11.conv.4.weight',
-# 'module.module.features.11.conv.6.weight',
-# 'module.module.features.11.conv.7.weight',
-# 'module.module.features.12.conv.0.weight',
-# 'module.module.features.12.conv.1.weight',
-# 'module.module.features.12.conv.3.weight',
-# 'module.module.features.12.conv.4.weight',
-# 'module.module.features.12.conv.6.weight',
-# 'module.module.features.12.conv.7.weight',
-# 'module.module.features.13.conv.0.weight',
-# 'module.module.features.13.conv.1.weight',
-# 'module.module.features.13.conv.3.weight',
-# 'module.module.features.13.conv.4.weight',
-# 'module.module.features.13.conv.6.weight',
-# 'module.module.features.13.conv.7.weight',
-# 'module.module.features.14.conv.0.weight',
-# 'module.module.features.14.conv.1.weight',
-# 'module.module.features.14.conv.3.weight',
-# 'module.module.features.14.conv.4.weight',
-# 'module.module.features.14.conv.6.weight',
-# 'module.module.features.14.conv.7.weight',
-# 'module.module.features.15.conv.0.weight',
-# 'module.module.features.15.conv.1.weight',
-# 'module.module.features.15.conv.3.weight',
-# 'module.module.features.15.conv.4.weight',
-# 'module.module.features.15.conv.6.weight',
-# 'module.module.features.15.conv.7.weight',
-# 'module.module.features.16.conv.0.weight',
-# 'module.module.features.16.conv.1.weight',
-# 'module.module.features.16.conv.3.weight',
-# 'module.module.features.16.conv.4.weight',
-# 'module.module.features.16.conv.6.weight',
-# 'module.module.features.16.conv.7.weight',
-# 'module.module.features.17.conv.0.weight',
-# 'module.module.features.17.conv.1.weight',
-# 'module.module.features.17.conv.3.weight',
-# 'module.module.features.17.conv.4.weight',
-# 'module.module.features.17.conv.6.weight',
-# 'module.module.features.17.conv.7.weight',
-'module.module.features.18.0.weight',
-'module.module.features.18.1.weight',
-'module.module.classifier.1.weight']
+
 
 best_prec1 = 0
 if opt.resume_path:
@@ -303,26 +196,30 @@ if opt.resume_path:
     checkpoint = torch.load(opt.resume_path)
     # model.to(f'cuda:{model.device_ids[0]}')
     model.to(torch.device("cuda"))
-    #%%%% need to refine the below code
+    # #%%%% need to refine the below code
+    #
+    # # NOTE: create new OrderedDict with additional `module.`
+    # new_state_dict = OrderedDict()
+    # for k, v in checkpoint['state_dict'].items():
+    #     # NOTE: this is hacky, remove it and get working without
+    #     name = 'module.' + k
+    #     new_state_dict[name] = v
+    #
+    # # %%%% end of refine code
 
-    # NOTE: create new OrderedDict with additional `module.`
-    new_state_dict = OrderedDict()
-    for k, v in checkpoint['state_dict'].items():
-        # NOTE: this is hacky, remove it and get working without
-        name = 'module.' + k
-        new_state_dict[name] = v
-
-    # %%%% end of refine code
+# get parameters from file
+params = Pruner.get_params(opt)
 
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
 
-    model.load_state_dict(new_state_dict)
+    # model.load_state_dict(new_state_dict)
+
+    model.load_state_dict(checkpoint['state_dict'])
 
 
 # introduce a range of sparsity values
-# sensitivities = np.arange(*args.sensitivity_range)
 sparse_rng = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
 # same as test call in main.py but includes sampling
@@ -330,45 +227,23 @@ spatial_transform = Compose([
     Scale(int(opt.sample_size / opt.scale_in_test)),
     CornerCrop(opt.sample_size, opt.crop_position_in_test),
     ToTensor(opt.norm_value), norm_method])
-# temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
 temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-# target_transform = VideoID()
 target_transform = ClassLabel()
 
 test_data = get_test_set(opt, spatial_transform, temporal_transform,
                          target_transform)
 
-# DEBUG: the size len(test_data) might be too big
-# sample a defined portion of the testing dataset
-subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
-# NOTE: removed .tolist() from subset_ind[0] as apparently not necessary
-test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 
+subset_ind = np.random.randint(0, len(test_data), size=(1, 400))
+test_subset = torch.utils.data.Subset(test_data, subset_ind[0])
 test_loader = torch.utils.data.DataLoader(
     test_subset,
-    # test_data,
     batch_size=16,
     shuffle=False,
     num_workers=opt.n_threads,
     pin_memory=True)
 
-# NOTE: is this needed?
-# criterion = nn.CrossEntropyLoss()
-# if not opt.no_cuda:
-#     criterion = criterion.cuda()
-
-# return the average losses, top1, top5 accuracies for subset of testing dataset
-# FIXME: need to use validation.py's val_epoch instead for this
 test_func = partial(test.test_eval, data_loader=test_loader, criterion=criterion, opt=opt)
-
-# test_logger = Logger(
-#     os.path.join(opt.result_path, 'test.log'),
-#     ['loss', 'prec1', 'prec5'])
-
-# test_func = test.test_eval(test_loader, model, criterion, opt)
-
-# group='filter' used to define filter pruning
-# FIXME: the 'filter' command should be editable
 
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng,
 test_func=test_func, group='element')

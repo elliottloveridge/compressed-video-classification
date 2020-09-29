@@ -197,6 +197,7 @@
 #   --compression_type ep \
 #   --ft_portion last_layer \
 #   --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+#   --summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv
 #   --test
 
 
@@ -231,28 +232,27 @@
 ## other
 
 
-# distiller model summary
-python /app/compressed-3d-cnn/model-summary.py --root_path /data \
---video_path ucf101_videos/jpg/ \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---result_path results \
---dataset ucf101 \
---n_classes 101 \
---model mobilenetv2 \
---width_mult 1.0 \
---resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth
-
-
-# # distiller pruning sensitivity analysis
-# python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
+# # distiller model summary
+# python /app/compressed-3d-cnn/model-summary.py --root_path /data \
 # --video_path ucf101_videos/jpg/ \
 # --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-# --resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth \
 # --result_path results \
 # --dataset ucf101 \
 # --n_classes 101 \
-# --batch_size 32  \
 # --model mobilenetv2 \
 # --width_mult 1.0 \
-# --n_val_samples 1 \
-# --n_epochs 1
+# --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth
+
+
+# distiller pruning sensitivity analysis
+python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
+--video_path ucf101_videos/jpg/ \
+--annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+--resume_path results/benchmark/1108/ucf101_mobilenetv2_50epochs_32batch-size_train-1108_best.pth \
+--result_path results/sensitivity/ \
+--dataset ucf101 \
+--n_classes 101 \
+--batch_size 32  \
+--model mobilenetv2 \
+--width_mult 1.0 \
+--summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv
