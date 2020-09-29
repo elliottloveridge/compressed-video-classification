@@ -27,7 +27,7 @@ module.layer3.1.conv2.weight,Conv3d,0.8
 module.layer3.1.bn2.weight,BatchNorm3d,0.8
 module.layer4.0.conv1.weight,Conv3d,0.8
 module.layer4.0.bn1.weight,BatchNorm3d,0.8
-module.layer4.0.conv2.weight,Conv3d
+module.layer4.0.conv2.weight,Conv3d,0.8
 module.layer4.0.bn2.weight,BatchNorm3d,0.8
 module.layer4.1.conv1.weight,Conv3d,0.8
 module.layer4.1.bn1.weight,BatchNorm3d,0.8
