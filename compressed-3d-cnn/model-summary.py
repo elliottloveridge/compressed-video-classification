@@ -72,6 +72,8 @@ for name, module in model.named_modules():
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
+print(model.state_dict())
+
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
     f += str(opt.model_depth)
