@@ -207,9 +207,6 @@ if opt.resume_path:
     #
     # # %%%% end of refine code
 
-# get parameters from file
-params = Pruner.get_params(opt)
-
     assert opt.arch == checkpoint['arch']
     best_prec1 = checkpoint['best_prec1']
     opt.begin_epoch = checkpoint['epoch']
@@ -218,6 +215,8 @@ params = Pruner.get_params(opt)
 
     model.load_state_dict(checkpoint['state_dict'])
 
+# get parameters from file
+params = Pruner.get_params(opt)
 
 # introduce a range of sparsity values
 sparse_rng = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
