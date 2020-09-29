@@ -192,7 +192,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --model_depth 50 \
   --learning_rate 0.01 \
   --n_val_samples 1 \
-  --n_epochs 1 \
+  --n_epochs 5 \
   --compress \
   --compression_type ep \
   --ft_portion last_layer \

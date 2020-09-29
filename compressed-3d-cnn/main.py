@@ -157,9 +157,6 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
-        for name, param in model.named_parameters():
-            print(name)
-
         if opt.compression_type == 'ep':
             params = Pruner.get_params(opt)
             print('pruning model')
@@ -263,13 +260,7 @@ if __name__ == '__main__':
     # save pruning amounts in text file
     path = os.path.join(opt.result_path, 'sparsity.txt')
 
-    par = pytorch_total_params
-    post = par - par2
-    per = post/par * 100
-
     with open(path, "w") as text_file:
-        text_file.write("Number of Parameters: %s\n" % par)
+        # text_file.write("Number of Parameters: %s\n" % par)
         text_file.write("Parameter Reduction Before Fine-Tune: %s\n" % par1)
         text_file.write("Parameter Reduction After Fine-Tune: %s\n" % par2)
-        text_file.write("Number of Parameters After: %s\n" % post)
-        text_file.write("Reduction in Parameters: %s \n" % per)
