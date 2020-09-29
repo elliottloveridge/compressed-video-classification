@@ -37,6 +37,10 @@ if __name__ == '__main__':
 
     # define input args
     opt = parse_opts()
+
+    # FIXME: temp solution
+    opt.compression_type = ['ep', 'kd']
+
     if opt.root_path != '':
         opt.video_path = os.path.join(opt.root_path, opt.video_path)
         opt.annotation_path = os.path.join(opt.root_path, opt.annotation_path)
