@@ -71,12 +71,13 @@ for name, module in model.named_modules():
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-cwd = os.getcwd()
-print(cwd)
+print(df)
+
+# FIXME: file save isn't working as doesn't recognise
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
     f += str(opt.model_depth)
 f += '.csv'
 
-df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f), index=False)
+df.to_csv(os.path.join('~/research-project/compressed-3d-cnn/model_summary/', f), index=False)
