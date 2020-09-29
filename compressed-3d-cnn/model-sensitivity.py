@@ -194,7 +194,6 @@ best_prec1 = 0
 
 
 if opt.resume_path:
-    # model = nn.DataParallel(model)
     print('loading checkpoint {}'.format(opt.resume_path))
     checkpoint = torch.load(opt.resume_path)
     model.to(torch.device("cuda"))
@@ -248,5 +247,14 @@ test_func = partial(test.test_eval, data_loader=test_loader, criterion=criterion
 
 sense = perform_sensitivity_analysis(model, params, sparsities=sparse_rng,
 test_func=test_func, group='element')
-sensitivities_to_png(sense, os.path.join(opt.result_path,'sensitivity.png'))
-sensitivities_to_csv(sense, os.path.join(opt.result_path, 'sensitivity.csv'))
+
+f = opt.arch
+if opt.arch in ['resnet', 'csn']:
+    f += str(opt.model_depth)
+f_png = f + '.png'
+f_csv = f + '.csv'
+
+sensitivities_to_png(sense, os.path.join(opt.result_path, f_png))
+sensitivities_to_csv(sense, os.path.join(opt.result_path, f_csv))
+
+# FIXME: doesn't yet add the best sensitivity choice and input into model summary

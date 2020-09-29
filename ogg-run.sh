@@ -248,11 +248,13 @@
 python /app/compressed-3d-cnn/model-sensitivity.py --root_path /data \
 --video_path ucf101_videos/jpg/ \
 --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+--resume_path results/benchmark/1809_1/ucf101_resnet18_benchmark_20epochs_1809_best.pth \
 --result_path results/sensitivity/ \
 --dataset ucf101 \
 --n_classes 101 \
 --batch_size 32  \
---model mobilenetv2 \
---width_mult 1.0 \
---summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv
+--model resnet \
+--model_depth 18 \
+--resnet_shortcut A \
+--downsample 1 \
+--summary_path /app/compressed-3d-cnn/model_summary/resnet18.csv
