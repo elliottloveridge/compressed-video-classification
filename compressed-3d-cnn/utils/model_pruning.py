@@ -56,3 +56,20 @@ class Pruner():
             params.append((df['Name'][i], df['Sparsity'][i]))
 
         return params
+
+
+    def get_names(opt):
+        """get network parameter names and desired sparsity level from model summary/sensitivity analysis
+        """
+
+        with open(opt.summary_path, newline='') as f:
+            df = pd.read_csv(f)
+            # only prune Conv3d layers at the moment
+            df = df[df['Type']=='Conv3d']
+
+        params = []
+
+        for i in df.index:
+            params.append(df['Name'][i])
+
+        return params

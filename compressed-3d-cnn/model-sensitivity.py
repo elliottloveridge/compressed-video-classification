@@ -218,7 +218,7 @@ if opt.resume_path:
     model.load_state_dict(checkpoint['state_dict'])
 
 # get parameters from file
-params = Pruner.get_params(opt)
+params = Pruner.get_names(opt)
 
 # introduce a range of sparsity values
 sparse_rng = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
