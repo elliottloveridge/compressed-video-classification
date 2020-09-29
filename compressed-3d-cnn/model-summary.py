@@ -80,4 +80,4 @@ if opt.arch in ['resnet', 'csn']:
     f += str(opt.model_depth)
 f += '.csv'
 
-df.to_csv(os.path.join('~/research-project/compressed-3d-cnn/model_summary/', f), index=False)
+df.to_csv(os.path.join('/app/compressed-3d-cnn/model_summary/', f), index=False)
