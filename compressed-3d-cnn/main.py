@@ -263,7 +263,7 @@ if __name__ == '__main__':
     # save pruning amounts in text file
     path = os.path.join(opt.result_path, 'sparsity.txt')
 
-    par = len(parameters)
+    par = pytorch_total_params
     post = par - par2
     per = post/par * 100
 
