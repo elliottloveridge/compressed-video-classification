@@ -238,8 +238,8 @@ python /app/compressed-3d-cnn/model-summary.py --root_path /data \
 --result_path results \
 --dataset ucf101 \
 --n_classes 101 \
---model mobilenetv2 \
---width_mult 1.0 \
+--model csn \
+--model_depth 50 \
 --resume_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth
 
 

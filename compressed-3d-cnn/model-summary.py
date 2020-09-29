@@ -66,7 +66,7 @@ module_ = []
 for name, module in model.named_modules():
     if len(module._modules) == 0:
         # FIXME: don't want this hardcoded
-        if module.__class__.__name__ not in ['ReLU', 'ReLU6' 'MaxPool3d', 'AvgPool3d']:
+        if module.__class__.__name__ not in ['MaxPool3d', 'AvgPool3d', 'Dropout']:
             if 'ReLU' not in module.__class__.__name__:
                 module_.append(module.__class__.__name__)
 
