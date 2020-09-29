@@ -67,7 +67,8 @@ for name, module in model.named_modules():
     if len(module._modules) == 0:
         # FIXME: don't want this hardcoded
         if module.__class__.__name__ not in ['ReLU', 'ReLU6' 'MaxPool3d', 'AvgPool3d']:
-            module_.append(module.__class__.__name__)
+            if 'ReLU' not in module.__class__.__name__:
+                module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
     if name[-6:] == 'weight':
