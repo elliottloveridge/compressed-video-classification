@@ -72,7 +72,8 @@ for name, module in model.named_modules():
 
 df = pd.DataFrame({'Name': name_, 'Type': module_})
 
-print(model.state_dict())
+for name, state in model.named_parameters():
+    print(name)
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:
