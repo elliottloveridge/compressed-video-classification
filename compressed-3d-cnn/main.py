@@ -162,6 +162,7 @@ if __name__ == '__main__':
             print('pruning model')
             model = Pruner.init_pruning(model, params)
             par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+            print('initial parameter prune:', par1)
 
         if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
