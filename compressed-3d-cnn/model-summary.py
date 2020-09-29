@@ -64,16 +64,13 @@ name_ = []
 module_ = []
 
 for name, module in model.named_modules():
-
-    if len(module._modules) == 0:
-        # append weight to name
-        name_.append(name + '.weight')
-        module_.append(module.__class__.__name__)
-
-df = pd.DataFrame({'Name': name_, 'Type': module_})
+    module_.append(module.__class__.__name__)
 
 for name, state in model.named_parameters():
-    print(name)
+    if name[-6:] == 'weight':
+        name_.append(name)
+
+df = pd.DataFrame({'Name': name_, 'Type': module_})
 
 f = opt.arch
 if opt.arch in ['resnet', 'csn']:

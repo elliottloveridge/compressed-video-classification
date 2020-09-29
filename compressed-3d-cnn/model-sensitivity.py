@@ -60,10 +60,7 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
     sensitivities = OrderedDict()
 
     for param_name in net_params:
-        # print(param_name)
-        # print(model.state_dict()[param_name].dim())
-        if model.state_dict()[param_name].dim() not in [2,5]:
-            # print('here')
+        if model.state_dict()[param_name].dim() not in [2, 4, 5]:
             continue
 
         # Make a copy of the model, because when we apply the zeros mask (i.e.
@@ -73,11 +70,7 @@ def perform_sensitivity_analysis(model, net_params, sparsities, test_func, group
         sensitivity = OrderedDict()
         for sparsity_level in sparsities:
             sparsity_level = float(sparsity_level)
-            # msglogger.info("Testing sensitivity of %s [%0.1f%% sparsity]"
-            # % (param_name, sparsity_level*100))
             print("Testing sensitivity of %s [%0.1f%% sparsity]"%(param_name, sparsity_level*100))
-            # Create the pruner (a level pruner), the pruning policy and the
-            # pruning schedule.
             if group == 'element':
                 # Element-wise sparasity
                 sparsity_levels = {param_name: sparsity_level}
