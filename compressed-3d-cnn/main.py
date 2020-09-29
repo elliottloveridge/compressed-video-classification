@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     best_prec1 = 0
 
-    # don't currently allow for resumed training whilst using kd
+    # don't currently allow for resume training whilst using kd
     if opt.resume_path and opt.compression_type != 'kd':
         print('loading checkpoint {}'.format(opt.resume_path))
         checkpoint = torch.load(opt.resume_path)
@@ -161,13 +161,8 @@ if __name__ == '__main__':
             params = Pruner.get_params(opt)
             print('pruning model')
             model = Pruner.init_pruning(model, params)
-            par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-            print("post-compression zero parameter count:", par)
+            par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
 
-        if opt.compression_type == 'ptq':
-            print('add collection stats')
-            # FIXME: add stats collection here
-            # classifier.acts_quant_stats_collection(model, criterion, pylogger, args, save_to_file=True)
         if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat']:
@@ -175,11 +170,8 @@ if __name__ == '__main__':
         else:
             compression_scheduler = None
 
-    # set distillation policy as None
     opt.kd_policy = None
-
     if opt.compress and opt.compression_type == 'kd':
-
         # generate teacher model and load state_dict
         teacher, parameters = generate_model(opt, teacher=True)
         print('loading checkpoint {}'.format(opt.t_path))
@@ -192,7 +184,6 @@ if __name__ == '__main__':
               opt.kd_student_wt, opt.kd_teacher_wt)
         opt.kd_policy = distiller.KnowledgeDistillationPolicy(model,
                         teacher, opt.kd_temp, dlw)
-        # FIXME: this may not be correct
         end_epoch = opt.begin_epoch + opt.n_epochs
         compression_scheduler.add_policy(opt.kd_policy,
                                         starting_epoch=opt.begin_epoch,
@@ -244,8 +235,8 @@ if __name__ == '__main__':
 
     # test for parameter reduction
     if opt.compression_type == 'ep':
-        par = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("post-compression zero parameter count:", par)
+        par2 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        print("post-compression zero parameter count:", par2)
 
     if opt.test:
         spatial_transform = Compose([
@@ -264,3 +255,17 @@ if __name__ == '__main__':
             num_workers=opt.n_threads,
             pin_memory=True)
         test.test(test_loader, model, opt, test_data.class_names)
+
+    # save pruning amounts in text file
+    path = os.path.join(opt.result_path, 'sparsity.txt')
+
+    par = len(parameters)
+    post = par - par2
+    per = post/par * 100
+
+    with open(path, "w") as text_file:
+        text_file.write("Number of Parameters: %s\n" % par)
+        text_file.write("Parameter Reduction Before Fine-Tune: %s\n" % par1)
+        text_file.write("Parameter Reduction After Fine-Tune: %s\n" % par2)
+        text_file.write("Number of Parameters After: %s\n" % post)
+        text_file.write("% Reduction in Parameters: %s %\n" % per)
