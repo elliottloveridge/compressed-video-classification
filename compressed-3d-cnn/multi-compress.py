@@ -59,7 +59,7 @@ if __name__ == '__main__':
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value)
     if opt.compression_type != '':
-        if not isinstance(opt.compession_type, list):
+        if not isinstance(opt.compression_type, list):
             assert opt.compression_type in ['ep', 'ptq', 'qat', 'kd']
         # FIXME: there is no test if using multiple compression types
     if not opt.compress:
