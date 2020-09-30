@@ -27,7 +27,7 @@ from train import train_epoch
 from validation import val_epoch
 import test
 
-from calculate_FLOP import model_info
+# from calculate_FLOP import model_info
 from utils.model_pruning import Pruner
 
 
