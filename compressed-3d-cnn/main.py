@@ -155,22 +155,22 @@ if __name__ == '__main__':
         opt.begin_epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
 
-    if not opt.no_train:
+    # if not opt.no_train:
 
-        # if opt.compression_type == 'ep':
-        #     params = Pruner.get_params(opt)
-        #     print('pruning model')
-        #     model = Pruner.init_pruning(model, params)
-        # if opt.compress:
-        #     par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        #     print('initial parameter prune:', par1)
+    if opt.compression_type == 'ep':
+        params = Pruner.get_params(opt)
+        print('pruning model')
+        model = Pruner.init_pruning(model, params)
+    if opt.compress:
+        par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        print('initial parameter prune:', par1)
 
-        if opt.compress and opt.compression_type in ['qat', 'kd']:
-            compression_scheduler = distiller.CompressionScheduler(model)
-            if opt.compression_type in ['qat']:
-                compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
-        else:
-            compression_scheduler = None
+    if opt.compress and opt.compression_type in ['qat', 'kd']:
+        compression_scheduler = distiller.CompressionScheduler(model)
+        if opt.compression_type in ['qat']:
+            compression_scheduler = distiller.file_config(model, optimizer, opt.compression_file, compression_scheduler)
+    else:
+        compression_scheduler = None
 
     opt.kd_policy = None
     if opt.compress and opt.compression_type == 'kd':
@@ -203,7 +203,7 @@ if __name__ == '__main__':
             model = Pruner.init_pruning(model, params)
             # get parameter number reduction at each epoch
             if opt.compress:
-                # num params - num non-zero params 
+                # num params - num non-zero params
                 par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
                 print('epoch', i, ' prune:', par1)
 
