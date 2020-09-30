@@ -201,9 +201,11 @@ if __name__ == '__main__':
         if opt.compression_type == 'ep':
             params = Pruner.get_params(opt)
             model = Pruner.init_pruning(model, params)
-        if opt.compress:
-            par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-            print('epoch', i, ' prune:', par1)
+            # get parameter number reduction at each epoch
+            if opt.compress:
+                # num params - num non-zero params 
+                par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+                print('epoch', i, ' prune:', par1)
 
         # end of this
 
