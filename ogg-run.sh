@@ -196,7 +196,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --compress \
   --compression_type ep \
   --ft_portion last_layer \
-  --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+  --pretrain_path results/pretrain/kinetics_mobilenetv2_1.0x_RGB_16_best.pth \
   --summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv \
   --test
 
