@@ -260,7 +260,7 @@ if __name__ == '__main__':
     if opt.compress:
         # num params - num non-zero params
         par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print('epoch', i, ' prune:', par1)
+        print('epoch', i, 'prune:', par1)
 
     if opt.test:
         spatial_transform = Compose([
