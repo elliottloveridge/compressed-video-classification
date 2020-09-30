@@ -42,10 +42,10 @@ model = csn.csn50(num_classes=101, sample_size=112, sample_duration=16)
 
 # model = model.cuda()
 # model = nn.DataParallel(model, device_ids=None)
-# print(model)
+print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 print("Total number of trainable parameters: ", pytorch_total_params)
 
-# flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
-# print("Total number of FLOPs: ", flops)
+flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+print("Total number of FLOPs: ", flops)
