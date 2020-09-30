@@ -186,7 +186,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
   --result_path results \
   --dataset ucf101 \
-  --n_classes 101 \
+  --n_classes 600 \
   --batch_size 32  \
   --model mobilenetv2 \
   --width_mult 1.0 \
