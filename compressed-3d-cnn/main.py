@@ -203,7 +203,7 @@ if __name__ == '__main__':
             model = Pruner.init_pruning(model, params)
         if opt.compress:
             par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-            print('epoch', i, ' prune:' par1)
+            print('epoch', i, ' prune:', par1)
 
         # end of this
 
