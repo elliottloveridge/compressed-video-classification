@@ -7,7 +7,7 @@ from torch.autograd import Variable
 import pdb
 
 from util import AverageMeter, calculate_accuracy
-from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnet, resnext
+from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnet, resnext, csn
 
 # model = shufflenet.get_model(groups=3, width_mult=0.5, num_classes=600)#1
 # model = shufflenetv2.get_model( width_mult=0.25, num_classes=600, sample_size = 112)#2
@@ -41,9 +41,11 @@ end_time = time.time()
 
 for i in range(1000):
 
-	output = model(input_var)
-	batch_time.update(time.time() - end_time)
-	end_time = time.time()
-	print("Current average time: ", batch_time.avg, "Speed (vps): ", 1 / (batch_time.avg / 8.0) )
+	# do not use first value as this brings the average down
+	if i != 0:
+		output = model(input_var)
+		batch_time.update(time.time() - end_time)
+		end_time = time.time()
+		print("Current average time: ", batch_time.avg, "Speed (vps): ", 1 / (batch_time.avg / 8.0) )
 
 print("Average time for CPU: ", batch_time.avg, "Speed (vps): ", 1 / (batch_time.avg / 8.0))
