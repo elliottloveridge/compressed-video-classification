@@ -157,14 +157,6 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
-    # if opt.compression_type == 'ep':
-    #     params = Pruner.get_params(opt)
-    #     print('pruning model')
-    #     model = Pruner.init_pruning(model, params)
-    # if opt.compress:
-    #     par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-    #     print('initial parameter prune:', par1)
-
         if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
             if opt.compression_type in ['qat']:
@@ -196,8 +188,6 @@ if __name__ == '__main__':
 
     for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
 
-        # added pruning at start each epoch
-
         if opt.compression_type == 'ep':
             params = Pruner.get_params(opt)
             model = Pruner.init_pruning(model, params)
@@ -206,8 +196,6 @@ if __name__ == '__main__':
                 # num params - num non-zero params
                 par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
                 print('epoch', i, ' prune:', par1)
-
-        # end of this
 
         if opt.compress and opt.compression_type in ['qat']:
             compression_scheduler.on_epoch_begin(i)
@@ -248,11 +236,6 @@ if __name__ == '__main__':
         quantizer = distiller.quantization.PostTrainLinearQuantizer(model, bits_activations=1, bits_parameters=1)
         quantizer.prepare_model(torch.rand(1, 3, 16, 112, 112))
 
-    # test for parameter reduction
-    if opt.compress:
-        par2 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-        print("post-compression zero parameter count:", par2)
-
     if opt.compression_type == 'ep':
         params = Pruner.get_params(opt)
         model = Pruner.init_pruning(model, params)
@@ -284,6 +267,4 @@ if __name__ == '__main__':
     path = os.path.join(opt.result_path, 'sparsity.txt')
 
     with open(path, "w") as text_file:
-        # text_file.write("Number of Parameters: %s\n" % par)
-        text_file.write("Parameter Reduction Before Fine-Tune: %s\n" % par1)
-        text_file.write("Parameter Reduction After Fine-Tune: %s\n" % par2)
+        text_file.write("Number of Zero Parameters: %s\n" % par1)
