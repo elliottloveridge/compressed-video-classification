@@ -40,9 +40,9 @@ model = csn.csn50(num_classes=101, sample_size=112, sample_duration=16)
 #     return pytorch_total_params, flops
 
 
-model = model.cuda()
-model = nn.DataParallel(model, device_ids=None)
-print(model)
+# model = model.cuda()
+# model = nn.DataParallel(model, device_ids=None)
+# print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 print("Total number of trainable parameters: ", pytorch_total_params)
