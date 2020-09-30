@@ -1,9 +1,20 @@
 import torch.nn as nn
 from thop import profile
-# from opts import parse_opts
-# from models import *
+from opts import parse_opts
+from models import *
 
-from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnext, resnet, csn
+# from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnext, resnet, csn
+
+
+def model_info(model, opt):
+    """get params and flops function
+    """
+
+    pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+
+    return pytorch_total_params, flops
+
 
 # model = shufflenet.get_model(groups=3, width_mult=0.5, num_classes=600)#1
 # model = shufflenetv2.get_model( width_mult=0.25, num_classes=600, sample_size = 112)#2
@@ -27,18 +38,6 @@ from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2,
 # model = resnet.resnet50( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 model = csn.csn50(num_classes=101, sample_size=112, sample_duration=16)
-
-# def model_info(model, opt):
-#
-#     # # NOTE: if these two lines are needed, in what order should they go?
-#     # model = model.cuda()
-#     # model = nn.DataParallel(model, device_ids=None)
-#     pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-#     flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
-#
-#     # # FIXME: need to get the slps part working!
-#     return pytorch_total_params, flops
-
 
 # model = model.cuda()
 # model = nn.DataParallel(model, device_ids=None)
