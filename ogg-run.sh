@@ -132,27 +132,28 @@
 # --compression_type qat \
 # --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
-# ucf101-mobilenetv2-qat-fine-tuning (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
-python /app/compressed-3d-cnn/main.py --root_path /data \
---video_path ucf101_videos/jpg/ \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---result_path results \
---dataset ucf101 \
---n_classes 101 \
---pretrain_path /data/results/ep/3009/ucf101_mobilenetv2_ep_5epochs_3009_best.pth \
---dataset ucf101 \
---n_finetune_classes 101 \
---ft_portion last_layer \
---batch_size 32  \
---model mobilenetv2 \
---width_mult 1.0 \
---learning_rate 0.01 \
---n_val_samples 1 \
---n_epochs 5 \
---test \
---compress \
---compression_type qat \
---compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
+# # ucf101-mobilenetv2-qat-fine-tuning (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
+# python /app/compressed-3d-cnn/main.py --root_path /data \
+# --video_path ucf101_videos/jpg/ \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --result_path results \
+# --dataset ucf101 \
+# --n_classes 600 \
+# --pretrain_path /data/results/pretrain/kinetics_resnet_101_RGB_16_best.pth \
+# --dataset ucf101 \
+# --n_finetune_classes 101 \
+# --ft_portion complete \
+# --batch_size 16  \
+# --model resnet \
+# --model_depth 101 \
+# --learning_rate 0.01 \
+# --n_val_samples 1 \
+# --n_epochs 20 \
+# --checkpoint 5 \
+# --test \
+# --compress \
+# --compression_type qat \
+# --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 
 
 ## ptq
@@ -179,25 +180,25 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 ## element-wise pruning
 
 
-# # element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
-# python /app/compressed-3d-cnn/main.py --root_path /data \
-#   --video_path ucf101_videos/jpg/ \
-#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-#   --result_path results \
-#   --dataset ucf101 \
-#   --n_classes 101 \
-#   --batch_size 32  \
-#   --model mobilenetv2 \
-#   --width_mult 1.0 \
-#   --learning_rate 0.01 \
-#   --n_val_samples 1 \
-#   --n_epochs 5 \
-#   --compress \
-#   --compression_type ep \
-#   --ft_portion last_layer \
-#   --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
-#   --summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv \
-#   --test
+# element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
+python /app/compressed-3d-cnn/main.py --root_path /data \
+  --video_path ucf101_videos/jpg/ \
+  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+  --result_path results \
+  --dataset ucf101 \
+  --n_classes 101 \
+  --batch_size 32  \
+  --model mobilenetv2 \
+  --width_mult 1.0 \
+  --learning_rate 0.01 \
+  --n_val_samples 1 \
+  --n_epochs 2 \
+  --compress \
+  --compression_type ep \
+  --ft_portion last_layer \
+  --pretrain_path results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+  --summary_path /app/compressed-3d-cnn/model_summary/mobilenetv2.csv \
+  --test
 
 
 ## knowledge distillation

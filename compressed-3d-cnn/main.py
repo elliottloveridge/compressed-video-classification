@@ -157,13 +157,13 @@ if __name__ == '__main__':
 
     if not opt.no_train:
 
-        if opt.compression_type == 'ep':
-            params = Pruner.get_params(opt)
-            print('pruning model')
-            model = Pruner.init_pruning(model, params)
-        if opt.compress:
-            par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
-            print('initial parameter prune:', par1)
+        # if opt.compression_type == 'ep':
+        #     params = Pruner.get_params(opt)
+        #     print('pruning model')
+        #     model = Pruner.init_pruning(model, params)
+        # if opt.compress:
+        #     par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+        #     print('initial parameter prune:', par1)
 
         if opt.compress and opt.compression_type in ['qat', 'kd']:
             compression_scheduler = distiller.CompressionScheduler(model)
@@ -195,6 +195,17 @@ if __name__ == '__main__':
     print('run')
 
     for i in range(opt.begin_epoch, opt.begin_epoch + opt.n_epochs):
+
+        # added pruning at start each epoch
+
+        if opt.compression_type == 'ep':
+            params = Pruner.get_params(opt)
+            model = Pruner.init_pruning(model, params)
+        if opt.compress:
+            par1 = sum(p.numel() - p.nonzero().size(0) for p in model.parameters() if p.requires_grad)
+            print('epoch', i, ' prune:' par1)
+
+        # end of this
 
         if opt.compress and opt.compression_type in ['qat']:
             compression_scheduler.on_epoch_begin(i)
