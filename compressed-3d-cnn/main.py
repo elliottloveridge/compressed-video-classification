@@ -170,7 +170,7 @@ if __name__ == '__main__':
         teacher, parameters = generate_model(opt, teacher=True)
         print('loading checkpoint {}'.format(opt.t_path))
         checkpoint = torch.load(opt.t_path)
-        # assert opt.t_arch == checkpoint['arch']
+        assert opt.t_arch == checkpoint['arch']
         teacher.load_state_dict(checkpoint['state_dict'])
 
         # create a distillation policy and add to compression_scheduler

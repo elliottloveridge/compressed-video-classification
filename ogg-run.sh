@@ -220,7 +220,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --compression_type kd \
 --t_model resnet \
 --t_model_depth 101 \
---t_path /data/results/benchmark/1009/ucf101_mobilenetv2_benchmark_20epochs_1009_best.pth \
+--t_path /data/results/benchmark/1209/ucf101_resnet_benchmark_20epochs_1209_best.pth \
 --t_n_classes 101 \
 --kd_distill_wt 0.7 \
 --kd_student_wt 0.3 \
