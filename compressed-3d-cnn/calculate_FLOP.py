@@ -20,29 +20,28 @@ from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2,
 # model = shufflenet.get_model(groups=3, width_mult=2.0, num_classes=600)#13
 # model = shufflenetv2.get_model( width_mult=2.0, num_classes=600, sample_size = 112)#14
 # model = mobilenet.get_model( width_mult=2.0, num_classes=600, sample_size = 112)#15
-# model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 112)#16
+# model = mobilenetv2.get_model( width_mult=1.0, num_classes=600, sample_size = 112)#16
 # model = squeezenet.get_model( version=1.1, num_classes=600, sample_size = 112, sample_duration = 16)
 # model = resnext.resnet101( num_classes=600, shortcut_type='B', cardinality=32, sample_size=112, sample_duration=16)
-model = resnet.resnet18( num_classes=101, shortcut_type='A', sample_size=112, sample_duration=16)
+# model = resnet.resnet18( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet50( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
-# model = csn.csn50(num_classes=600, sample_size=112, sample_duration=16)
+model = csn.csn50(num_classes=101, sample_size=112, sample_duration=16)
 
-def model_info(model, opt):
+# def model_info(model, opt):
+#
+#     # # NOTE: if these two lines are needed, in what order should they go?
+#     # model = model.cuda()
+#     # model = nn.DataParallel(model, device_ids=None)
+#     pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+#     flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+#
+#     # # FIXME: need to get the slps part working!
+#     return pytorch_total_params, flops
 
-    # # NOTE: if these two lines are needed, in what order should they go?
-    # model = model.cuda()
-    # model = nn.DataParallel(model, device_ids=None)
-    pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
 
-    # # FIXME: need to get the slps part working!
-    return pytorch_total_params, flops
-
-
-
-# model = model.cuda()
-# model = nn.DataParallel(model, device_ids=None)
+model = model.cuda()
+model = nn.DataParallel(model, device_ids=None)
 print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
