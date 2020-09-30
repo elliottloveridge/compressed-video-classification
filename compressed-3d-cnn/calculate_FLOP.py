@@ -41,8 +41,8 @@ def model_info(model, opt):
 
 
 
-model = model.cuda()
-model = nn.DataParallel(model, device_ids=None)
+# model = model.cuda()
+# model = nn.DataParallel(model, device_ids=None)
 print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
