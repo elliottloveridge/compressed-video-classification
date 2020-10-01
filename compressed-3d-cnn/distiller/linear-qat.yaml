@@ -10,8 +10,8 @@
 quantizers:
   linear_quantizer:
     class: QuantAwareTrainRangeLinearQuantizer
-    bits_activations: 4
-    bits_weights: 4
+    bits_activations: 1
+    bits_weights: 1
     mode: 'ASYMMETRIC_UNSIGNED'  # Can try "SYMMETRIC" as well
     ema_decay: 0.999   # Decay value for exponential moving average tracking of activation ranges
     per_channel_wts: True
