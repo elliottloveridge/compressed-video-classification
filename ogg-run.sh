@@ -57,11 +57,11 @@
 
 ## evaluation
 
-# ucf101 evaluation (after testing)
-python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
---annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
---dataset ucf101 \
---result_path results
+# # ucf101 evaluation (after testing)
+# python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
+# --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+# --dataset ucf101 \
+# --result_path results
 
 
 ## fine-tuning & transfer learning (pre-trained kinetics-600)
@@ -185,25 +185,25 @@ python /app/compressed-3d-cnn/utils/video_accuracy.py --root_path /data \
 ## element-wise pruning
 
 
-# # element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
-# python /app/compressed-3d-cnn/main.py --root_path /data \
-#   --video_path ucf101_videos/jpg/ \
-#   --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
-#   --result_path results \
-#   --dataset ucf101 \
-#   --n_classes 101 \
-#   --batch_size 16  \
-#   --model csn \
-#   --model_depth 50 \
-#   --learning_rate 0.01 \
-#   --n_val_samples 1 \
-#   --n_epochs 5 \
-#   --compress \
-#   --compression_type ep \
-#   --ft_portion last_layer \
-#   --pretrain_path results/benchmark/1109_1/ucf101_csn_benchmark_50epochs_1109_best.pth \
-#   --summary_path /app/compressed-3d-cnn/model_summary/csn50.csv \
-#   --test
+# element-wise pruning of mobilenetv2 w/ last_layer fine-tuning from pre-trained model
+python /app/compressed-3d-cnn/main.py --root_path /data \
+  --video_path ucf101_videos/jpg/ \
+  --annotation_path /app/compressed-3d-cnn/annotation_UCF101/ucf101_01.json \
+  --result_path results \
+  --dataset ucf101 \
+  --n_classes 101 \
+  --batch_size 16  \
+  --model csn \
+  --model_depth 50 \
+  --learning_rate 0.01 \
+  --n_val_samples 1 \
+  --n_epochs 5 \
+  --compress \
+  --compression_type ep \
+  --ft_portion last_layer \
+  --pretrain_path results/benchmark/1109_1/ucf101_csn_benchmark_50epochs_1109_best.pth \
+  --summary_path /app/compressed-3d-cnn/model_summary/csn50.csv \
+  --test
 
 
 ## knowledge distillation

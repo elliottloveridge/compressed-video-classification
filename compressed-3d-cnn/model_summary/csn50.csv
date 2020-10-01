@@ -1,5 +1,5 @@
 Name,Type,Sparsity
-module.conv1.weight,Conv3d,0.4
+module.conv1.weight,Conv3d,0.6
 module.bn1.weight,BatchNorm3d,0.6
 module.layer1.0.conv1.weight,Conv3d,0.6
 module.layer1.0.bn1.weight,BatchNorm3d,0.6
