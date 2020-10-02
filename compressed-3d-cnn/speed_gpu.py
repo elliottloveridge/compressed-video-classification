@@ -26,12 +26,11 @@ from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2,
 # model = mobilenet.get_model( width_mult=2.0, num_classes=600, sample_size = 112)#15
 # model = mobilenetv2.get_model( width_mult=1.0, num_classes=101, sample_size = 112)#16
 # model = squeezenet.get_model( version=1.1, num_classes=600, sample_size = 112, sample_duration = 8)
-model = resnet.resnet18(sample_size = 112, sample_duration = 8, num_classes=101)
+# model = resnet.resnet18(sample_size = 112, sample_duration = 8, num_classes=101)
 # model = resnet.resnet50(sample_size = 112, sample_duration = 8, num_classes=600)
 # model = resnet.resnet101(sample_size = 112, sample_duration = 8, num_classes=101)
 # model = resnext.resnext101(sample_size = 112, sample_duration = 8, num_classes=600)
-
-# model = csn.csn50(sample_size = 112, sample_duration = 8, num_classes=101)
+model = csn.csn50(sample_size = 112, sample_duration = 8, num_classes=101)
 
 model = model.cuda()
 model = nn.DataParallel(model, device_ids=None)
