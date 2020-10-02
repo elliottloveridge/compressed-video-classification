@@ -130,7 +130,7 @@ python /app/compressed-3d-cnn/main.py --root_path /data \
 --test \
 --compress \
 --compression_type qat \
---resume_path results/benchmark/1109_1/ucf101_csn_benchmark_50epochs_1109_best
+--resume_path results/benchmark/1109_1/ucf101_csn_benchmark_50epochs_1109_best.pth \
 --compression_file /app/compressed-3d-cnn/distiller/linear-qat.yaml
 #
 # # ucf101-mobilenetv2-qat-fine-tuning (inc. testing) - 20 epochs, 0.01 learning_rate, 5 checkpoint
